@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='css/login.css')}}">
+  <title>Login - FYP</title>
+</head>
+<body>
+  <div class="flex">
+    <div class="login-box">
+      <input type="checkbox" id="TeacherCheckbox" class="hidden">
+      <input type="checkbox" id="StudentCheckbox" class="hidden">
+      <div id="Choice">
+        <div class="title">
+          <img class="title-img" src="https://img.icons8.com/dusk/64/000000/login-rounded-right.png">
+          <div><b>E-learning Platform</b></div>
+        </div>
+        <hr>
+        <div class="des">Welcome to E-learning Platform!</div>
+        <div class="des">You want to login as a...</div>
+        <label for="TeacherCheckbox" class="login-choice">
+          <img src="https://img.icons8.com/color/96/000000/teacher.png">
+          <div>Teacher</div>
+        </label>
+        <label for="StudentCheckbox" class="login-choice">
+          <img src="https://img.icons8.com/dusk/64/000000/student-male.png"> 
+          <div>Student</div>
+        </label>
+      </div>
+
+      <div id="TeacherLogin">
+        <div class="title">
+          <img class="title-img" src="https://img.icons8.com/color/96/000000/teacher.png">
+          <div><b>Teacher Login</b></div>
+        </div>
+        <hr>
+        <div class="des">Welcome Teacher!</div>
+        <div class="des">Plase Type in Your Information</div>
+        <form class="w-100" action="{{url_for('insert')}}" method="POST">
+          <input class="input-field" type="text" name="account" placeholder="Teacher Account">
+          <input class="input-field" type="password" name="password" placeholder="Passowrd">
+          <div class="btn-list">
+            <label for="TeacherCheckbox" class="btn red">Back</label>
+            <button class="btn green btn-clear">Login</button>
+          </div>
+        </form>
+      </div>
+      
+      <div id="StudentLogin">
+        <div class="title">
+          <img class="title-img" src="https://img.icons8.com/dusk/64/000000/student-male.png">
+          <div><b>Student Login</b></div>
+        </div>
+        <hr>
+        <div class="des">Welcome Student!</div>
+        <div class="des">Plase Type in Your Information</div>
+        <form class="w-100" action="" method="POST">
+          <input class="input-field" type="text" name="account" placeholder="Student Account">
+          <input class="input-field" type="password" name="password" placeholder="Passowrd">
+          <div class="btn-list">
+            <label for="StudentCheckbox" class="btn red">Back</label>
+            <button class="btn green btn-clear">Login</button>
+          </div>
+        </form>
+      </div>
+    
+    </div>
+  </div>
+</body>
+</html>
