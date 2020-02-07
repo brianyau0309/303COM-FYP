@@ -25,10 +25,10 @@ CREATE TABLE user_following (
   PRIMARY KEY (username, following)
 );
 
-CREATE TABLE material_collection (
+CREATE TABLE course_collection (
   username VARCHAR(20) NOT NULL,
-  material CHAR(8) NOT NULL,
-  PRIMARY KEY (username, material)
+  course CHAR(8) NOT NULL,
+  PRIMARY KEY (username, course)
 );
 
 CREATE TABLE question_collection (
@@ -42,27 +42,38 @@ CREATE TABLE search_history (
   tag VARCHAR(20) NOT NULL
 );
 
-CREATE TABLE materials (
-  material_id CHAR(8) NOT NULL,
+CREATE TABLE courses (
+  course_id CHAR(8) NOT NULL,
   author VARCHAR(20) NOT NULL,
   title VARCHAR(50) NOT NULL,
   descrition TEXT NOT NULL,
-  upload_date DATETIME NOT NULL,
-  PRIMARY KEY (material_id)
+  create_date DATETIME NOT NULL,
+  PRIMARY KEY (course_id)
 );
 
-CREATE TABLE materials_tags (
-  material CHAR(8) NOT NULL,
+CREATE TABLE lessions (
+  course CHAR(8) NOT NULL,
+  lession_num INT(8) NOT NULL,
+  title VARCHAR(50) NOT NULL,
+  detail TEXT NOT NULL,
+  video_link VARCHAR(200),
+  file_link VARCHAR(200),
+  last_update DATETIME NOT NULL,
+  PRIMARY KEY (course, lession_num)
+);
+
+CREATE TABLE courses_tags (
+  course CHAR(8) NOT NULL,
   tag VARCHAR(20) NOT NULL,
-  PRIMARY KEY (material, tag)
+  PRIMARY KEY (course, tag)
 );
 
-CREATE TABLE materials_comments (
-  material CHAR(8) NOT NULL,
+CREATE TABLE courses_comments (
+  course CHAR(8) NOT NULL,
   composor VARCHAR(20) NOT NULL,
   content TEXT NOT NULL,
   rating INT(1) NOT NULL,
-  PRIMARY KEY (material, composor)
+  PRIMARY KEY (course, composor)
 );
 
 CREATE TABLE questions (
@@ -181,21 +192,24 @@ ALTER TABLE user_following
   ADD FOREIGN KEY (username) REFERENCES users(username),
   ADD FOREIGN KEY (following) REFERENCES users(username);
 
-ALTER TABLE material_collection
+ALTER TABLE course_collection
   ADD FOREIGN KEY (username) REFERENCES users(username);
 
 ALTER TABLE question_collection
   ADD FOREIGN KEY (question) REFERENCES questions(question_id),
   ADD FOREIGN KEY (username) REFERENCES users(username);
 
-ALTER TABLE materials
+ALTER TABLE courses
   ADD FOREIGN KEY (author) REFERENCES users(username);
 
-ALTER TABLE materials_tags
-  ADD FOREIGN KEY (material) REFERENCES materials(material_id);
+ALTER TABLE lessions
+  ADD FOREIGN KEY (course) REFERENCES courses(course_id);
 
-ALTER TABLE materials_comments
-  ADD FOREIGN KEY (material) REFERENCES materials(material_id),
+ALTER TABLE courses_tags
+  ADD FOREIGN KEY (course) REFERENCES courses(course_id);
+
+ALTER TABLE courses_comments
+  ADD FOREIGN KEY (course) REFERENCES courses(course_id),
   ADD FOREIGN KEY (composor) REFERENCES users(username);
 
 ALTER TABLE questions
@@ -227,7 +241,7 @@ ALTER TABLE task_questions
   ADD FOREIGN KEY (quesion_type) REFERENCES task_question_types(type_id);
 
 ALTER TABLE task_anwsers
-  ADD FOREIGN KEY (classroom, task_num, question_num) REFERENCES tasks(classroom, task_num, question_num),
+  ADD FOREIGN KEY (classroom, task_num, question_num) REFERENCES task_questions(classroom, task_num, question_num),
   ADD FOREIGN KEY (student) REFERENCES users(username);
 
 ALTER TABLE celendar
