@@ -13,7 +13,7 @@
       <input type="checkbox" id="StudentCheckbox" class="hidden">
       <div id="Choice">
         <div class="title">
-          <img class="title-img" src="https://img.icons8.com/dusk/64/000000/login-rounded-right.png">
+          <img class="title-img" src="{{url_for('static', filename='images/icons/icon-192x192.png')}}">
           <div><b>E-learning Platform</b></div>
         </div>
         <hr>
@@ -37,9 +37,9 @@
         <hr>
         <div class="des">Welcome Teacher!</div>
         <div class="des">Plase Type in Your Information</div>
-        <form class="w-100" action="{{url_for('insert')}}" method="POST">
-          <input class="input-field" type="text" name="account" placeholder="Teacher Account">
-          <input class="input-field" type="password" name="password" placeholder="Passowrd">
+        <form class="w-100" action="{{url_for('login_process')}}" method="POST">
+          <input class="input-field" type="text" name="user_id" placeholder="Teacher User ID" required>
+          <input class="input-field" type="password" name="password" placeholder="Passowrd" required>
           <div class="btn-list">
             <label for="TeacherCheckbox" class="btn red">Back</label>
             <button class="btn green btn-clear">Login</button>
@@ -55,9 +55,9 @@
         <hr>
         <div class="des">Welcome Student!</div>
         <div class="des">Plase Type in Your Information</div>
-        <form class="w-100" action="" method="POST">
-          <input class="input-field" type="text" name="account" placeholder="Student Account">
-          <input class="input-field" type="password" name="password" placeholder="Passowrd">
+        <form class="w-100" action="{{url_for('login_process')}}" method="POST">
+          <input class="input-field" type="text" name="user_id" placeholder="Student User ID" required>
+          <input class="input-field" type="password" name="password" placeholder="Passowrd" required>
           <div class="btn-list">
             <label for="StudentCheckbox" class="btn red">Back</label>
             <button class="btn green btn-clear">Login</button>
@@ -67,5 +67,15 @@
     
     </div>
   </div>
+
+  {% with messages = get_flashed_messages() %}
+    {% if messages %}
+    <script>
+      {% for message in messages %}
+        alert('Login Fail: Plase check your user ID or password is correct or not.')
+      {% endfor %}
+    </script>
+    {% endif %}
+  {% endwith %}
 </body>
 </html>
