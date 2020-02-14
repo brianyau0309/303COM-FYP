@@ -10,6 +10,15 @@ body {
   height: 100vh;
   overflow: hidden;
   font-family: 'Montserrat', sans-serif;
+  background: repeating-linear-gradient(45deg, #e8f1f957, transparent 27vh),repeating-linear-gradient(125deg, #e8f1f957, transparent 27vh);
+}
+
+button {
+  font-size: 100%;
+  font-family: inherit;
+  border: 0;
+  padding: 0;
+  background-color: inherit;
 }
 
 #main {
@@ -23,11 +32,12 @@ body {
     "content";
 }
 
-#header {
+.header {
   grid-area: header;
   display: grid;
   grid-template-columns: 8vh 1fr 8vh;
   background: lightblue;
+  height: 7vh;
 }
 
 .header-icon {
@@ -61,10 +71,10 @@ body {
   position: absolute;
   top: 7vh;
   left: 0;
-  background: rgba(0,0,0,0.5);
+  background: rgba(0,0,0,0.6);
   width: 100%;
   height: 93vh;
-  transition: opacity linear .2s;
+  transition: opacity linear .1s;
   display: flex;
   flex-flow: row wrap;
   justify-content: space-around;
@@ -101,8 +111,130 @@ body {
 }
 
 .nav-items > div {
+  color: lightblue;
   text-align: center;
   font-size: 2vh;
   width: 12vh;
   margin: 0 auto;
+}
+
+.Questions .question-list li {
+  margin: 3px 0;
+  padding: 0 1vh;
+  border-top: 1px solid lightgray;
+  border-bottom: 1px solid lightgray;
+}
+
+.Questions .question-list a {
+  text-decoration: none;
+  color: inherit;
+}
+
+.Question {
+  position: absolute;
+  left: 0;
+  background: white;
+  width: 100%;
+  height: 100%;
+}
+
+.Question.open {
+  top: 0;
+}
+
+.Question.close {
+  top: 100vh;
+}
+
+.Question .TextEditor > .EditorPanel {
+  width: 96%;
+  margin: 0 auto;
+  border: 1px solid gray;
+  border-bottom: none;
+}
+
+.Question .TextEditor > .EditorPanel > button {
+  margin: 1vh .95vh;
+  border: 1px solid transparent;
+  width: 3vh;
+  height: 3vh;
+  cursor: pointer;
+}
+
+.Question .TextEditor > .EditorPanel > button:hover {
+  border: 1px solid lightgray;
+}
+
+.Question .TextEditor > .EditorPanel > button > img {
+  width: 100%;
+  height: 100%;
+}
+
+.Question .TextEditor > #TextField {
+  display: block;
+  font-size: 2vh;
+  margin: auto;
+  width: 96%;
+  height: 15vh;
+  background-color: rgba(255,255,255,.5);
+  border: 1px inset lightgray;
+}
+
+.Question .question_detail img {
+  width: 80%;
+  height: auto;
+  display: block;
+}
+
+.CreateQuestions > input {
+  display: block;
+  width: 96%;
+  margin: 1vh auto;
+  font-size: 3vh;
+  border: 1px solid gray;
+}
+
+.CreateQuestions> .TextEditor > .EditorPanel {
+  width: 96%;
+  margin: 0 auto;
+  border: 1px solid gray;
+  border-bottom: none;
+}
+
+.CreateQuestions> .TextEditor > .EditorPanel > button {
+  margin: 1vh .95vh;
+  border: 1px solid transparent;
+  width: 3vh;
+  height: 3vh;
+  cursor: pointer;
+}
+
+.CreateQuestions > .TextEditor > .EditorPanel > button:hover {
+  border: 1px solid lightgray;
+}
+
+.CreateQuestions > .TextEditor > .EditorPanel > button > img {
+  width: 100%;
+  height: 100%;
+}
+
+.CreateQuestions > .TextEditor > #TextField {
+  display: block;
+  font-size: 2vh;
+  margin: auto;
+  width: 96%;
+  height: 75vh;
+  background-color: rgba(255,255,255,.5);
+  border: 1px inset lightgray;
+}
+
+.CreateQuestions > .submit {
+  width: 96%;
+  font-size: 3vh;
+  background: lightblue;
+  border-radius: 10px;
+  margin: 1vh auto;
+  display: block;
+  padding: .5vh 0;
+  cursor: pointer;
 }

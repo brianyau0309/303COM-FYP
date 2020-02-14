@@ -69,19 +69,19 @@ CREATE TABLE courses_tags (
 
 CREATE TABLE courses_comments (
   course INT(8) UNSIGNED NOT NULL,
-  composor INT(8) UNSIGNED NOT NULL,
+  creater INT(8) UNSIGNED NOT NULL,
   content TEXT NOT NULL,
   rating INT(1) NOT NULL,
   valid ENUM('yes', 'no') NOT NULL DEFAULT 'yes',
-  PRIMARY KEY (course, composor)
+  PRIMARY KEY (course, creater)
 );
 
 CREATE TABLE questions (
   question_id INT(8) UNSIGNED ZEROFILL NOT NULL AUTO_INCREMENT,
-  composor INT(8) UNSIGNED NOT NULL,
+  creater INT(8) UNSIGNED NOT NULL,
   title VARCHAR(50) NOT NULL,
-  detial TEXT NOT NULL,
-  compose_date DATETIME NOT NULL,
+  detail TEXT NOT NULL,
+  create_date DATETIME NOT NULL,
   solve CHAR(1) NOT NULL,
   valid ENUM('yes', 'no') NOT NULL DEFAULT 'yes',
   PRIMARY KEY (question_id)
@@ -89,18 +89,18 @@ CREATE TABLE questions (
 
 CREATE TABLE anwsers (
   question INT(8) UNSIGNED NOT NULL,
-  composor INT(8) UNSIGNED NOT NULL,
+  creater INT(8) UNSIGNED NOT NULL,
   answer TEXT NOT NULL,
-  compose_date DATETIME NOT NULL,
+  create_date DATETIME NOT NULL,
   valid ENUM('yes', 'no') NOT NULL DEFAULT 'yes',
-  PRIMARY KEY (question, composor)
+  PRIMARY KEY (question, creater)
 );
 
 CREATE TABLE anwser_likes (
   question INT(8) UNSIGNED NOT NULL,
-  composor INT(8) UNSIGNED NOT NULL,
+  creater INT(8) UNSIGNED NOT NULL,
   like_by INT(8) UNSIGNED NOT NULL,
-  PRIMARY KEY (question, composor, like_by)
+  PRIMARY KEY (question, creater, like_by)
 );
 
 CREATE TABLE classrooms (
@@ -169,7 +169,7 @@ CREATE TABLE chatroom (
   message_num INT(8) UNSIGNED NOT NULL,
   member INT(8) UNSIGNED NOT NULL,
   message VARCHAR(150) NOT NULL,
-  compose_date DATETIME NOT NULL,
+  date DATETIME NOT NULL,
   PRIMARY KEY (classroom, message_num)
 );
 
@@ -202,17 +202,17 @@ ALTER TABLE courses_tags
 
 ALTER TABLE courses_comments
   ADD FOREIGN KEY (course) REFERENCES courses(course_id),
-  ADD FOREIGN KEY (composor) REFERENCES users(user_id);
+  ADD FOREIGN KEY (creater) REFERENCES users(user_id);
 
 ALTER TABLE questions
-  ADD FOREIGN KEY (composor) REFERENCES users(user_id);
+  ADD FOREIGN KEY (creater) REFERENCES users(user_id);
 
 ALTER TABLE anwsers
   ADD FOREIGN KEY (question) REFERENCES questions(question_id),
-  ADD FOREIGN KEY (composor) REFERENCES users(user_id);
+  ADD FOREIGN KEY (creater) REFERENCES users(user_id);
 
 ALTER TABLE anwser_likes
-  ADD FOREIGN KEY (question, composor) REFERENCES anwsers(question, composor),
+  ADD FOREIGN KEY (question, creater) REFERENCES anwsers(question, creater),
   ADD FOREIGN KEY (like_by) REFERENCES users(user_id);
 
 ALTER TABLE classrooms

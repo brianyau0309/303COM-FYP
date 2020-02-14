@@ -8,7 +8,9 @@ export default class Setting extends React.Component {
   render() {
     return (
       <div className="Setting content">
-        Setting Here!
+        <div>
+          <span>{this.props.user_data.nickname}</span>
+        </div>
       </div>
     )
   }

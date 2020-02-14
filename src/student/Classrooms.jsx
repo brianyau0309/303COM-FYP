@@ -8,7 +8,11 @@ export default class Classrooms extends React.Component {
   render() {
     return (
       <div className="Classrooms content">
-        Classrooms Here!
+        <button>Join Classroom</button>
+        <h3>My Classrooms</h3>
+        <ul>
+          <li>classroom 1</li>
+        </ul>
       </div>
     )
   }
