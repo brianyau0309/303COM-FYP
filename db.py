@@ -51,5 +51,32 @@ SQL = {
     INSERT INTO answers
     (question, creater, answer, create_date)
     VALUES ({0}, {1}, '{2}', '{3}')
+    ''',
+    'submit_edited_answer': '''
+    UPDATE answers
+    SET answer = '{2}'
+    WHERE question = {0} AND creater = {1}
+    ''',
+    'delete_answer': '''
+    DELETE FROM answers
+    WHERE question = {0} AND creater = {1}
+    ''',
+    'question_collection': '''
+    SELECT a.question_id, a.creater, a.title, a.solve, a.create_date, b.nickname
+    FROM questions a, users b, question_collection c
+    WHERE a.creater = b.user_id AND a.question_id = c.question  AND c.user_id = {0}
+    ''',
+    'is_collection': '''
+    SELECT *
+    FROM question_collection
+    WHERE user_id = {0} AND question = {1}
+    ''',
+    'add_to_collection': '''
+    INSERT INTO question_collection
+    VALUES ({0}, {1})
+    ''',
+    'delete_from_collection': '''
+    DELETE FROM question_collection
+    WHERE user_id = {0} AND question = {1}
     '''
 }

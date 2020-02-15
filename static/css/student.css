@@ -170,7 +170,7 @@ button {
   height: 100%;
 }
 
-.Question .TextEditor > #TextField {
+.Question .TextEditor > iframe {
   display: block;
   font-size: 2vh;
   margin: auto;
@@ -237,4 +237,28 @@ button {
   display: block;
   padding: .5vh 0;
   cursor: pointer;
+}
+
+.EditAnswer {
+  position: absolute;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  background: white;
+}
+
+.EditAnswer.open {
+  top: 0;
+}
+
+.EditAnswer.close {
+  top: 100vh;
+}
+
+.EditAnswer .TextEditor > .EditorPanel {
+  margin-top: 3vh;
+}
+
+.EditAnswer .TextEditor > iframe {
+  height: 75vh;
 }

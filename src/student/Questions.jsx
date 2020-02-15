@@ -30,14 +30,15 @@ export default class Questions extends React.Component {
 
   callQuestion(id) {
     this.child.current.loadQuestion(id)
-    this.child.current.loadAnswer(id)
+    this.child.current.loadAnswers(id)
     this.child.current.checkCanAnswer(id)
+    this.child.current.checkIsCollection(id)
     this.child.current.openToggle()
   }
 
   render() {
     return (
-      <div className="Questions content" onClick={() => console.log(this.state)}>
+      <div className="Questions content">
         <input type='text' placeholder='Search Questions Here!'/>
         <NavLink to='/questions/create'><div>Ask Questions</div></NavLink>
         <NavLink to='/questions/create'><div>My Questions</div></NavLink>

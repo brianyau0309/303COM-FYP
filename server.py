@@ -11,8 +11,6 @@ db = DBConn()
 
 def replace_string(string):
     return string.replace('\\','\\\\').replace('\'','\\\'').replace('\"','\\\"')
-def re_replace_string(string):
-    return string.replace('\\\\','\\').replace('\\\'','\'').replace('\\\"','\"')
 
 @app.route('/sw')
 def sw():
@@ -124,17 +122,77 @@ def api_anwsers_byQuestion_ID(id):
     data = db.exe_fetch(SQL['answer_byQustion_ID'].format(id), 'all')
     return jsonify({'answers': data})
 
-@app.route('/api/submit_answer', methods=['POST'])
+#  @app.route('/api/submit_answer', methods=['POST'])
+#  def api_submit_answer():
+    #  if session.get('user') != None:
+        #  user = session.get('user')
+        #  data = request.json.get('submit_answer')
+        #  question = data.get('question')
+        #  answer = replace_string(data.get('answer'))
+        #  now = datetime.now().strftime('%Y/%m/%d %H:%M:%S')
+
+        #  print(SQL['submit_answer'].format(user, question, answer, now))
+        #  return jsonify({'submit_anwser': 'Success'})
+
+    #  return jsonify({'result': 'Error'})
+
+@app.route('/api/submit_answer', methods=['POST', 'PUT', 'DELETE'])
 def api_submit_answer():
     if session.get('user') != None:
         user = session.get('user')
-        data = request.json.get('submit_answer')
-        question = data.get('question')
-        answer = replace_string(data.get('answer'))
-        now = datetime.now().strftime('%Y/%m/%d %H:%M:%S')
+        if request.method == 'POST':
+            data = request.json.get('submit_answer')
+            question = data.get('question')
+            answer = replace_string(data.get('answer'))
+            now = datetime.now().strftime('%Y/%m/%d %H:%M:%S')
 
-        print(SQL['submit_answer'].format(user, question, answer, now))
-        return jsonify({'submit_anwser': 'Success'})
+            print(SQL['submit_answer'].format(question, user, answer, now))
+            return jsonify({'submit_answer': 'Success'})
+
+        if request.method == 'PUT':
+            data = request.json.get('submit_edited_answer')
+            question = data.get('question')
+            edited_answer = replace_string(data.get('edited_answer'))
+
+            print(SQL['submit_edited_answer'].format(question, user, edited_answer))
+            return jsonify({'submit_edited_answer': 'Success'})
+
+        if request.method == 'DELETE':
+            data = request.json.get('delete_answer')
+            question = data.get('question')
+
+            print(SQL['delete_answer'].format(question, user))
+            return jsonify({'delete_answer': 'Success'})
+
+    return jsonify({'result': 'Error'})
+
+@app.route('/api/question_collection', methods = ['GET', 'POST', 'DELETE'])
+def question_collection():
+    if session.get('user') != None:
+        user = session.get('user')
+        question = request.args.get('q')
+
+        if request.method == 'GET':
+            if question != None:
+                isCollection = False
+                record = db.exe_fetch(SQL['is_collection'].format(user, question))
+                if record:
+                    isCollection = True
+                return jsonify({'isCollection': isCollection})
+            else:
+                collection = db.exe_fetch(SQL['question_collection'].format(user), 'all')
+                return jsonify({'question_collection': collection})
+
+        if request.method == 'POST':
+            if question != None:
+                db.exe_commit(SQL['add_to_collection'].format(user, question))
+                return jsonify({'add_to_collection': 'Success'})
+
+        if request.method == 'DELETE':
+            if question != None:
+                db.exe_commit(SQL['delete_from_collection'].format(user, question))
+                return jsonify({'delete_from_collection': 'Success'})
+
 
     return jsonify({'result': 'Error'})
 
