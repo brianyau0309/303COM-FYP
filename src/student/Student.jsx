@@ -4,6 +4,8 @@ import { BrowserRouter as Router, Route, Redirect, Switch } from 'react-router-d
 import Nav from './Nav.jsx'
 import Courses from './Courses.jsx'
 import Questions from './Questions.jsx'
+import MyQuestions from './MyQuestions.jsx'
+import QuestionCollection from './QuestionCollection.jsx'
 import CreateQuestions from './CreateQuestion.jsx'
 import Classrooms from './Classrooms.jsx'
 import Notification from './Notification.jsx'
@@ -57,11 +59,24 @@ export default class Student extends React.Component {
                 <Header title='Courses'/>
                 <Courses/>
               </Route>
+              <Route path="/questions/my">
+                <div className="header">
+                  <img className="header-icon" src={imgBack} onClick={() => window.history.back()}/>
+                  <span>My Questions</span>
+                </div>
+                <MyQuestions/>
+              </Route>
+              <Route path="/questions/collection">
+                <div className="header">
+                  <img className="header-icon" src={imgBack} onClick={() => window.history.back()}/>
+                  <span>My Collection</span>
+                </div>
+                <QuestionCollection/>
+              </Route>
               <Route path="/questions/create">
                 <div className="header">
                   <img className="header-icon" src={imgBack} onClick={() => window.history.back()}/>
                   <span>Questions</span>
-                  <img className="header-toggle" src={imgLink + "toggle.png"} onClick={this.navToggle}/>
                 </div>
                 <CreateQuestions/>
               </Route>

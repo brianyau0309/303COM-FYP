@@ -33,7 +33,7 @@ def login_process():
     user_id = request.form['user_id']
     password = request.form['password']
 
-    data = db.exe_fetch("SELECT password FROM users WHERE valid = 'yes' and user_id = '%s'"%user_id)
+    data = db.exe_fetch(SQL['login_process'].format(user_id))
     if data != None:
         if data['password'] == password:
             print('Success')
@@ -69,100 +69,83 @@ def api_user_data():
     return jsonify({'result': 'Error'})
 
 #
-# CreateQuestion API
-#
-
-@app.route('/api/create_question', methods=['POST'])
-def api_create_question():
-    if session.get('user') != None:
-        user = session.get('user')
-        data = request.json.get('create_question')
-        title = replace_string(data.get('title'))
-        content = replace_string(data.get('content'))
-        now = datetime.now().strftime('%Y/%m/%d %H:%M:%S')
-
-        print(SQL['create_question'].format(user, title, content, now))
-        return jsonify({'result': 'Success'})
-
-    return jsonify({'result': 'Error'})
-
-#
 # Questions API
 #
 
 @app.route('/api/questions')
 def api_questions():
-    data = db.exe_fetch(SQL['questions'], 'all')
-    return jsonify({'questions': data})
+    if session.get('user') != None:
+        new = db.exe_fetch(SQL['questions_new'], 'all')
+        hot = db.exe_fetch(SQL['questions_hot'], 'all')
+        return jsonify({'questions': {
+            'new': new,
+            'hot': hot
+        }})
 
-#
-# Question API
-#
+    return jsonify({'result': 'Error'})
 
-@app.route('/api/question/<path:id>')
-def api_question(id):
-    data = db.exe_fetch(SQL['question'].format(id))
-    return jsonify({'question': data})
-
-@app.route('/api/check_can_answer/<path:id>')
-def api_check_can_answer(id):
-    canAnswer = True
+@app.route('/api/question', methods = ['GET','POST','PUT'])
+def api_question():
     if session.get('user') != None:
         user = session.get('user')
-        data = db.exe_fetch(SQL['answer_byQustion_ID'].format(id)+' AND creater = %s'%user)
-        question_creater = db.exe_fetch(SQL['question'].format(id)).get('creater')
-        print(int(user) == int(question_creater))
-        if data or int(user) == int(question_creater):
-            canAnswer = False
+        question = request.args.get('q')
 
-    return jsonify({'canAnswer': canAnswer})
+        if request.method == 'GET':
+            if question != None:
+                data = db.exe_fetch(SQL['question'].format(question))
+                return jsonify({'question': data})
 
-@app.route('/api/answers/<path:id>')
-def api_anwsers_byQuestion_ID(id):
-    data = db.exe_fetch(SQL['answer_byQustion_ID'].format(id), 'all')
-    return jsonify({'answers': data})
-
-#  @app.route('/api/submit_answer', methods=['POST'])
-#  def api_submit_answer():
-    #  if session.get('user') != None:
-        #  user = session.get('user')
-        #  data = request.json.get('submit_answer')
-        #  question = data.get('question')
-        #  answer = replace_string(data.get('answer'))
-        #  now = datetime.now().strftime('%Y/%m/%d %H:%M:%S')
-
-        #  print(SQL['submit_answer'].format(user, question, answer, now))
-        #  return jsonify({'submit_anwser': 'Success'})
-
-    #  return jsonify({'result': 'Error'})
-
-@app.route('/api/submit_answer', methods=['POST', 'PUT', 'DELETE'])
-def api_submit_answer():
-    if session.get('user') != None:
-        user = session.get('user')
         if request.method == 'POST':
-            data = request.json.get('submit_answer')
-            question = data.get('question')
-            answer = replace_string(data.get('answer'))
+            data = request.json.get('create_question')
+            title = replace_string(data.get('title'))
+            content = replace_string(data.get('content'))
             now = datetime.now().strftime('%Y/%m/%d %H:%M:%S')
 
-            print(SQL['submit_answer'].format(question, user, answer, now))
-            return jsonify({'submit_answer': 'Success'})
+            db.exe_commit(SQL['create_question'].format(user, title, content, now))
+            return jsonify({'result': 'Success'})
 
         if request.method == 'PUT':
-            data = request.json.get('submit_edited_answer')
-            question = data.get('question')
-            edited_answer = replace_string(data.get('edited_answer'))
+            if question != None:
+                question_create_by = db.exe_fetch(SQL['question'].format(question)).get('create_by')
+                if int(user) == int(question_create_by):
+                    db.exe_commit(SQL['question_valid'].format('false' ,question))
+                    return jsonify({'question_valid': {
+                        'result': 'Success',
+                        'valid': 'false'
+                    }})
 
-            print(SQL['submit_edited_answer'].format(question, user, edited_answer))
-            return jsonify({'submit_edited_answer': 'Success'})
+    return jsonify({'result': 'Error'})
 
-        if request.method == 'DELETE':
-            data = request.json.get('delete_answer')
-            question = data.get('question')
+@app.route('/api/solve_question', methods=['PATCH'])
+def api_solve_question():
+    if session.get('user') != None:
+        user = session.get('user')
+        data = request.json.get('solve_question')
+        question = data.get('question')
+        solved_by = data.get('solved_by')
+        if solved_by == 0:
+            solved_by = 'null'
 
-            print(SQL['delete_answer'].format(question, user))
-            return jsonify({'delete_answer': 'Success'})
+        db.exe_commit(SQL['solve_question'].format(solved_by, question))
+        return jsonify({'solve_question': 'Success'})
+
+    return jsonify({'result': 'Error'})
+
+@app.route('/api/my_questions')
+def api_my_questions():
+    if session.get('user') != None:
+        user = session.get('user')
+        question = request.args.get('q')
+
+        if question != None:
+            myQuestion = False
+            question_create_by = db.exe_fetch(SQL['question'].format(question)).get('create_by')
+            if int(user) == int(question_create_by):
+                myQuestion = True
+            return jsonify({'myQuestion': myQuestion})
+        else:
+            my_questions = db.exe_fetch(SQL['my_questions'].format(user), 'all')
+            return jsonify({'my_questions': my_questions})
 
     return jsonify({'result': 'Error'})
 
@@ -193,6 +176,56 @@ def question_collection():
                 db.exe_commit(SQL['delete_from_collection'].format(user, question))
                 return jsonify({'delete_from_collection': 'Success'})
 
+    return jsonify({'result': 'Error'})
+
+#
+# Answer API
+#
+
+@app.route('/api/check_can_answer/<path:id>')
+def api_check_can_answer(id):
+    canAnswer = True
+    if session.get('user') != None:
+        user = session.get('user')
+        data = db.exe_fetch(SQL['answer_byQustion_ID'].format(id)+' AND create_by = %s'%user)
+        question_create_by = db.exe_fetch(SQL['question'].format(id)).get('create_by')
+        if data or int(user) == int(question_create_by):
+            canAnswer = False
+
+    return jsonify({'canAnswer': canAnswer})
+
+@app.route('/api/answers/<path:id>')
+def api_anwsers_byQuestion_ID(id):
+    data = db.exe_fetch(SQL['answer_byQustion_ID'].format(id), 'all')
+    return jsonify({'answers': data})
+
+@app.route('/api/submit_answer', methods=['POST', 'PUT', 'DELETE'])
+def api_submit_answer():
+    if session.get('user') != None:
+        user = session.get('user')
+        if request.method == 'POST':
+            data = request.json.get('submit_answer')
+            question = data.get('question')
+            answer = replace_string(data.get('answer'))
+            now = datetime.now().strftime('%Y/%m/%d %H:%M:%S')
+
+            db.exe_commit(SQL['submit_answer'].format(question, user, answer, now))
+            return jsonify({'submit_answer': 'Success'})
+
+        if request.method == 'PUT':
+            data = request.json.get('submit_edited_answer')
+            question = data.get('question')
+            edited_answer = replace_string(data.get('edited_answer'))
+
+            db.exe_commit(SQL['submit_edited_answer'].format(question, user, edited_answer))
+            return jsonify({'submit_edited_answer': 'Success'})
+
+        if request.method == 'DELETE':
+            data = request.json.get('delete_answer')
+            question = data.get('question')
+
+            db.exe_commit(SQL['delete_answer'].format(question, user))
+            return jsonify({'delete_answer': 'Success'})
 
     return jsonify({'result': 'Error'})
 

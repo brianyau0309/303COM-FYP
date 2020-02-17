@@ -24,12 +24,12 @@ DROP TABLE IF EXISTS `answer_likes`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `answer_likes` (
   `question` int(8) unsigned NOT NULL,
-  `creater` int(8) unsigned NOT NULL,
+  `create_by` int(8) unsigned NOT NULL,
   `like_by` int(8) unsigned NOT NULL,
-  PRIMARY KEY (`question`,`creater`,`like_by`),
+  PRIMARY KEY (`question`,`create_by`,`like_by`),
   KEY `like_by` (`like_by`),
-  CONSTRAINT `answer_likes_ibfk_1` FOREIGN KEY (`question`, `creater`) REFERENCES `answers` (`question`, `creater`),
-  CONSTRAINT `answer_likes_ibfk_2` FOREIGN KEY (`like_by`) REFERENCES `users` (`user_id`)
+  CONSTRAINT `answer_likes_ibfk_1` FOREIGN KEY (`question`, `create_by`) REFERENCES `answers` (`question`, `create_by`) ON DELETE CASCADE,
+  CONSTRAINT `answer_likes_ibfk_2` FOREIGN KEY (`like_by`) REFERENCES `users` (`user_id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -51,14 +51,14 @@ DROP TABLE IF EXISTS `answers`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `answers` (
   `question` int(8) unsigned NOT NULL,
-  `creater` int(8) unsigned NOT NULL,
+  `create_by` int(8) unsigned NOT NULL,
   `answer` text COLLATE utf8mb4_unicode_ci NOT NULL,
   `create_date` datetime NOT NULL,
-  `valid` enum('yes','no') COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'yes',
-  PRIMARY KEY (`question`,`creater`),
-  KEY `creater` (`creater`),
+  `valid` tinyint(1) NOT NULL DEFAULT 1,
+  PRIMARY KEY (`question`,`create_by`),
+  KEY `create_by` (`create_by`),
   CONSTRAINT `answers_ibfk_1` FOREIGN KEY (`question`) REFERENCES `questions` (`question_id`),
-  CONSTRAINT `answers_ibfk_2` FOREIGN KEY (`creater`) REFERENCES `users` (`user_id`)
+  CONSTRAINT `answers_ibfk_2` FOREIGN KEY (`create_by`) REFERENCES `users` (`user_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -68,6 +68,7 @@ CREATE TABLE `answers` (
 
 LOCK TABLES `answers` WRITE;
 /*!40000 ALTER TABLE `answers` DISABLE KEYS */;
+INSERT INTO `answers` VALUES (1,2,'Answer Test<div><ol><li>1\'1</li><li>2\"2<br></li></ol><div><ul><li>3/3</li><li>456</li></ul></div></div>','2020-02-14 21:07:59',1),(3,2,'May be 1','2020-02-17 21:57:01',1);
 /*!40000 ALTER TABLE `answers` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -84,7 +85,7 @@ CREATE TABLE `celendar` (
   `event` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL,
   `detail` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `event_date` datetime NOT NULL,
-  `valid` enum('yes','no') COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'yes',
+  `valid` tinyint(1) NOT NULL DEFAULT 1,
   PRIMARY KEY (`classroom`,`event_num`),
   CONSTRAINT `celendar_ibfk_1` FOREIGN KEY (`classroom`) REFERENCES `classrooms` (`classroom_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -168,7 +169,7 @@ CREATE TABLE `classrooms` (
   `name` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL,
   `description` varchar(256) COLLATE utf8mb4_unicode_ci NOT NULL,
   `create_date` datetime NOT NULL,
-  `valid` enum('yes','no') COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'yes',
+  `valid` tinyint(1) NOT NULL DEFAULT 1,
   PRIMARY KEY (`classroom_id`),
   KEY `create_by` (`create_by`),
   CONSTRAINT `classrooms_ibfk_1` FOREIGN KEY (`create_by`) REFERENCES `users` (`user_id`)
@@ -196,8 +197,8 @@ CREATE TABLE `course_collection` (
   `course` int(8) unsigned NOT NULL,
   PRIMARY KEY (`user_id`,`course`),
   KEY `course` (`course`),
-  CONSTRAINT `course_collection_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`),
-  CONSTRAINT `course_collection_ibfk_2` FOREIGN KEY (`course`) REFERENCES `courses` (`course_id`)
+  CONSTRAINT `course_collection_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`) ON DELETE CASCADE,
+  CONSTRAINT `course_collection_ibfk_2` FOREIGN KEY (`course`) REFERENCES `courses` (`course_id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -223,7 +224,7 @@ CREATE TABLE `courses` (
   `title` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL,
   `descrition` text COLLATE utf8mb4_unicode_ci NOT NULL,
   `create_date` datetime NOT NULL,
-  `valid` enum('yes','no') COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'yes',
+  `valid` tinyint(1) NOT NULL DEFAULT 1,
   PRIMARY KEY (`course_id`),
   KEY `author` (`author`),
   CONSTRAINT `courses_ibfk_1` FOREIGN KEY (`author`) REFERENCES `users` (`user_id`)
@@ -248,14 +249,14 @@ DROP TABLE IF EXISTS `courses_comments`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `courses_comments` (
   `course` int(8) unsigned NOT NULL,
-  `creater` int(8) unsigned NOT NULL,
+  `create_by` int(8) unsigned NOT NULL,
   `content` text COLLATE utf8mb4_unicode_ci NOT NULL,
   `rating` int(1) NOT NULL,
-  `valid` enum('yes','no') COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'yes',
-  PRIMARY KEY (`course`,`creater`),
-  KEY `creater` (`creater`),
+  `valid` tinyint(1) NOT NULL DEFAULT 1,
+  PRIMARY KEY (`course`,`create_by`),
+  KEY `create_by` (`create_by`),
   CONSTRAINT `courses_comments_ibfk_1` FOREIGN KEY (`course`) REFERENCES `courses` (`course_id`),
-  CONSTRAINT `courses_comments_ibfk_2` FOREIGN KEY (`creater`) REFERENCES `users` (`user_id`)
+  CONSTRAINT `courses_comments_ibfk_2` FOREIGN KEY (`create_by`) REFERENCES `users` (`user_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -333,8 +334,8 @@ CREATE TABLE `question_collection` (
   `question` int(8) unsigned NOT NULL,
   PRIMARY KEY (`user_id`,`question`),
   KEY `question` (`question`),
-  CONSTRAINT `question_collection_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`),
-  CONSTRAINT `question_collection_ibfk_2` FOREIGN KEY (`question`) REFERENCES `questions` (`question_id`)
+  CONSTRAINT `question_collection_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`) ON DELETE CASCADE,
+  CONSTRAINT `question_collection_ibfk_2` FOREIGN KEY (`question`) REFERENCES `questions` (`question_id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -344,6 +345,7 @@ CREATE TABLE `question_collection` (
 
 LOCK TABLES `question_collection` WRITE;
 /*!40000 ALTER TABLE `question_collection` DISABLE KEYS */;
+INSERT INTO `question_collection` VALUES (2,1),(2,3),(2,4);
 /*!40000 ALTER TABLE `question_collection` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -356,16 +358,18 @@ DROP TABLE IF EXISTS `questions`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `questions` (
   `question_id` int(8) unsigned zerofill NOT NULL AUTO_INCREMENT,
-  `creater` int(8) unsigned NOT NULL,
+  `create_by` int(8) unsigned NOT NULL,
   `title` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL,
   `detail` text COLLATE utf8mb4_unicode_ci NOT NULL,
   `create_date` datetime NOT NULL,
-  `solve` char(1) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `valid` enum('yes','no') COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'yes',
+  `solved_by` int(8) unsigned DEFAULT NULL,
+  `valid` tinyint(1) NOT NULL DEFAULT 1,
   PRIMARY KEY (`question_id`),
-  KEY `creater` (`creater`),
-  CONSTRAINT `questions_ibfk_1` FOREIGN KEY (`creater`) REFERENCES `users` (`user_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+  KEY `create_by` (`create_by`),
+  KEY `questions_ibfk_2` (`solved_by`),
+  CONSTRAINT `questions_ibfk_1` FOREIGN KEY (`create_by`) REFERENCES `users` (`user_id`) ON DELETE CASCADE,
+  CONSTRAINT `questions_ibfk_2` FOREIGN KEY (`solved_by`) REFERENCES `users` (`user_id`) ON DELETE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -374,7 +378,7 @@ CREATE TABLE `questions` (
 
 LOCK TABLES `questions` WRITE;
 /*!40000 ALTER TABLE `questions` DISABLE KEYS */;
-INSERT INTO `questions` VALUES (00000001,1,'Testing','<b>Hello World!</b><div style=\"text-align: left;\">Here is a <i>Test</i> to know is this <u>Text Field</u> is work or not.</div><div style=\"text-align: left;\">Left</div><div style=\"text-align: center;\">Center</div><div style=\"text-align: right;\">Right</div><div style=\"text-align: left;\"><ol><li>Number List</li></ol><ul><li>Bullet List</li></ul><div>Super<sup>script</sup></div><div>Sub<sub>script</sub></div></div>','2020-02-12 22:59:30','N','yes'),(00000002,1,'Student\'s testing','<b>a\'s</b><div style=\"text-align: center;\"><i>b\\s\"</i></div>','2020-02-12 23:18:47','N','yes');
+INSERT INTO `questions` VALUES (00000001,1,'Testing','<b>Hello World!</b><div style=\"text-align: left;\">Here is a <i>Test</i> to know is this <u>Text Field</u> is work or not.</div><div style=\"text-align: left;\">Left</div><div style=\"text-align: center;\">Center</div><div style=\"text-align: right;\">Right</div><div style=\"text-align: left;\"><ol><li>Number List</li></ol><ul><li>Bullet List</li></ul><div>Super<sup>script</sup></div><div>Sub<sub>script</sub></div></div>','2020-02-12 22:59:30',NULL,1),(00000002,1,'Student\'s testing','<b>a\'s</b><div style=\"text-align: center;\"><i>b\\s\"</i></div>','2020-02-12 23:18:47',NULL,1),(00000003,1,'Math Question','<img src=\"https://i.insider.com/5a4bdcc6cb9df434008b4577?width=600&amp;format=jpeg&amp;auto=webp\" alt=\"「math question」的圖片\n搜尋結果\"><div>What is the Answer</div>','2020-02-14 22:15:35',NULL,1),(00000004,2,'Mary Question','Past Tenses Question','2020-02-17 21:59:09',NULL,1),(00000005,2,'Mary Question 2','<div style=\"text-align: center;\">Question 2</div><div style=\"text-align: center;\">What is the past tense of run?</div>','2020-02-17 22:02:50',NULL,1),(00000006,1,'Peter Question','<b>Bold</b> means&nbsp;import','2020-02-18 04:49:32',NULL,1);
 /*!40000 ALTER TABLE `questions` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -389,7 +393,7 @@ CREATE TABLE `search_history` (
   `user_id` int(8) unsigned NOT NULL,
   `tag` varchar(20) COLLATE utf8mb4_unicode_ci NOT NULL,
   KEY `user_id` (`user_id`),
-  CONSTRAINT `search_history_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`)
+  CONSTRAINT `search_history_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -419,8 +423,8 @@ CREATE TABLE `task_answers` (
   `answers_comment` text COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   PRIMARY KEY (`student`),
   KEY `classroom` (`classroom`,`task_num`,`question_num`),
-  CONSTRAINT `task_answers_ibfk_1` FOREIGN KEY (`classroom`, `task_num`, `question_num`) REFERENCES `task_questions` (`classroom`, `task_num`, `question_num`),
-  CONSTRAINT `task_answers_ibfk_2` FOREIGN KEY (`student`) REFERENCES `users` (`user_id`)
+  CONSTRAINT `task_answers_ibfk_1` FOREIGN KEY (`classroom`, `task_num`, `question_num`) REFERENCES `task_questions` (`classroom`, `task_num`, `question_num`) ON DELETE CASCADE,
+  CONSTRAINT `task_answers_ibfk_2` FOREIGN KEY (`student`) REFERENCES `users` (`user_id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -450,7 +454,7 @@ CREATE TABLE `task_questions` (
   `awnser` varchar(80) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `full_mark` int(3) NOT NULL,
   PRIMARY KEY (`classroom`,`task_num`,`question_num`),
-  CONSTRAINT `task_questions_ibfk_1` FOREIGN KEY (`classroom`, `task_num`) REFERENCES `tasks` (`classroom`, `task_num`)
+  CONSTRAINT `task_questions_ibfk_1` FOREIGN KEY (`classroom`, `task_num`) REFERENCES `tasks` (`classroom`, `task_num`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -477,11 +481,11 @@ CREATE TABLE `tasks` (
   `creator` int(8) unsigned NOT NULL,
   `create_date` datetime NOT NULL,
   `deadline` datetime DEFAULT NULL,
-  `publish` enum('yes','no') COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'yes',
+  `publish` tinyint(1) NOT NULL DEFAULT 1,
   PRIMARY KEY (`classroom`,`task_num`),
   KEY `creator` (`creator`),
-  CONSTRAINT `tasks_ibfk_1` FOREIGN KEY (`classroom`) REFERENCES `classrooms` (`classroom_id`),
-  CONSTRAINT `tasks_ibfk_2` FOREIGN KEY (`creator`) REFERENCES `users` (`user_id`)
+  CONSTRAINT `tasks_ibfk_1` FOREIGN KEY (`classroom`) REFERENCES `classrooms` (`classroom_id`) ON DELETE CASCADE,
+  CONSTRAINT `tasks_ibfk_2` FOREIGN KEY (`creator`) REFERENCES `users` (`user_id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -506,8 +510,8 @@ CREATE TABLE `user_following` (
   `following` int(8) unsigned NOT NULL,
   PRIMARY KEY (`user_id`,`following`),
   KEY `following` (`following`),
-  CONSTRAINT `user_following_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`),
-  CONSTRAINT `user_following_ibfk_2` FOREIGN KEY (`following`) REFERENCES `users` (`user_id`)
+  CONSTRAINT `user_following_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`) ON DELETE CASCADE,
+  CONSTRAINT `user_following_ibfk_2` FOREIGN KEY (`following`) REFERENCES `users` (`user_id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -536,7 +540,7 @@ CREATE TABLE `users` (
   `sex` enum('m','f','n') COLLATE utf8mb4_unicode_ci NOT NULL,
   `user_type` enum('student','teacher','admin') COLLATE utf8mb4_unicode_ci NOT NULL,
   `school` varchar(80) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `valid` enum('yes','no') COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'yes',
+  `valid` tinyint(1) NOT NULL DEFAULT 1,
   PRIMARY KEY (`user_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -547,7 +551,7 @@ CREATE TABLE `users` (
 
 LOCK TABLES `users` WRITE;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
-INSERT INTO `users` VALUES (00000001,'Student01','wong','tai man','peter','m','student','A School','yes'),(00000002,'Teacher01','chan','tai man','mary','m','teacher','B School','yes'),(00000003,'Admin01','yau','siu fung brian','brian','m','admin','','yes');
+INSERT INTO `users` VALUES (00000001,'Student01','wong','tai man','peter','m','student','A School',1),(00000002,'Teacher01','chan','tai man','mary','m','teacher','B School',1),(00000003,'Admin01','yau','siu fung brian','brian','m','admin','',1);
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -560,4 +564,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2020-02-14 20:22:11
+-- Dump completed on 2020-02-18  5:20:37

@@ -34,6 +34,8 @@ export default class EditAnswer extends React.Component {
       if (res.ok) {
         res.json().then(result => {
           console.log(result)
+          this.props.reload()
+          this.openToggle()
         })
       }
     })
