@@ -2,14 +2,16 @@ import React from 'react'
 import { BrowserRouter as Router, Route, Redirect, Switch } from 'react-router-dom'
 
 import Nav from './Nav.jsx'
-import Courses from './Courses.jsx'
-import Questions from './Questions.jsx'
-import MyQuestions from './MyQuestions.jsx'
-import QuestionCollection from './QuestionCollection.jsx'
-import CreateQuestions from './CreateQuestion.jsx'
-import Classrooms from './Classrooms.jsx'
-import Notification from './Notification.jsx'
-import Setting from './Setting.jsx'
+import Courses from './Courses/Courses.jsx'
+
+import Questions from './Questions/Questions.jsx'
+import MyQuestions from './Questions/MyQuestions.jsx'
+import QuestionCollection from './Questions/QuestionCollection.jsx'
+import CreateQuestions from './Questions/CreateQuestion.jsx'
+
+import Classrooms from './Classrooms/Classrooms.jsx'
+import Notification from './Notification/Notification.jsx'
+import Setting from './Setting/Setting.jsx'
 
 const imgBack = 'https://img.icons8.com/flat_round/64/000000/back--v1.png'
 

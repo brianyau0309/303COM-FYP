@@ -2,7 +2,7 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 
 import EditAnswer from './EditAnswer.jsx'
-import TextEditor from '../TextEditor.jsx'
+import TextEditor from '../../TextEditor.jsx'
 
 const imgBack = 'https://img.icons8.com/flat_round/64/000000/back--v1.png'
 
@@ -27,6 +27,7 @@ export default class Question extends React.Component {
     this.submitAnswer = this.submitAnswer.bind(this)
     this.editAnswer = this.editAnswer.bind(this)
     this.deleteAnswer = this.deleteAnswer.bind(this)
+    this.likeAnswer = this.likeAnswer.bind(this)
     this.reload = this.reload.bind(this)
     this.openToggle = this.openToggle.bind(this)
     this.answerFieldToggle = this.answerFieldToggle.bind(this)
@@ -94,7 +95,7 @@ export default class Question extends React.Component {
   }
 
   deleteQuestion() {
-    fetch('/api/question?q='+this.state.question_id, { method: 'PUT' }).then(res => {
+    fetch('/api/question?q='+this.state.question_id, { method: 'PATCH' }).then(res => {
       if (res.ok) {
         res.json().then(result => {
           console.log(result)
@@ -184,6 +185,17 @@ export default class Question extends React.Component {
     })
   }
 
+  likeAnswer(create_by, m) {
+    fetch('/api/answer_likes?q='+this.state.question_id+'&c='+create_by, { method: m }).then(res => {
+      if (res.ok) {
+        res.json().then(result => {
+          console.log(result)
+          this.loadAnswers(this.state.question_id)
+        })
+      }
+    })
+  }
+
   reload() {
     this.checkCanAnswer(this.state.question_id)
     this.loadAnswers(this.state.question_id)
@@ -241,6 +253,10 @@ export default class Question extends React.Component {
                     <div dangerouslySetInnerHTML={{__html: a.answer}}></div>
                     <div>{a.nickname}</div>
                     <div>{a.create_date}</div>
+                    <div>Likes: {a.likes}</div>
+                    { a.user_liked ? 
+                      <button onClick={() => this.likeAnswer(a.create_by, 'DELETE')}>Unlike</button>
+                    : <button onClick={() => this.likeAnswer(a.create_by, 'POST')}>Like</button>}
                   </div>
                 )
               }
@@ -266,6 +282,10 @@ export default class Question extends React.Component {
                    <div dangerouslySetInnerHTML={{__html: a.answer}}></div>
                    <div>{a.nickname}</div>
                    <div>{a.create_date}</div>
+                    <div>Likes: {a.likes}</div>
+                    { a.user_liked ? 
+                      <button onClick={() => this.likeAnswer(a.create_by, 'DELETE')}>Unlike</button>
+                    : <button onClick={() => this.likeAnswer(a.create_by, 'POST')}>Like</button>}
                    {this.props.user_id === a.create_by ? 
                      <div>
                        <div onClick={() => this.editAnswer(a.answer)}>Edit</div>

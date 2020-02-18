@@ -1,6 +1,6 @@
 import React from 'react'
 
-import TextEditor from '../TextEditor2.jsx'
+import TextEditor from '../../TextEditor2.jsx'
 
 const imgBack = 'https://img.icons8.com/flat_round/64/000000/back--v1.png'
 
@@ -22,7 +22,7 @@ export default class EditAnswer extends React.Component {
   submitEditedAnswer() {
     let editedAnswer = TextField2.document.body.innerHTML
     fetch('/api/submit_answer', {
-      method: 'PUT',
+      method: 'PATCH',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ 'submit_edited_answer': 
         {

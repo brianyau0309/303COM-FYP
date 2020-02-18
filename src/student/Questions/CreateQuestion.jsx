@@ -1,7 +1,7 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 
-import TextEditor from '../TextEditor.jsx'
+import TextEditor from '../../TextEditor.jsx'
 
 export default class CreateQuestions extends React.Component {
   constructor(props) {

@@ -47,6 +47,12 @@ SQL = {
     WHERE a.create_by = b.user_id AND c.question = a.question_id AND a.valid = true AND b.valid = true
     LIMIT 5
     ''',
+    'search_questions': '''
+    SELECT a.question_id, a.title, b.nickname, b.user_type, a.create_date, a.solved_by
+    FROM questions a, users b
+    WHERE a.create_by = b.user_id AND a.valid = true AND b.valid = true AND LOWER(a.title) LIKE LOWER('%{0}%')
+    ORDER BY a.create_date
+    ''',
     'question': '''
     SELECT a.question_id, a.create_by, a.title, a.detail, a.solved_by, a.create_date, b.nickname, b.user_type
     FROM questions a, users b
@@ -71,6 +77,36 @@ SQL = {
     SELECT a.answer, a.create_date, a.create_by, b.nickname, b.user_type
     FROM answers a, users b
     WHERE a.create_by = b.user_id AND a.valid = true AND b.valid = true AND question = '{0}'
+    ''',
+    'new_answer_byQuestionId': '''
+    SELECT
+      a.answer,
+      a.create_date,
+      a.create_by,
+      b.nickname,
+      b.user_type,
+      c.likes,
+      CASE WHEN d.like_by IS NOT NULL
+        then true
+        else false
+      END as user_liked
+    FROM answers a
+      INNER JOIN users b ON a.create_by = b.user_id
+      LEFT JOIN (
+        SELECT question, create_by, COUNT(*) as likes
+        FROM answer_likes
+        GROUP BY question, create_by
+      ) as c ON a.question = c.question AND a.create_by = c.create_by
+      LEFT JOIN answer_likes d ON d.question = a.question AND d.create_by = a.create_by AND d.like_by = {1}
+    WHERE a.question = {0}
+    ''',
+    'like_answer': '''
+    INSERT INTO answer_likes
+    VALUES ({0}, {1}, {2})
+    ''',
+    'unlike_answer': '''
+    DELETE FROM answer_likes
+    WHERE question = {0} AND create_by = {1} AND like_by = {2}
     ''',
     'submit_answer': '''
     INSERT INTO answers

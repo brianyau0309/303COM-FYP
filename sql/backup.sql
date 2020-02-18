@@ -39,6 +39,7 @@ CREATE TABLE `answer_likes` (
 
 LOCK TABLES `answer_likes` WRITE;
 /*!40000 ALTER TABLE `answer_likes` DISABLE KEYS */;
+INSERT INTO `answer_likes` VALUES (1,2,1),(1,2,2),(3,2,1);
 /*!40000 ALTER TABLE `answer_likes` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -345,7 +346,7 @@ CREATE TABLE `question_collection` (
 
 LOCK TABLES `question_collection` WRITE;
 /*!40000 ALTER TABLE `question_collection` DISABLE KEYS */;
-INSERT INTO `question_collection` VALUES (2,1),(2,3),(2,4);
+INSERT INTO `question_collection` VALUES (1,1),(2,1),(2,3),(2,4);
 /*!40000 ALTER TABLE `question_collection` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -542,7 +543,7 @@ CREATE TABLE `users` (
   `school` varchar(80) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `valid` tinyint(1) NOT NULL DEFAULT 1,
   PRIMARY KEY (`user_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -551,7 +552,7 @@ CREATE TABLE `users` (
 
 LOCK TABLES `users` WRITE;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
-INSERT INTO `users` VALUES (00000001,'Student01','wong','tai man','peter','m','student','A School',1),(00000002,'Teacher01','chan','tai man','mary','m','teacher','B School',1),(00000003,'Admin01','yau','siu fung brian','brian','m','admin','',1);
+INSERT INTO `users` VALUES (00000001,'Student01','wong','tai man','peter','m','student','A School',1),(00000002,'Teacher01','chan','man man','mary','f','teacher','B School',1),(00000003,'Admin01','yau','siu fung brian','brian','m','admin','',1),(00000004,'Student02','lee','tai man','ben','m','student','C School',1),(00000005,'Student03','chan','tai man','tommy','m','student','A School',1),(00000006,'Student04','chow','tai man','jimmy','m','student','B School',1),(00000007,'Student05','lee','tai man','tony','m','student','C School',1),(00000008,'Student06','wong','man man','emma','f','student','C School',1),(00000009,'Student07','ng','tai man','john','m','student','D School',1),(00000010,'Student08','cheng','man man','christain','f','student','A School',1),(00000011,'Teacher02','lee','man man','mia','f','teacher','A School',1),(00000012,'Teacher03','ng','tai man','oliver','m','teacher','A School',1),(00000013,'Teacher04','chow','man man','eva','f','teacher','C School',1),(00000014,'Teacher05','wong','tai man','ben','m','teacher','D School',1);
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -564,4 +565,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2020-02-18  5:20:37
+-- Dump completed on 2020-02-19  2:56:53
