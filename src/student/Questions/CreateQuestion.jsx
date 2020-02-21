@@ -15,7 +15,7 @@ export default class CreateQuestions extends React.Component {
   output() {
     let title = document.querySelector('.CreateQuestions > input').value
     let content = TextField.document.body.innerHTML
-    if (content !== '', title !== '') {
+    if (content !== '' && title !== '') {
       fetch('/api/question', { 
         method: 'POST' ,
         headers: { 'Content-Type': 'application/json' },

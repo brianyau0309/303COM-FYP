@@ -164,7 +164,7 @@ def question_collection():
         if request.method == 'GET':
             if question != None:
                 isCollection = False
-                record = db.exe_fetch(SQL['is_collection'].format(user, question))
+                record = db.exe_fetch(SQL['is_collection'].format(user, question, 'question_collection'))
                 if record:
                     isCollection = True
                 return jsonify({'isCollection': isCollection})
@@ -174,12 +174,12 @@ def question_collection():
 
         elif request.method == 'POST':
             if question != None:
-                db.exe_commit(SQL['add_to_collection'].format(user, question))
+                db.exe_commit(SQL['add_to_collection'].format(user, question, 'question_collection'))
                 return jsonify({'add_to_collection': 'Success'})
 
         elif request.method == 'DELETE':
             if question != None:
-                db.exe_commit(SQL['delete_from_collection'].format(user, question))
+                db.exe_commit(SQL['delete_from_collection'].format(user, question, 'question_collection'))
                 return jsonify({'delete_from_collection': 'Success'})
 
     return jsonify({'result': 'Error'})
@@ -193,7 +193,7 @@ def api_check_can_answer(id):
     canAnswer = True
     if session.get('user') != None:
         user = session.get('user')
-        data = db.exe_fetch(SQL['answer_byQustion_ID'].format(id)+' AND create_by = %s'%user)
+        data = db.exe_fetch(SQL['check_can_answer'].format(id, user))
         question_create_by = db.exe_fetch(SQL['question'].format(id)).get('create_by')
         if data or int(user) == int(question_create_by):
             canAnswer = False
@@ -204,7 +204,7 @@ def api_check_can_answer(id):
 def api_anwsers_byQuestion_ID(id):
     if session.get('user') != None:
         user = session.get('user')
-        answers = db.exe_fetch(SQL['new_answer_byQuestionId'].format(id, user), 'all')
+        answers = db.exe_fetch(SQL['answer_byQuestionId'].format(id, user), 'all')
 
         return jsonify({'answers': answers})
 
@@ -257,6 +257,170 @@ def api_submit_answer():
             return jsonify({'delete_answer': 'Success'})
 
     return jsonify({'result': 'Error'})
+
+#
+# Courses API
+#
+@app.route('/api/courses', methods=['GET', 'POST'])
+def api_courses():
+    if session.get('user') != None:
+        new = db.exe_fetch(SQL['courses_new'], 'all')
+        user = session.get('user')
+        if request.method == 'GET':
+            return jsonify({'courses': { 'new': new } })
+
+    return jsonify({'result': 'Error'})
+
+@app.route('/api/course', methods=['GET', 'POST'])
+def api_course():
+    if session.get('user') != None:
+        user = session.get('user')
+        course = request.args.get('q')
+
+        if request.method == 'GET':
+            if course != None:
+                data = db.exe_fetch(SQL['course'].format(course))
+                return jsonify({'course': data})
+
+        elif request.method == 'POST':
+            data = request.json.get('create_course')
+            title = replace_string(data.get('title'))
+            description = replace_string(data.get('description'))
+            tags = data.get('tags')
+            now = datetime.now().strftime('%Y/%m/%d %H:%M:%S')
+
+            last_id = db.exe_commit_last_id(SQL['create_course'].format(user, title, description, now)).get('last_id')
+            for tag in tags:
+                db.exe_commit(SQL['create_course_tags'].format(last_id, replace_string(tag)))
+
+            return jsonify({'create_course': 'Success'})
+
+    return jsonify({'result': 'Error'})
+
+@app.route('/api/my_courses')
+def api_my_courses():
+    if session.get('user') != None:
+        user = session.get('user')
+        course = request.args.get('c')
+
+        if course != None:
+            myCourse = False
+            author = db.exe_fetch(SQL['course'].format(course)).get('author')
+            if int(user) == int(author):
+                myCourse = True
+            return jsonify({'myCourse': myCourse})
+        else:
+            my_courses = db.exe_fetch(SQL['my_courses'].format(user), 'all')
+            return jsonify({'my_courses': my_courses})
+
+    return jsonify({'result': 'Error'})
+
+@app.route('/api/course_collection', methods = ['GET', 'POST', 'DELETE'])
+def course_collection():
+    if session.get('user') != None:
+        user = session.get('user')
+        course = request.args.get('c')
+
+        if request.method == 'GET':
+            if course != None:
+                isCollection = False
+                record = db.exe_fetch(SQL['is_collection'].format(user, course, 'course_collection', 'course'))
+                if record:
+                    isCollection = True
+                return jsonify({'isCollection': isCollection})
+            else:
+                collection = db.exe_fetch(SQL['course_collection'].format(user), 'all')
+                return jsonify({'course_collection': collection})
+
+        elif request.method == 'POST':
+            if course != None:
+                db.exe_commit(SQL['add_to_collection'].format(user, course, 'course_collection'))
+                return jsonify({'add_to_collection': 'Success'})
+
+        elif request.method == 'DELETE':
+            if course != None:
+                db.exe_commit(SQL['delete_from_collection'].format(user, course, 'course_collection', 'couese'))
+                return jsonify({'delete_from_collection': 'Success'})
+
+    return jsonify({'result': 'Error'})
+
+@app.route('/api/courses_comments', methods=['GET', 'POST', 'PATCH', 'DELETE'])
+def api_courses_comments():
+    if session.get('user') != None:
+        user = session.get('user')
+        course = request.args.get('c')
+        checkCourse = request.args.get('cc')
+
+        if request.method == 'GET':
+            if course != None and checkCourse == None:
+                comments = db.exe_fetch(SQL['comments_byCourseId'].format(course, user), 'all')
+                return jsonify({'comments': comments})
+
+            elif course == None and checkCourse != None:
+                canComment = True
+                data = db.exe_fetch(SQL['check_can_comment'].format(checkCourse, user))
+                author = db.exe_fetch(SQL['course'].format(checkCourse)).get('author')
+                if data or int(user) == int(author):
+                    canComment = False
+
+                return jsonify({'canComment': canComment})
+
+        elif request.method == 'POST':
+            data = request.json.get('submit_comment')
+            course = data.get('course')
+            comment = replace_string(data.get('comment'))
+            rate = data.get('rate')
+            now = datetime.now().strftime('%Y/%m/%d %H:%M:%S')
+
+            db.exe_commit(SQL['submit_comment'].format(course, user, comment, rate, now))
+            return jsonify({'submit_comment': 'Success'})
+
+        elif request.method == 'PATCH':
+            data = request.json.get('submit_edited_comment')
+            course = data.get('course')
+            edited_comment = replace_string(data.get('edited_comment'))
+            edited_rate = data.get('edited_rate')
+
+            db.exe_commit(SQL['submit_edited_comment'].format(course, user, edited_comment, edited_rate))
+            return jsonify({'submit_edited_comment': 'Success'})
+
+        elif request.method == 'DELETE':
+            if course != None:
+                db.exe_commit(SQL['delete_comment'].format(course, user))
+            return jsonify({'delete_comment': 'Success'})
+
+    return jsonify({'result': 'Error'})
+
+@app.route('/api/submit_comment', methods=['POST', 'PATCH', 'DELETE'])
+def api_submit_comment():
+    if session.get('user') != None:
+        user = session.get('user')
+        if request.method == 'POST':
+            data = request.json.get('submit_comment')
+            question = data.get('question')
+            comment = replace_string(data.get('comment'))
+            now = datetime.now().strftime('%Y/%m/%d %H:%M:%S')
+
+            db.exe_commit(SQL['submit_comment'].format(question, user, comment, now))
+            return jsonify({'submit_comment': 'Success'})
+
+        elif request.method == 'PATCH':
+            data = request.json.get('submit_edited_comment')
+            question = data.get('question')
+            edited_comment = replace_string(data.get('edited_comment'))
+
+            db.exe_commit(SQL['submit_edited_comment'].format(question, user, edited_comment))
+            return jsonify({'submit_edited_comment': 'Success'})
+
+        elif request.method == 'DELETE':
+            data = request.json.get('delete_comment')
+            question = data.get('question')
+
+            db.exe_commit(SQL['delete_comment'].format(question, user))
+            return jsonify({'delete_comment': 'Success'})
+
+    return jsonify({'result': 'Error'})
+
 
 if __name__ == '__main__':
     version = db.exe_fetch('select version()')['version()']

@@ -118,6 +118,7 @@ button {
   margin: 0 auto;
 }
 
+.Courses .course-list li,
 .Questions .question-list li {
   margin: 3px 0;
   padding: 0 1vh;
@@ -125,12 +126,17 @@ button {
   border-bottom: 1px solid lightgray;
 }
 
+.Courses .course-list a,
 .Questions .question-list a {
   text-decoration: none;
   color: inherit;
 }
 
-.Question {
+.Courses .course-list img {
+  display: none;
+}
+
+.Question, .Course {
   position: absolute;
   left: 0;
   background: white;
@@ -138,10 +144,12 @@ button {
   height: 100%;
 }
 
+.Course.open,
 .Question.open {
   top: 0;
 }
 
+.Course.close,
 .Question.close {
   top: 100vh;
 }
@@ -180,6 +188,7 @@ button {
   border: 1px inset lightgray;
 }
 
+.Question .course_description img,
 .Question .question_detail img {
   width: 80%;
   height: auto;
@@ -239,6 +248,7 @@ button {
   cursor: pointer;
 }
 
+.EditComment,
 .EditAnswer {
   position: absolute;
   left: 0;
@@ -247,10 +257,12 @@ button {
   background: white;
 }
 
+.EditComment.open,
 .EditAnswer.open {
   top: 0;
 }
 
+.EditComment.close,
 .EditAnswer.close {
   top: 100vh;
 }

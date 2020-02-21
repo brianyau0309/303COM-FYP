@@ -3,11 +3,12 @@ import { BrowserRouter as Router, Route, Redirect, Switch } from 'react-router-d
 
 import Nav from './Nav.jsx'
 import Courses from './Courses/Courses.jsx'
+import CreateCourses from './Courses/CreateCourses.jsx'
 
 import Questions from './Questions/Questions.jsx'
+import CreateQuestions from './Questions/CreateQuestion.jsx'
 import MyQuestions from './Questions/MyQuestions.jsx'
 import QuestionCollection from './Questions/QuestionCollection.jsx'
-import CreateQuestions from './Questions/CreateQuestion.jsx'
 
 import Classrooms from './Classrooms/Classrooms.jsx'
 import Notification from './Notification/Notification.jsx'
@@ -57,10 +58,20 @@ export default class Student extends React.Component {
           <div id="main">
             <Nav nav={this.state.nav} navToggle={this.navToggle}/>
             <Switch>
+              {this.state.user_data.user_type === 'teacher' ?
+                <Route path="/courses/create">
+                  <div className="header">
+                    <img className="header-icon" src={imgBack} onClick={() => window.history.back()}/>
+                    <span>Create Courses</span>
+                  </div>
+                  <CreateCourses/>
+                </Route>
+              : null}
               <Route path="/courses">
                 <Header title='Courses'/>
-                <Courses/>
+                <Courses user_type={this.state.user_data.user_type} user_id={this.state.user_data.user_id}/>
               </Route>
+
               <Route path="/questions/my">
                 <div className="header">
                   <img className="header-icon" src={imgBack} onClick={() => window.history.back()}/>
@@ -78,7 +89,7 @@ export default class Student extends React.Component {
               <Route path="/questions/create">
                 <div className="header">
                   <img className="header-icon" src={imgBack} onClick={() => window.history.back()}/>
-                  <span>Questions</span>
+                  <span>Create Questions</span>
                 </div>
                 <CreateQuestions/>
               </Route>
@@ -86,6 +97,7 @@ export default class Student extends React.Component {
                 <Header title='Questions'/>
                 <Questions user_id={this.state.user_data.user_id}/>
               </Route>
+
               <Route path="/classrooms">
                 <Header title='Classrooms'/>
                 <Classrooms/>

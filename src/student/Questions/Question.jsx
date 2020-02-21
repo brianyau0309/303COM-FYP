@@ -19,8 +19,8 @@ export default class Question extends React.Component {
     this.checkCanAnswer = this.checkCanAnswer.bind(this)
     this.checkMyQuestion = this.checkMyQuestion.bind(this)
     this.checkIsCollection = this.checkIsCollection.bind(this)
-    this.loadAnswers = this.loadAnswers.bind(this)
     this.loadQuestion = this.loadQuestion.bind(this)
+    this.loadAnswers = this.loadAnswers.bind(this)
     this.deleteQuestion = this.deleteQuestion.bind(this)
     this.solveQuestion = this.solveQuestion.bind(this)
     this.collectionToggle = this.collectionToggle.bind(this)
@@ -66,16 +66,6 @@ export default class Question extends React.Component {
     })
   }
 
-  loadAnswers(id) {
-    fetch('/api/answers/'+id).then(res => {
-      if (res.ok) {
-        res.json().then(result => {
-          this.setState({'answers': result.answers})
-        })
-      }
-    })
-  }
-
   loadQuestion(id) {
     fetch('/api/question?q='+id).then(res => {
       if (res.ok) {
@@ -89,6 +79,16 @@ export default class Question extends React.Component {
             'detail': result.question.detail,
             'solved_by': result.question.solved_by
           })
+        })
+      }
+    })
+  }
+
+  loadAnswers(id) {
+    fetch('/api/answers/'+id).then(res => {
+      if (res.ok) {
+        res.json().then(result => {
+          this.setState({'answers': result.answers})
         })
       }
     })
@@ -282,10 +282,10 @@ export default class Question extends React.Component {
                    <div dangerouslySetInnerHTML={{__html: a.answer}}></div>
                    <div>{a.nickname}</div>
                    <div>{a.create_date}</div>
-                    <div>Likes: {a.likes}</div>
-                    { a.user_liked ? 
-                      <button onClick={() => this.likeAnswer(a.create_by, 'DELETE')}>Unlike</button>
-                    : <button onClick={() => this.likeAnswer(a.create_by, 'POST')}>Like</button>}
+                   <div>Likes: {a.likes}</div>
+                   { a.user_liked ? 
+                     <button onClick={() => this.likeAnswer(a.create_by, 'DELETE')}>Unlike</button>
+                   : <button onClick={() => this.likeAnswer(a.create_by, 'POST')}>Like</button>}
                    {this.props.user_id === a.create_by ? 
                      <div>
                        <div onClick={() => this.editAnswer(a.answer)}>Edit</div>
@@ -299,7 +299,6 @@ export default class Question extends React.Component {
                )
              }
            })}
-  
 
         </div>
 
