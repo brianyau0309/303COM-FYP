@@ -73,6 +73,7 @@ export default class Question extends React.Component {
           console.log(result.question)
           this.setState({ 
             'answerField': false,
+            'deleteQuestion': false,
             'question_id': result.question.question_id,
             'title': result.question.title, 
             'create_by': result.question.nickname,

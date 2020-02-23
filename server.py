@@ -3,9 +3,17 @@ from flask import Flask, flash, session, request, send_file, render_template, re
 from flask_cors import cross_origin
 from datetime import datetime
 from db import DBConn, SQL
+from pathlib import Path
+from werkzeug.utils import secure_filename
+
+UPLOAD_FILE_FOLDER = os.getcwd()  + '/static/files'
+ALLOWED_FILE_TYPE = ['pdf', 'doc', 'docx', 'ppt', 'pptx']
+UPLOAD_ICON_FOLDER = os.getcwd()  + '/static/image/user_icons'
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'SecretKeyHERE!'
+app.config['UPLOAD_ICON_FOLDER'] = UPLOAD_ICON_FOLDER
+app.config['UPLOAD_FILE_FOLDER'] = UPLOAD_FILE_FOLDER
 
 db = DBConn()
 
@@ -271,15 +279,17 @@ def api_courses():
 
     return jsonify({'result': 'Error'})
 
-@app.route('/api/course', methods=['GET', 'POST'])
+@app.route('/api/course', methods=['GET', 'POST', 'PUT', 'PATCH'])
 def api_course():
     if session.get('user') != None:
         user = session.get('user')
-        course = request.args.get('q')
+        course = request.args.get('c')
 
         if request.method == 'GET':
             if course != None:
                 data = db.exe_fetch(SQL['course'].format(course))
+                tags = db.exe_fetch(SQL['course_tags'].format(course), 'all')
+                data['tags'] = [d['tag'] for d in tags]
                 return jsonify({'course': data})
 
         elif request.method == 'POST':
@@ -291,9 +301,34 @@ def api_course():
 
             last_id = db.exe_commit_last_id(SQL['create_course'].format(user, title, description, now)).get('last_id')
             for tag in tags:
-                db.exe_commit(SQL['create_course_tags'].format(last_id, replace_string(tag)))
+                if tag != '' and tag != None:
+                    db.exe_commit(SQL['create_course_tags'].format(course, replace_string(tag)))
 
             return jsonify({'create_course': 'Success'})
+
+        elif request.method == 'PUT':
+            data = request.json.get('submit_edited_course')
+            course = data.get('course')
+            edited_title = replace_string(data.get('edited_title'))
+            edited_description = replace_string(data.get('edited_description'))
+            edited_tags = data.get('edited_tags')
+            db.exe_commit(SQL['submit_edited_course'].format(course, user, edited_title, edited_description))
+            db.exe_commit(SQL['reset_course_tags'].format(course))
+            for tag in edited_tags:
+                if tag != '' and tag != None:
+                    db.exe_commit(SQL['create_course_tags'].format(course, replace_string(tag)))
+
+            return jsonify({'edit_course': 'Success'})
+
+        elif request.method == 'PATCH':
+            if course != None:
+                author = db.exe_fetch(SQL['course'].format(course)).get('author')
+                if int(user) == int(author):
+                    db.exe_commit(SQL['course_valid'].format('false', course))
+                    return jsonify({'course_valid': {
+                        'result': 'Success',
+                        'valid': 'false'
+                    }})
 
     return jsonify({'result': 'Error'})
 
@@ -339,7 +374,7 @@ def course_collection():
 
         elif request.method == 'DELETE':
             if course != None:
-                db.exe_commit(SQL['delete_from_collection'].format(user, course, 'course_collection', 'couese'))
+                db.exe_commit(SQL['delete_from_collection'].format(user, course, 'course_collection', 'course'))
                 return jsonify({'delete_from_collection': 'Success'})
 
     return jsonify({'result': 'Error'})
@@ -391,36 +426,114 @@ def api_courses_comments():
 
     return jsonify({'result': 'Error'})
 
-@app.route('/api/submit_comment', methods=['POST', 'PATCH', 'DELETE'])
-def api_submit_comment():
+#
+# Lesson API
+#
+
+@app.route('/api/lessons')
+def api_lessons():
     if session.get('user') != None:
         user = session.get('user')
-        if request.method == 'POST':
-            data = request.json.get('submit_comment')
-            question = data.get('question')
-            comment = replace_string(data.get('comment'))
-            now = datetime.now().strftime('%Y/%m/%d %H:%M:%S')
-
-            db.exe_commit(SQL['submit_comment'].format(question, user, comment, now))
-            return jsonify({'submit_comment': 'Success'})
-
-        elif request.method == 'PATCH':
-            data = request.json.get('submit_edited_comment')
-            question = data.get('question')
-            edited_comment = replace_string(data.get('edited_comment'))
-
-            db.exe_commit(SQL['submit_edited_comment'].format(question, user, edited_comment))
-            return jsonify({'submit_edited_comment': 'Success'})
-
-        elif request.method == 'DELETE':
-            data = request.json.get('delete_comment')
-            question = data.get('question')
-
-            db.exe_commit(SQL['delete_comment'].format(question, user))
-            return jsonify({'delete_comment': 'Success'})
+        course = request.args.get('c')
+        if course != None:
+            lessons = db.exe_fetch(SQL['lessons'].format(course), 'all')
+            return jsonify({'lessons': lessons})
 
     return jsonify({'result': 'Error'})
 
+@app.route('/api/lesson', methods=['GET', 'POST', 'PUT', 'DELETE'])
+def api_lesson():
+    if session.get('user') != None:
+        user = session.get('user')
+        course = request.args.get('c')
+        lesson = request.args.get('l')
+
+        if request.method == 'GET':
+            if course != None and lesson != None:
+                lesson = db.exe_fetch(SQL['lesson'].format(course, lesson))
+                return jsonify({ 'lesson': lesson })
+
+        elif request.method == 'POST':
+            if course != None and lesson == None:
+                file = None
+                filename = 'null'
+                video_link = 'null'
+                title = replace_string(request.form['title'])
+                detail = replace_string(request.form['lesson_detail'])
+                try:
+                    video_link = request.form['youtube_link']
+                    file = request.files['file']
+                except:
+                    pass
+
+                now = datetime.now().strftime('%Y/%m/%d %H:%M:%S')
+
+                num = 1
+                lesson_last_num = db.exe_fetch(SQL['lesson_last_num'].format(course)).get('last_num')
+                if lesson_last_num != None:
+                    num = lesson_last_num + 1
+
+                if file != None:
+                    filename = secure_filename(file.filename)
+                    file.save(os.path.join(app.config['UPLOAD_FILE_FOLDER'], str(course)+'_'+str(num)+'.'+filename.split('.')[-1]))
+                    filename = "'"+filename+"'"
+                if video_link != 'null':
+                    video_link = "'"+video_link+"'"
+
+                db.exe_commit(SQL['create_lesson'].format(course, num, title, detail, video_link, filename, now))
+
+                return jsonify({'create_lesson': 'Success'})
+
+        elif request.method == 'PUT':
+            if course != None and lesson != None:
+                file = None
+                filename = 'null'
+                title = replace_string(request.form['title'])
+                detail = replace_string(request.form['lesson_detail'])
+                video_link = request.form['youtube_link']
+                delete_file = request.form['delete_file']
+                print(request.form)
+                try:
+                    file = request.files['file']
+                except:
+                    pass
+
+                now = datetime.now().strftime('%Y/%m/%d %H:%M:%S')
+
+                if delete_file == 'true':
+                    for t in ALLOWED_FILE_TYPE:
+                        if Path(UPLOAD_FILE_FOLDER+'/'+str(course)+'_'+str(lesson)+'.'+t).exists():
+                            os.remove(UPLOAD_FILE_FOLDER+'/'+str(course)+'_'+str(lesson)+'.'+t)
+
+                if file != None:
+                    filename = secure_filename(file.filename)
+                    for t in ALLOWED_FILE_TYPE:
+                        if Path(UPLOAD_FILE_FOLDER+'/'+str(course)+'_'+str(lesson)+'.'+t).exists():
+                            os.remove(UPLOAD_FILE_FOLDER+'/'+str(course)+'_'+str(lesson)+'.'+t)
+
+                    file.save(os.path.join(app.config['UPLOAD_FILE_FOLDER'], str(course)+'_'+str(lesson)+'.'+filename.split('.')[-1]))
+                    filename = "'"+filename+"'"
+
+                if video_link != '':
+                    video_link = "'"+video_link+"'"
+                else:
+                    video_link = 'null'
+
+                if file != None or delete_file == 'true':
+                    db.exe_commit(SQL['edit_lesson_with_filename'].format(course, lesson, title, detail, video_link, filename, now))
+                else:
+                    db.exe_commit(SQL['edit_lesson'].format(course, lesson, title, detail, video_link, now))
+
+                return jsonify({'edit_lesson': 'Success'})
+
+        elif request.method == 'DELETE':
+            if course != None and lesson != None:
+                for t in ALLOWED_FILE_TYPE:
+                    if Path(UPLOAD_FILE_FOLDER+'/'+str(course)+'_'+str(lesson)+'.'+t).exists():
+                        os.remove(UPLOAD_FILE_FOLDER+'/'+str(course)+'_'+str(lesson)+'.'+t)
+                db.exe_commit(SQL['delete_lesson'].format(course, lesson))
+
+    return jsonify({'result': 'Error'})
 
 if __name__ == '__main__':
     version = db.exe_fetch('select version()')['version()']
@@ -430,3 +543,4 @@ if __name__ == '__main__':
     key = os.path.dirname(os.path.realpath(__file__))+"/ssl/private.key"
 
     app.run(host='192.168.1.160', port=3000, debug=True, ssl_context=(cer,key))
+

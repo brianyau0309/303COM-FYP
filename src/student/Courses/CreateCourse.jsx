@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 
 import TextEditor from '../../TextEditor.jsx'
 
-export default class CreateCourses extends React.Component {
+export default class CreateCourse extends React.Component {
   constructor(props) {
     super(props)
     this.state = {

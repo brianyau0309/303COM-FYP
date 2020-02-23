@@ -31,6 +31,7 @@ export default class Courses extends React.Component {
 
   callCourse(id) {
     this.child.current.loadCourse(id)
+    this.child.current.loadLessons(id)
     this.child.current.loadComments(id)
     this.child.current.checkCanComment(id)
     this.child.current.checkMyCourse(id)
@@ -71,7 +72,7 @@ export default class Courses extends React.Component {
         <h3>Recommand</h3>
         <ul>3</ul>
 
-        <Course ref={this.child} user_id={this.props.user_id}/>
+        <Course ref={this.child} user_id={this.props.user_id} loadCourses={this.loadCourses}/>
       </div>
     )
   }

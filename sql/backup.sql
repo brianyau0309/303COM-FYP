@@ -209,6 +209,7 @@ CREATE TABLE `course_collection` (
 
 LOCK TABLES `course_collection` WRITE;
 /*!40000 ALTER TABLE `course_collection` DISABLE KEYS */;
+INSERT INTO `course_collection` VALUES (2,2);
 /*!40000 ALTER TABLE `course_collection` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -223,13 +224,13 @@ CREATE TABLE `courses` (
   `course_id` int(8) unsigned zerofill NOT NULL AUTO_INCREMENT,
   `author` int(8) unsigned NOT NULL,
   `title` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `descrition` text COLLATE utf8mb4_unicode_ci NOT NULL,
+  `description` text COLLATE utf8mb4_unicode_ci NOT NULL,
   `create_date` datetime NOT NULL,
   `valid` tinyint(1) NOT NULL DEFAULT 1,
   PRIMARY KEY (`course_id`),
   KEY `author` (`author`),
   CONSTRAINT `courses_ibfk_1` FOREIGN KEY (`author`) REFERENCES `users` (`user_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -238,6 +239,7 @@ CREATE TABLE `courses` (
 
 LOCK TABLES `courses` WRITE;
 /*!40000 ALTER TABLE `courses` DISABLE KEYS */;
+INSERT INTO `courses` VALUES (00000001,2,'DSE Math Prictice.','<b>DSE</b> Math question for F5 and F6 student to practice.<div>with Video.</div>','2020-02-20 23:05:53',1),(00000002,11,'English Course','Tenses Exercise for F1-F3 Student.','2020-02-21 20:43:27',1);
 /*!40000 ALTER TABLE `courses` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -254,6 +256,7 @@ CREATE TABLE `courses_comments` (
   `content` text COLLATE utf8mb4_unicode_ci NOT NULL,
   `rating` int(1) NOT NULL,
   `valid` tinyint(1) NOT NULL DEFAULT 1,
+  `create_date` datetime DEFAULT NULL,
   PRIMARY KEY (`course`,`create_by`),
   KEY `create_by` (`create_by`),
   CONSTRAINT `courses_comments_ibfk_1` FOREIGN KEY (`course`) REFERENCES `courses` (`course_id`),
@@ -267,6 +270,7 @@ CREATE TABLE `courses_comments` (
 
 LOCK TABLES `courses_comments` WRITE;
 /*!40000 ALTER TABLE `courses_comments` DISABLE KEYS */;
+INSERT INTO `courses_comments` VALUES (2,2,'I like this exercise!',5,1,'2020-02-22 00:09:31');
 /*!40000 ALTER TABLE `courses_comments` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -291,36 +295,38 @@ CREATE TABLE `courses_tags` (
 
 LOCK TABLES `courses_tags` WRITE;
 /*!40000 ALTER TABLE `courses_tags` DISABLE KEYS */;
+INSERT INTO `courses_tags` VALUES (1,'DSE'),(1,'F5'),(1,'F6'),(1,'Math'),(2,'English'),(2,'F1'),(2,'F2'),(2,'F3'),(2,'Tenses');
 /*!40000 ALTER TABLE `courses_tags` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
--- Table structure for table `lessions`
+-- Table structure for table `lessons`
 --
 
-DROP TABLE IF EXISTS `lessions`;
+DROP TABLE IF EXISTS `lessons`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `lessions` (
+CREATE TABLE `lessons` (
   `course` int(8) unsigned NOT NULL,
-  `lession_num` int(8) unsigned NOT NULL,
+  `lesson_num` int(8) unsigned NOT NULL,
   `title` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL,
   `detail` text COLLATE utf8mb4_unicode_ci NOT NULL,
   `video_link` varchar(200) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `file_link` varchar(200) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `filename` varchar(200) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `last_update` datetime NOT NULL,
-  PRIMARY KEY (`course`,`lession_num`),
-  CONSTRAINT `lessions_ibfk_1` FOREIGN KEY (`course`) REFERENCES `courses` (`course_id`)
+  PRIMARY KEY (`course`,`lesson_num`),
+  CONSTRAINT `lessons_ibfk_1` FOREIGN KEY (`course`) REFERENCES `courses` (`course_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `lessions`
+-- Dumping data for table `lessons`
 --
 
-LOCK TABLES `lessions` WRITE;
-/*!40000 ALTER TABLE `lessions` DISABLE KEYS */;
-/*!40000 ALTER TABLE `lessions` ENABLE KEYS */;
+LOCK TABLES `lessons` WRITE;
+/*!40000 ALTER TABLE `lessons` DISABLE KEYS */;
+INSERT INTO `lessons` VALUES (1,1,'Lesson 1','Somthing &gt;&gt;&gt;!','https://www.youtube.com/embed/L_UPHsGR6fM','Tutorial1011ans_2017_1.doc','2020-02-23 00:40:09'),(2,1,'Lesson 1: Past Tense','Q1. What is the past tense of \'run\'?<div>Q2.</div>',NULL,NULL,'2020-02-23 23:11:43'),(2,2,'Lesson 2: Present tense','Present Tense<div>a. 1</div><div>b. 2</div><div>c.&nbsp;</div>','https://www.youtube.com/embed/EYiUqij4ngM','Tutorial1011ans_2017_1.doc','2020-02-23 23:33:41');
+/*!40000 ALTER TABLE `lessons` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -565,4 +571,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2020-02-19  2:56:53
+-- Dump completed on 2020-02-24  0:40:32

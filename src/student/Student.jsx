@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Route, Redirect, Switch } from 'react-router-d
 
 import Nav from './Nav.jsx'
 import Courses from './Courses/Courses.jsx'
-import CreateCourses from './Courses/CreateCourses.jsx'
+import CreateCourse from './Courses/CreateCourse.jsx'
 
 import Questions from './Questions/Questions.jsx'
 import CreateQuestions from './Questions/CreateQuestion.jsx'
@@ -64,7 +64,7 @@ export default class Student extends React.Component {
                     <img className="header-icon" src={imgBack} onClick={() => window.history.back()}/>
                     <span>Create Courses</span>
                   </div>
-                  <CreateCourses/>
+                  <CreateCourse/>
                 </Route>
               : null}
               <Route path="/courses">

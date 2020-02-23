@@ -29,7 +29,6 @@ class DBConn():
         connection.close()
         return last_id
 
-
 SQL = {
     'login_process':'''
     SELECT password
@@ -168,12 +167,24 @@ SQL = {
     FROM courses a, users b
     WHERE a.author = b.user_id AND a.valid = true AND b.valid = true AND a.course_id = '{0}'
     ''',
+    'course_tags': '''
+    SELECT * FROM courses_tags WHERE course = {0}
+    ''',
     'create_course': '''
     INSERT INTO courses (author, title, description, create_date)
     VALUES ({0}, '{1}', '{2}', '{3}')
     ''',
     'create_course_tags': '''
     INSERT INTO courses_tags VALUES ({0}, '{1}')
+    ''',
+    'submit_edited_course': '''
+    UPDATE courses
+    SET title = '{2}', description = '{3}'
+    WHERE course_id = {0} AND author = {1}
+    ''',
+    'reset_course_tags': '''
+    DELETE FROM courses_tags
+    WHERE course = {0}
     ''',
     'course_collection': '''
     SELECT a.course_id, a.author, a.title, a.create_date, b.nickname
@@ -191,9 +202,9 @@ SQL = {
     WHERE valid = true AND course = {0} AND create_by = {1}
     ''',
     'comments_byCourseId': '''
-    SELECT *
-    FROM courses_comments
-    WHERE valid = true AND course = {0}
+    SELECT a.*, b.nickname, b.user_type
+    FROM courses_comments a, users b
+    WHERE a.create_by = b.user_id AND a.valid = true AND b.valid = true AND course = {0}
     ''',
     'submit_comment': '''
     INSERT INTO courses_comments
@@ -208,5 +219,37 @@ SQL = {
     'delete_comment': '''
     DELETE FROM courses_comments
     WHERE course = {0} AND create_by = {1}
+    ''',
+    'course_valid': '''
+    UPDATE courses
+    SET valid = {0}
+    WHERE course_id = {1}
+    ''',
+    'lessons': '''
+    SELECT lesson_num, title, filename, video_link ,last_update FROM lessons WHERE course = {0}
+    ''',
+    'lesson': '''
+    SELECT * FROM lessons WHERE course = {0} and lesson_num = {1}
+    ''',
+    'lesson_last_num': '''
+    SELECT MAX(lesson_num) as last_num FROM lessons WHERE course = {0}
+    ''',
+    'create_lesson': '''
+    INSERT INTO lessons VALUES
+    ({0}, {1}, '{2}', '{3}', {4}, {5}, '{6}')
+    ''',
+    'edit_lesson': '''
+    UPDATE lessons
+    SET title = '{2}', detail = '{3}', video_link = {4}, last_update = '{5}'
+    WHERE course = {0} AND lesson_num = {1}
+    ''',
+    'edit_lesson_with_filename': '''
+    UPDATE lessons
+    SET title = '{2}', detail = '{3}', video_link = {4}, filename = {5}, last_update = '{6}'
+    WHERE course = {0} AND lesson_num = {1}
+    ''',
+    'delete_lesson': '''
+    DELETE FROM lessons
+    WHERE course = {0} AND lesson_num = {1}
     ''',
 }
