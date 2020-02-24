@@ -95,7 +95,6 @@ def api_questions():
 
             return jsonify({ 'search_result': search_result })
 
-
     return jsonify({'result': 'Error'})
 
 @app.route('/api/question', methods = ['GET','POST','PATCH'])
@@ -172,7 +171,7 @@ def question_collection():
         if request.method == 'GET':
             if question != None:
                 isCollection = False
-                record = db.exe_fetch(SQL['is_collection'].format(user, question, 'question_collection'))
+                record = db.exe_fetch(SQL['is_collection'].format(user, question, 'question_collection', 'question'))
                 if record:
                     isCollection = True
                 return jsonify({'isCollection': isCollection})
@@ -182,12 +181,12 @@ def question_collection():
 
         elif request.method == 'POST':
             if question != None:
-                db.exe_commit(SQL['add_to_collection'].format(user, question, 'question_collection'))
+                db.exe_commit(SQL['add_to_collection'].format(user, question, 'question_collection', 'question'))
                 return jsonify({'add_to_collection': 'Success'})
 
         elif request.method == 'DELETE':
             if question != None:
-                db.exe_commit(SQL['delete_from_collection'].format(user, question, 'question_collection'))
+                db.exe_commit(SQL['delete_from_collection'].format(user, question, 'question_collection', 'question'))
                 return jsonify({'delete_from_collection': 'Success'})
 
     return jsonify({'result': 'Error'})
@@ -272,10 +271,25 @@ def api_submit_answer():
 @app.route('/api/courses', methods=['GET', 'POST'])
 def api_courses():
     if session.get('user') != None:
-        new = db.exe_fetch(SQL['courses_new'], 'all')
-        user = session.get('user')
+
         if request.method == 'GET':
-            return jsonify({'courses': { 'new': new } })
+            new = db.exe_fetch(SQL['courses_new'], 'all')
+            hot = db.exe_fetch(SQL['courses_hot'], 'all')
+            user = session.get('user')
+            return jsonify({'courses': { 'new': new, 'hot': hot } })
+
+        elif request.method == 'POST':
+            search_query = request.json.get('search_query')
+            search_method = request.json.get('search_method')
+
+            if search_method == 'title':
+                search_result = db.exe_fetch(SQL['search_courses_by_title'].format(replace_string(search_query)), 'all')
+            elif search_method == 'author':
+                search_result = db.exe_fetch(SQL['search_courses_by_author'].format(replace_string(search_query)), 'all')
+            elif search_method == 'tags':
+                print(search_query.split(' '))
+
+            return jsonify({ 'search_result': search_result })
 
     return jsonify({'result': 'Error'})
 
@@ -290,6 +304,10 @@ def api_course():
                 data = db.exe_fetch(SQL['course'].format(course))
                 tags = db.exe_fetch(SQL['course_tags'].format(course), 'all')
                 data['tags'] = [d['tag'] for d in tags]
+                try:
+                    data['avg_rate'] = float(data.get('avg_rate'))
+                except:
+                    pass
                 return jsonify({'course': data})
 
         elif request.method == 'POST':
@@ -302,7 +320,7 @@ def api_course():
             last_id = db.exe_commit_last_id(SQL['create_course'].format(user, title, description, now)).get('last_id')
             for tag in tags:
                 if tag != '' and tag != None:
-                    db.exe_commit(SQL['create_course_tags'].format(course, replace_string(tag)))
+                    db.exe_commit(SQL['create_course_tags'].format(last_id, replace_string(tag)))
 
             return jsonify({'create_course': 'Success'})
 

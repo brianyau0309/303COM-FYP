@@ -2,8 +2,11 @@ import React from 'react'
 import { BrowserRouter as Router, Route, Redirect, Switch } from 'react-router-dom'
 
 import Nav from './Nav.jsx'
+
 import Courses from './Courses/Courses.jsx'
 import CreateCourse from './Courses/CreateCourse.jsx'
+import MyCourses from './Courses/MyCourses.jsx'
+import CourseCollection from './Courses/CourseCollection.jsx'
 
 import Questions from './Questions/Questions.jsx'
 import CreateQuestions from './Questions/CreateQuestion.jsx'
@@ -58,6 +61,22 @@ export default class Student extends React.Component {
           <div id="main">
             <Nav nav={this.state.nav} navToggle={this.navToggle}/>
             <Switch>
+              <Route path="/courses/collection">
+                <div className="header">
+                  <img className="header-icon" src={imgBack} onClick={() => window.history.back()}/>
+                  <span>My Collection</span>
+                </div>
+                <CourseCollection/>
+              </Route>
+              {this.state.user_data.user_type === 'teacher' ?
+                <Route path="/courses/my">
+                  <div className="header">
+                    <img className="header-icon" src={imgBack} onClick={() => window.history.back()}/>
+                    <span>My Courses</span>
+                  </div>
+                  <MyCourses/>
+                </Route>
+              : null}
               {this.state.user_data.user_type === 'teacher' ?
                 <Route path="/courses/create">
                   <div className="header">

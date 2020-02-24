@@ -21,7 +21,7 @@ export default class CreateLesson extends React.Component {
     let filetype = null
     if (file != undefined) { filetype = document.querySelector('#lesson_file').files[0].name.split('.').pop() }
     let youtube_link = document.querySelector('#youtube_link').value
-    let lesson_detail = TextField.document.body.innerHTML
+    let lesson_detail = window.frames['CreateLesson'].document.body.innerHTML
 
     const form = new FormData()
     form.append('title', title)
@@ -47,7 +47,7 @@ export default class CreateLesson extends React.Component {
     document.querySelector('#lesson_title').value = ''
     document.querySelector('#lesson_file').value = ''
     document.querySelector('#youtube_link').value = ''
-    TextField.document.body.innerHTML = ''
+    window.frames['CreateLesson'].document.body.innerHTML = ''
     this.setState({'open': !this.state.open})
   }
 
@@ -63,7 +63,7 @@ export default class CreateLesson extends React.Component {
         <input id='youtube_link' type='url' placeholder='Youtube Embed Link'/>
         <input id='lesson_file' type='file' placeholder='Lesson File'/>
         
-        <TextEditor/>
+        <TextEditor editor='CreateLesson'/>
 
         <button style={{display: 'block'}} className='submit' onClick={this.createLesson}>Create</button>
       </div>

@@ -1,6 +1,6 @@
 import React from 'react'
 
-import TextEditor from '../../TextEditor2.jsx'
+import TextEditor from '../../TextEditor.jsx'
 
 const imgBack = 'https://img.icons8.com/flat_round/64/000000/back--v1.png'
 const imgStar = 'https://img.icons8.com/emoji/48/000000/star-emoji.png'
@@ -20,12 +20,12 @@ export default class EditComment extends React.Component {
   }
 
   loadComment(c, r) {
-    TextField2.document.body.innerHTML = c
+    window.frames['EditComment'].document.body.innerHTML = c
     this.setState({ 'editedRate': r })
   } 
 
   submitEditedComment() {
-    let editedComment = TextField2.document.body.innerHTML
+    let editedComment = window.frames['EditComment'].document.body.innerHTML
     fetch('/api/courses_comments', {
       method: 'PATCH',
       headers: { 'Content-Type': 'application/json' },
@@ -69,7 +69,7 @@ export default class EditComment extends React.Component {
           )
         )}
         <span>{this.state.editedRate}</span>
-        <TextEditor/>
+        <TextEditor editor='EditerComment'/>
         <button onClick={this.submitEditedComment}>Submit Edited Comment</button>
       </div>
     )

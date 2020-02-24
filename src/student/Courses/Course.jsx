@@ -89,6 +89,8 @@ export default class Course extends React.Component {
             'author': result.course.nickname,
             'description': result.course.description,
             'tags': result.course.tags,
+            'avg_rate': result.course.avg_rate,
+            'raters': result.course.raters,
           })
         })
       }
@@ -150,13 +152,14 @@ export default class Course extends React.Component {
         res.json().then(result => {
           console.log(result)
           this.checkIsCollection(this.state.course_id)
+          this.props.loadCourses()
         })
       }
     })
   }
 
   submitComment() {
-    let comment = TextField.document.body.innerHTML
+    let comment = window.frames['CourseComment'].document.body.innerHTML
     console.log(comment)
     fetch('/api/courses_comments', {
       method: 'POST',
@@ -248,6 +251,8 @@ export default class Course extends React.Component {
           </div>
         : null}
 
+        <div>Course Rate: {this.state.avg_rate ? this.state.avg_rate.toFixed(2) : '--'}({this.state.raters ? this.state.raters : '--'})</div>
+
         {this.state.isCollection ? 
            <div onClick={() => this.collectionToggle(this.state.course_id, 'DELETE')}>Remove from Collection</div>
         :  <div onClick={() => this.collectionToggle(this.state.course_id, 'POST')}>Add to Collection</div> }
@@ -266,7 +271,7 @@ export default class Course extends React.Component {
                   )
                 )}
                 <span>{this.state.commentRate}</span>
-                <TextEditor/>
+                <TextEditor editor='CourseComment'/>
                 <button onClick={this.submitComment}>Submit</button>
               </div> 
             : null}

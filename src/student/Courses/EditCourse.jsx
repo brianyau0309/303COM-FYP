@@ -1,6 +1,6 @@
 import React from 'react'
 
-import TextEditor from '../../TextEditor2.jsx'
+import TextEditor from '../../TextEditor.jsx'
 
 const imgBack = 'https://img.icons8.com/flat_round/64/000000/back--v1.png'
 
@@ -23,11 +23,11 @@ export default class EditCourse extends React.Component {
 
   loadCourse(title, tags, d) {
     this.setState({ 'editedTitle': title, 'tags': tags })
-    TextField2.document.body.innerHTML = d
+    window.frames['EditCourse'].document.body.innerHTML = d
   } 
 
   submitEditedCourse() {
-    let editedDescription = TextField2.document.body.innerHTML
+    let editedDescription = window.frames['EditCourse'].document.body.innerHTML
     fetch('/api/course', {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
@@ -91,7 +91,7 @@ export default class EditCourse extends React.Component {
         
         <input type="text" value={this.state.editedTitle} onChange={this.titleOnChange}/>
         
-        <TextEditor/>
+        <TextEditor editor='EditCourse'/>
 
         <div>Courses Tags <img onClick={this.newTag} src="https://img.icons8.com/flat_round/64/000000/plus.png"/></div>
         <ul>

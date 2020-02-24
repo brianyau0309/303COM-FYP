@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 
 import TextEditor from '../../TextEditor.jsx'
 
-export default class CreateQuestions extends React.Component {
+export default class CreateQuestion extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
@@ -14,7 +14,7 @@ export default class CreateQuestions extends React.Component {
 
   output() {
     let title = document.querySelector('.CreateQuestions > input').value
-    let content = TextField.document.body.innerHTML
+    let content = window.frames['CreateQuestion'].document.body.innerHTML
     if (content !== '' && title !== '') {
       fetch('/api/question', { 
         method: 'POST' ,
@@ -50,7 +50,7 @@ export default class CreateQuestions extends React.Component {
           </div>
         : null }
         <input type='text' placeholder='Question Title' required/>
-        <TextEditor/>
+        <TextEditor editor='CreateQuestion'/>
         <button className='submit' onClick={this.output}>Ask!</button>
       </div>
     )

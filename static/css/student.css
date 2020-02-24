@@ -209,7 +209,7 @@ button {
   height: 100%;
 }
 
-.CreateQuestions > .TextEditor > #TextField {
+.CreateQuestions > .TextEditor > iframe {
   display: block;
   font-size: 2vh;
   margin: auto;

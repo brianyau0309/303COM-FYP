@@ -18,7 +18,7 @@ export default class CreateCourse extends React.Component {
 
   output() {
     let title = document.querySelector('.CreateCourses > input').value
-    let description = TextField.document.body.innerHTML
+    let description = window.frames['CreateCourse'].document.body.innerHTML
     if (description !== '' && title !== '' && !this.state.tags.includes('')) {
       fetch('/api/course', { 
         method: 'POST' ,
@@ -78,7 +78,7 @@ export default class CreateCourse extends React.Component {
         : null }
         <input type='text' placeholder='Courses Title' required maxLength='40'/>
         
-        <TextEditor/>
+        <TextEditor editor='CreateCourse'/>
 
         <div>Courses Tags <img onClick={this.newTag} src="https://img.icons8.com/flat_round/64/000000/plus.png"/></div>
         <ul>

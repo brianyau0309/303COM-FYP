@@ -44,7 +44,7 @@ SQL = {
     SELECT a.question_id, a.title, b.nickname, b.user_type, a.create_date, a.solved_by
     FROM questions a, users b
     WHERE a.create_by = b.user_id AND a.valid = true AND b.valid = true
-    ORDER BY a.create_date
+    ORDER BY a.create_date DESC
     LIMIT 5
     ''',
     'questions_hot': '''
@@ -162,20 +162,48 @@ SQL = {
     ORDER BY a.create_date
     LIMIT 5
     ''',
-    'course': '''
-    SELECT a.course_id, a.author, a.title, a.description, a.create_date, b.nickname
+    'courses_hot': '''
+    SELECT a.course_id, a.title, a.description, b.nickname, a.create_date, c.collectors
+    FROM courses a
+        INNER JOIN users b ON a.author = b.user_id
+        LEFT JOIN (
+          SELECT course, COUNT(*) as collectors
+          FROM course_collection
+          GROUP BY course
+          ) c ON a.course_id = c.course
+    WHERE a.valid = true AND b.valid = true
+    ORDER BY c.collectors DESC
+    LIMIT 5
+    ''',
+    'search_courses_by_title': '''
+    SELECT a.course_id, a.author, a.title, a.create_date, b.nickname
     FROM courses a, users b
-    WHERE a.author = b.user_id AND a.valid = true AND b.valid = true AND a.course_id = '{0}'
+    WHERE a.author = b.user_id AND a.valid = true AND b.valid = true AND LOWER(a.title) LIKE LOWER('%{0}%')
+    ORDER BY a.create_date
+    ''',
+    'search_courses_by_author': '''
+    SELECT a.course_id, a.author, a.title, a.create_date, b.nickname
+    FROM courses a, users b
+    WHERE a.author = b.user_id AND a.valid = true AND b.valid = true AND LOWER(b.nickname) LIKE LOWER('%{0}%')
+    ORDER BY a.create_date
+    ''',
+    'course': '''
+    SELECT a.course_id, a.author, a.title, a.description, a.create_date, b.nickname, c.avg_rate, c.raters
+    FROM courses a
+      INNER JOIN users b ON a.author = b.user_id
+      LEFT JOIN (SELECT course, AVG(rating) as avg_rate, COUNT(create_by) as raters FROM courses_comments) c ON c.course = {0}
+    WHERE a.valid = true AND b.valid = true AND a.course_id = {0}
     ''',
     'course_tags': '''
-    SELECT * FROM courses_tags WHERE course = {0}
+    SELECT tag FROM courses_tags WHERE course = {0}
     ''',
     'create_course': '''
     INSERT INTO courses (author, title, description, create_date)
     VALUES ({0}, '{1}', '{2}', '{3}')
     ''',
     'create_course_tags': '''
-    INSERT INTO courses_tags VALUES ({0}, '{1}')
+    INSERT INTO courses_tags (course, tag)
+    VALUES ({0}, '{1}')
     ''',
     'submit_edited_course': '''
     UPDATE courses
@@ -192,7 +220,7 @@ SQL = {
     WHERE a.author = b.user_id AND a.course_id = c.course AND c.user_id = {0} AND a.valid = true AND b.valid = true
     ''',
     'my_courses': '''
-    SELECT a.course__id, a.author, a.title, a.create_date, b.nickname
+    SELECT a.course_id, a.author, a.title, a.create_date, b.nickname
     FROM courses a, users b
     WHERE a.author = b.user_id AND a.author = {0} AND a.valid = true AND b.valid = true
     ''',
@@ -202,7 +230,7 @@ SQL = {
     WHERE valid = true AND course = {0} AND create_by = {1}
     ''',
     'comments_byCourseId': '''
-    SELECT a.*, b.nickname, b.user_type
+    SELECT a.create_by, a.content, a.rating, a.create_date, b.nickname, b.user_type
     FROM courses_comments a, users b
     WHERE a.create_by = b.user_id AND a.valid = true AND b.valid = true AND course = {0}
     ''',
@@ -229,7 +257,8 @@ SQL = {
     SELECT lesson_num, title, filename, video_link ,last_update FROM lessons WHERE course = {0}
     ''',
     'lesson': '''
-    SELECT * FROM lessons WHERE course = {0} and lesson_num = {1}
+    SELECT * FROM lessons
+    WHERE course = {0} and lesson_num = {1}
     ''',
     'lesson_last_num': '''
     SELECT MAX(lesson_num) as last_num FROM lessons WHERE course = {0}

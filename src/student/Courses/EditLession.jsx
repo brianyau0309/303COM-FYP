@@ -1,6 +1,6 @@
 import React from 'react'
 
-import TextEditor from '../../TextEditor3.jsx'
+import TextEditor from '../../TextEditor.jsx'
 
 const imgBack = 'https://img.icons8.com/flat_round/64/000000/back--v1.png'
 
@@ -20,7 +20,7 @@ export default class EditLesson extends React.Component {
     document.querySelector('#edited_lesson_file').value = ''
     document.querySelector('#edited_youtube_link').value = v
     document.querySelector('#delete_file_check').checked = false
-    TextEditor3.document.body.innerHTML = d
+    window.frames['EditLesson'].document.body.innerHTML = d
     this.setState({ 'filename': f })
   }
 
@@ -31,7 +31,7 @@ export default class EditLesson extends React.Component {
     let filetype = null
     if (file!= undefined) { filetype = document.querySelector('#edited_lesson_file').files[0].name.split('.').pop() }
     let youtube_link = document.querySelector('#edited_youtube_link').value
-    let lesson_detail = TextEditor3.document.body.innerHTML
+    let lesson_detail = window.frames['EditLesson'].document.body.innerHTML
     let delete_file = false
     if (document.querySelector('#delete_file_check').checked === true) { delete_file = true }
     console.log(delete_file)
@@ -79,7 +79,7 @@ export default class EditLesson extends React.Component {
           <input id='delete_file_check' type="checkbox"/>
         </label>
         
-        <TextEditor editor={'TextEditor3'}/>
+        <TextEditor editor='EditLesson'/>
 
         <button style={{display: 'block'}} className='submit' onClick={this.editLesson}>Edit</button>
       </div>

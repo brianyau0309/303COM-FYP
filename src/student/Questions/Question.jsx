@@ -135,13 +135,14 @@ export default class Question extends React.Component {
         res.json().then(result => {
           console.log(result)
           this.checkIsCollection(this.state.question_id)
+          this.props.loadQuestions()
         })
       }
     })
   }
 
   submitAnswer() {
-    let answer = TextField.document.body.innerHTML
+    let answer = QuestionComment.document.body.innerHTML
     console.log(answer)
     fetch('/api/submit_answer',{
       method: 'POST',
@@ -269,7 +270,7 @@ export default class Question extends React.Component {
               <div onClick={this.answerFieldToggle}>I want to answer!</div> 
               {this.state.answerField ? 
                 <div>
-                  <TextEditor/>
+                  <TextEditor editor='QuestionComment'/>
                   <button onClick={this.submitAnswer}>Submit</button>
                 </div> 
               : null}
@@ -283,7 +284,7 @@ export default class Question extends React.Component {
                    <div dangerouslySetInnerHTML={{__html: a.answer}}></div>
                    <div>{a.nickname}</div>
                    <div>{a.create_date}</div>
-                   <div>Likes: {a.likes}</div>
+                   <div>Likes: {a.likes ? a.likes : 0}</div>
                    { a.user_liked ? 
                      <button onClick={() => this.likeAnswer(a.create_by, 'DELETE')}>Unlike</button>
                    : <button onClick={() => this.likeAnswer(a.create_by, 'POST')}>Like</button>}
@@ -293,7 +294,7 @@ export default class Question extends React.Component {
                        <div onClick={this.deleteAnswer}>Delete</div>
                      </div>
                    : null}
-                   {this.state.solved_by === 0 || this.state.solved_by === null ? 
+                   {(this.state.solved_by === 0 || this.state.solved_by === null) && this.state.myQuestion ? 
                      <div onClick={() => this.solveQuestion(a.create_by)}>This Answer Solve My Question!</div>
                    : null}
                  </div>

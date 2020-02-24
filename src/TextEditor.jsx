@@ -18,13 +18,13 @@ export default class TextEditor extends React.Component {
     this.btnClick = this.btnClick.bind(this)
   }
   componentDidMount() {
-    TextField.document.designMode = 'on'
-    TextField.document.execCommand("enableObjectResizing", false, false)
+    window.frames[this.props.editor].document.designMode = 'on'
+    window.frames[this.props.editor].document.execCommand("enableObjectResizing", false, false)
   }
   btnClick(event) {
     let n = null
     if (event === 'InsertOrderedList' || event === 'InsertUnorderedList') n = Math.random() * 1000
-    TextField.document.execCommand(event, false, n)
+    window.frames[this.props.editor].document.execCommand(event, false, n)
   }
 
   render() {
@@ -44,7 +44,7 @@ export default class TextEditor extends React.Component {
           <button id="btnSub" title="Subscript" onClick={() => this.btnClick('Subscript')}><img src={imgSub}/></button>
         </div>
 
-        <iframe marginwidth="15" marginheight="10" name="TextField" id="TextField" onKeyUp={this.counting}></iframe>
+        <iframe marginwidth="15" marginheight="10" name={this.props.editor} id={this.props.editor} onKeyUp={this.counting}></iframe>
       </div>
     )
   }

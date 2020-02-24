@@ -75,8 +75,15 @@ export default class Lesson extends React.Component {
         
         <div className="Lesson-detail">
           <div>{this.state.title}</div>
-          <a href={this.state.video_link}>Link</a>
-          <div>{this.state.filename}</div>
+          {this.state.video_link != null ? 
+            <iframe width="560" height="315" src={this.state.video_link} frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+          : null}
+          {this.state.filename != null ? 
+            <div>
+              <span>{this.state.filename}</span>
+              <a href={window.location.origin+'/static/files/'+this.state.course_id+'_'+this.state.lesson_num+'.'+this.state.filename.split('.').pop()} Download={this.state.filename}>Download</a>
+            </div>
+          : null}
           <div className="lesson_detail" dangerouslySetInnerHTML={{__html: this.state.detail}}></div>
         </div>
 

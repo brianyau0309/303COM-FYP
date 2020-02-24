@@ -1,6 +1,6 @@
 import React from 'react'
 
-import TextEditor from '../../TextEditor2.jsx'
+import TextEditor from '../../TextEditor.jsx'
 
 const imgBack = 'https://img.icons8.com/flat_round/64/000000/back--v1.png'
 
@@ -16,11 +16,11 @@ export default class EditAnswer extends React.Component {
   }
 
   loadAnswer(a) {
-    TextField2.document.body.innerHTML = a
+    window.frames['EditAnswer'].document.body.innerHTML = a
   } 
 
   submitEditedAnswer() {
-    let editedAnswer = TextField2.document.body.innerHTML
+    let editedAnswer = window.frames['EditAnswer'].document.body.innerHTML
     fetch('/api/submit_answer', {
       method: 'PATCH',
       headers: { 'Content-Type': 'application/json' },
@@ -52,7 +52,7 @@ export default class EditAnswer extends React.Component {
           <img className='header-icon' src={imgBack} onClick={this.openToggle}/>
           <span>Edit Answer</span>
         </div>
-        <TextEditor/>
+        <TextEditor editor='EditAnswer'/>
         <button onClick={this.submitEditedAnswer}>Submit Edited Answer</button>
       </div>
     )
