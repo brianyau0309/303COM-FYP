@@ -69,7 +69,7 @@ CREATE TABLE `answers` (
 
 LOCK TABLES `answers` WRITE;
 /*!40000 ALTER TABLE `answers` DISABLE KEYS */;
-INSERT INTO `answers` VALUES (1,2,'Answer Test<div><ol><li>1\'1</li><li>2\"2<br></li></ol><div><ul><li>3/3</li><li>456</li></ul></div></div>','2020-02-14 21:07:59',1),(3,2,'May be 1','2020-02-17 21:57:01',1);
+INSERT INTO `answers` VALUES (1,2,'Answer Test<div><ol><li>1\'1</li><li>2\"2<br></li></ol><div><ul><li>3/3</li><li>456</li></ul></div></div>','2020-02-14 21:07:59',1),(3,2,'May be 1','2020-02-17 21:57:01',1),(6,2,'Yes I <b>know</b> it!','2020-02-24 21:14:13',1);
 /*!40000 ALTER TABLE `answers` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -209,7 +209,7 @@ CREATE TABLE `course_collection` (
 
 LOCK TABLES `course_collection` WRITE;
 /*!40000 ALTER TABLE `course_collection` DISABLE KEYS */;
-INSERT INTO `course_collection` VALUES (2,2);
+INSERT INTO `course_collection` VALUES (1,2),(2,1),(2,2),(2,7),(11,2);
 /*!40000 ALTER TABLE `course_collection` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -230,7 +230,7 @@ CREATE TABLE `courses` (
   PRIMARY KEY (`course_id`),
   KEY `author` (`author`),
   CONSTRAINT `courses_ibfk_1` FOREIGN KEY (`author`) REFERENCES `users` (`user_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -239,7 +239,7 @@ CREATE TABLE `courses` (
 
 LOCK TABLES `courses` WRITE;
 /*!40000 ALTER TABLE `courses` DISABLE KEYS */;
-INSERT INTO `courses` VALUES (00000001,2,'DSE Math Prictice.','<b>DSE</b> Math question for F5 and F6 student to practice.<div>with Video.</div>','2020-02-20 23:05:53',1),(00000002,11,'English Course','Tenses Exercise for F1-F3 Student.','2020-02-21 20:43:27',1);
+INSERT INTO `courses` VALUES (00000001,2,'DSE Math Prictice.','<b>DSE</b> Math question for F5 and F6 student to practice.<div>with Video.</div>','2020-02-20 23:05:53',1),(00000002,11,'English Course','Tenses Exercise for F1-F3 Student.','2020-02-21 20:43:27',1),(00000003,2,'Course 02','Course about Testing','2020-02-24 20:59:25',1),(00000004,2,'Course 3','<strike>For Testing</strike>','2020-02-24 21:02:39',0),(00000005,2,'Course 3','<strike>For Testing</strike>','2020-02-24 21:04:52',0),(00000006,2,'Course 3','<strike>For Testing</strike>','2020-02-24 21:05:19',0),(00000007,2,'Course 03','<i>For Testing!</i>','2020-02-24 21:10:39',1);
 /*!40000 ALTER TABLE `courses` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -270,7 +270,7 @@ CREATE TABLE `courses_comments` (
 
 LOCK TABLES `courses_comments` WRITE;
 /*!40000 ALTER TABLE `courses_comments` DISABLE KEYS */;
-INSERT INTO `courses_comments` VALUES (2,2,'I like this exercise!',5,1,'2020-02-22 00:09:31');
+INSERT INTO `courses_comments` VALUES (2,2,'I like it',4,1,'2020-02-24 20:54:02');
 /*!40000 ALTER TABLE `courses_comments` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -283,7 +283,7 @@ DROP TABLE IF EXISTS `courses_tags`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `courses_tags` (
   `course` int(8) unsigned NOT NULL,
-  `tag` varchar(20) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `tag` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL,
   PRIMARY KEY (`course`,`tag`),
   CONSTRAINT `courses_tags_ibfk_1` FOREIGN KEY (`course`) REFERENCES `courses` (`course_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -295,7 +295,7 @@ CREATE TABLE `courses_tags` (
 
 LOCK TABLES `courses_tags` WRITE;
 /*!40000 ALTER TABLE `courses_tags` DISABLE KEYS */;
-INSERT INTO `courses_tags` VALUES (1,'DSE'),(1,'F5'),(1,'F6'),(1,'Math'),(2,'English'),(2,'F1'),(2,'F2'),(2,'F3'),(2,'Tenses');
+INSERT INTO `courses_tags` VALUES (1,'DSE'),(1,'F5'),(1,'F6'),(1,'Math'),(2,'English'),(2,'F1'),(2,'F2'),(2,'F3'),(2,'Tenses'),(3,'A'),(3,'B'),(7,'A'),(7,'B'),(7,'C');
 /*!40000 ALTER TABLE `courses_tags` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -325,7 +325,7 @@ CREATE TABLE `lessons` (
 
 LOCK TABLES `lessons` WRITE;
 /*!40000 ALTER TABLE `lessons` DISABLE KEYS */;
-INSERT INTO `lessons` VALUES (1,1,'Lesson 1','Somthing &gt;&gt;&gt;!','https://www.youtube.com/embed/L_UPHsGR6fM','Tutorial1011ans_2017_1.doc','2020-02-23 00:40:09'),(2,1,'Lesson 1: Past Tense','Q1. What is the past tense of \'run\'?<div>Q2.</div>',NULL,NULL,'2020-02-23 23:11:43'),(2,2,'Lesson 2: Present tense','Present Tense<div>a. 1</div><div>b. 2</div><div>c.&nbsp;</div>','https://www.youtube.com/embed/EYiUqij4ngM','Tutorial1011ans_2017_1.doc','2020-02-23 23:33:41');
+INSERT INTO `lessons` VALUES (1,1,'Lesson 1','Somthing &gt;&gt;&gt;!!','https://www.youtube.com/embed/L_UPHsGR6fM','Tutorial1011ans_2017_1.doc','2020-02-24 20:54:42'),(2,1,'Lesson 1: Past Tense','Q1. What is the past tense of \'run\'?<div>Q2.</div>',NULL,NULL,'2020-02-23 23:11:43'),(2,2,'Lesson 2: Present tense','Present Tense<div>a. 1</div><div>b. 2</div><div>c.&nbsp;</div>','https://www.youtube.com/embed/EYiUqij4ngM','Tutorial1011ans_2017_1.doc','2020-02-23 23:33:41');
 /*!40000 ALTER TABLE `lessons` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -352,7 +352,7 @@ CREATE TABLE `question_collection` (
 
 LOCK TABLES `question_collection` WRITE;
 /*!40000 ALTER TABLE `question_collection` DISABLE KEYS */;
-INSERT INTO `question_collection` VALUES (1,1),(2,1),(2,3),(2,4);
+INSERT INTO `question_collection` VALUES (1,1),(2,1),(2,3),(2,4),(2,7);
 /*!40000 ALTER TABLE `question_collection` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -376,7 +376,7 @@ CREATE TABLE `questions` (
   KEY `questions_ibfk_2` (`solved_by`),
   CONSTRAINT `questions_ibfk_1` FOREIGN KEY (`create_by`) REFERENCES `users` (`user_id`) ON DELETE CASCADE,
   CONSTRAINT `questions_ibfk_2` FOREIGN KEY (`solved_by`) REFERENCES `users` (`user_id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -385,7 +385,7 @@ CREATE TABLE `questions` (
 
 LOCK TABLES `questions` WRITE;
 /*!40000 ALTER TABLE `questions` DISABLE KEYS */;
-INSERT INTO `questions` VALUES (00000001,1,'Testing','<b>Hello World!</b><div style=\"text-align: left;\">Here is a <i>Test</i> to know is this <u>Text Field</u> is work or not.</div><div style=\"text-align: left;\">Left</div><div style=\"text-align: center;\">Center</div><div style=\"text-align: right;\">Right</div><div style=\"text-align: left;\"><ol><li>Number List</li></ol><ul><li>Bullet List</li></ul><div>Super<sup>script</sup></div><div>Sub<sub>script</sub></div></div>','2020-02-12 22:59:30',NULL,1),(00000002,1,'Student\'s testing','<b>a\'s</b><div style=\"text-align: center;\"><i>b\\s\"</i></div>','2020-02-12 23:18:47',NULL,1),(00000003,1,'Math Question','<img src=\"https://i.insider.com/5a4bdcc6cb9df434008b4577?width=600&amp;format=jpeg&amp;auto=webp\" alt=\"「math question」的圖片\n搜尋結果\"><div>What is the Answer</div>','2020-02-14 22:15:35',NULL,1),(00000004,2,'Mary Question','Past Tenses Question','2020-02-17 21:59:09',NULL,1),(00000005,2,'Mary Question 2','<div style=\"text-align: center;\">Question 2</div><div style=\"text-align: center;\">What is the past tense of run?</div>','2020-02-17 22:02:50',NULL,1),(00000006,1,'Peter Question','<b>Bold</b> means&nbsp;import','2020-02-18 04:49:32',NULL,1);
+INSERT INTO `questions` VALUES (00000001,1,'Testing','<b>Hello World!</b><div style=\"text-align: left;\">Here is a <i>Test</i> to know is this <u>Text Field</u> is work or not.</div><div style=\"text-align: left;\">Left</div><div style=\"text-align: center;\">Center</div><div style=\"text-align: right;\">Right</div><div style=\"text-align: left;\"><ol><li>Number List</li></ol><ul><li>Bullet List</li></ul><div>Super<sup>script</sup></div><div>Sub<sub>script</sub></div></div>','2020-02-12 22:59:30',NULL,1),(00000002,1,'Student\'s testing','<b>a\'s</b><div style=\"text-align: center;\"><i>b\\s\"</i></div>','2020-02-12 23:18:47',NULL,1),(00000003,1,'Math Question','<img src=\"https://i.insider.com/5a4bdcc6cb9df434008b4577?width=600&amp;format=jpeg&amp;auto=webp\" alt=\"「math question」的圖片\n搜尋結果\"><div>What is the Answer</div>','2020-02-14 22:15:35',NULL,1),(00000004,2,'Mary Question','Past Tenses Question','2020-02-17 21:59:09',NULL,1),(00000005,2,'Mary Question 2','<div style=\"text-align: center;\">Question 2</div><div style=\"text-align: center;\">What is the past tense of run?</div>','2020-02-17 22:02:50',NULL,1),(00000006,1,'Peter Question','<b>Bold</b> means&nbsp;import','2020-02-18 04:49:32',NULL,1),(00000007,2,'Big Question','About Hong Kong.....','2020-02-24 21:13:05',NULL,1);
 /*!40000 ALTER TABLE `questions` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -398,7 +398,7 @@ DROP TABLE IF EXISTS `search_history`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `search_history` (
   `user_id` int(8) unsigned NOT NULL,
-  `tag` varchar(20) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `tag` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL,
   KEY `user_id` (`user_id`),
   CONSTRAINT `search_history_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -410,6 +410,7 @@ CREATE TABLE `search_history` (
 
 LOCK TABLES `search_history` WRITE;
 /*!40000 ALTER TABLE `search_history` DISABLE KEYS */;
+INSERT INTO `search_history` VALUES (2,'DSE'),(2,'DSE'),(2,'A'),(2,'A'),(2,'C'),(2,'A'),(2,'C'),(2,'A'),(2,'C'),(1,'History'),(1,'DSE'),(1,'English'),(1,'DSE'),(1,'English'),(1,'DSE'),(1,'Math'),(2,'dse'),(2,'english'),(2,'dse'),(2,'Math'),(2,'dse'),(2,'Math'),(2,'English'),(2,'math'),(2,'ahq');
 /*!40000 ALTER TABLE `search_history` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -571,4 +572,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2020-02-24  0:40:32
+-- Dump completed on 2020-02-25 22:21:51

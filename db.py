@@ -175,6 +175,24 @@ SQL = {
     ORDER BY c.collectors DESC
     LIMIT 5
     ''',
+    'recommand_tags': '''
+    SELECT tag, COUNT(*) as search_count
+    FROM search_history
+    WHERE user_id = {0}
+    GROUP BY tag
+    ORDER BY search_count DESC
+    LIMIT 5
+    ''',
+    'top_in_tag': '''
+    SELECT a.course_id, a.title, a.description ,a.create_date, b.nickname, d.collectors
+    FROM courses a, users b, courses_tags c, (
+      SELECT course, COUNT(*) AS collectors
+      FROM course_collection
+      GROUP BY course
+    ) d
+    WHERE a.author = b.user_id AND a.course_id = c.course AND a.course_id = d.course AND c.tag = '{0}'
+    LIMIT 1
+    ''',
     'search_courses_by_title': '''
     SELECT a.course_id, a.author, a.title, a.create_date, b.nickname
     FROM courses a, users b
@@ -186,6 +204,23 @@ SQL = {
     FROM courses a, users b
     WHERE a.author = b.user_id AND a.valid = true AND b.valid = true AND LOWER(b.nickname) LIKE LOWER('%{0}%')
     ORDER BY a.create_date
+    ''',
+    'search_courses_by_tags': '''
+    SELECT a.course_id, a.author, a.title, a.create_date, b.nickname, c.relevant
+    FROM courses a
+      INNER JOIN users b ON a.author = b.user_id
+      INNER JOIN (
+        SELECT course,
+          SUM({0})
+          as relevant
+        FROM courses_tags
+        GROUP BY course
+      ) c ON a.course_id = c.course and relevant > 0
+    WHERE a.valid = true AND b.valid = true
+    ORDER BY c.relevant DESC
+    ''',
+    'search_history': '''
+    INSERT INTO search_history VALUES ({0}, '{1}')
     ''',
     'course': '''
     SELECT a.course_id, a.author, a.title, a.description, a.create_date, b.nickname, c.avg_rate, c.raters

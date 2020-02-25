@@ -271,12 +271,29 @@ def api_submit_answer():
 @app.route('/api/courses', methods=['GET', 'POST'])
 def api_courses():
     if session.get('user') != None:
+        user = session.get('user')
 
         if request.method == 'GET':
             new = db.exe_fetch(SQL['courses_new'], 'all')
             hot = db.exe_fetch(SQL['courses_hot'], 'all')
-            user = session.get('user')
-            return jsonify({'courses': { 'new': new, 'hot': hot } })
+            tags = db.exe_fetch(SQL['recommand_tags'].format(user), 'all')
+            recommand = []
+            for tag in tags:
+                print(tag)
+                if tag.get('tag') != None:
+                    print(SQL['top_in_tag'].format(replace_string(tag.get('tag'))))
+                    course = db.exe_fetch(SQL['top_in_tag'].format(replace_string(tag.get('tag'))))
+                    if course != None and course not in recommand:
+                        recommand.append(course)
+
+            for i in hot:
+                if len(recommand) < 5:
+                    if i not in recommand:
+                        recommand.append(i)
+                else:
+                    break
+
+            return jsonify({'courses': { 'new': new, 'hot': hot, 'recommand': recommand } })
 
         elif request.method == 'POST':
             search_query = request.json.get('search_query')
@@ -284,10 +301,27 @@ def api_courses():
 
             if search_method == 'title':
                 search_result = db.exe_fetch(SQL['search_courses_by_title'].format(replace_string(search_query)), 'all')
+
             elif search_method == 'author':
                 search_result = db.exe_fetch(SQL['search_courses_by_author'].format(replace_string(search_query)), 'all')
+
             elif search_method == 'tags':
-                print(search_query.split(' '))
+                tags = search_query.split(' ')
+                case = ''
+                for tag in tags:
+                    t = replace_string(tag)
+                    if case == '':
+                        case += '''(CASE WHEN LOWER(tag) = LOWER('{0}') THEN 1 ELSE 0 END)'''.format(t)
+                    else:
+                        case += ''' + (CASE WHEN LOWER(tag) = LOWER('{0}') THEN 1 ELSE 0 END)'''.format(t)
+                    db.exe_commit(SQL['search_history'].format(user, t))
+
+                search_result = db.exe_fetch(SQL['search_courses_by_tags'].format(case), 'all')
+                for i in search_result:
+                    try:
+                        i['relevant'] = float(i['relevant'])
+                    except:
+                        pass
 
             return jsonify({ 'search_result': search_result })
 
@@ -320,7 +354,10 @@ def api_course():
             last_id = db.exe_commit_last_id(SQL['create_course'].format(user, title, description, now)).get('last_id')
             for tag in tags:
                 if tag != '' and tag != None:
-                    db.exe_commit(SQL['create_course_tags'].format(last_id, replace_string(tag)))
+                    try:
+                        db.exe_commit(SQL['create_course_tags'].format(last_id, replace_string(tag)))
+                    except:
+                        pass
 
             return jsonify({'create_course': 'Success'})
 
@@ -334,7 +371,10 @@ def api_course():
             db.exe_commit(SQL['reset_course_tags'].format(course))
             for tag in edited_tags:
                 if tag != '' and tag != None:
-                    db.exe_commit(SQL['create_course_tags'].format(course, replace_string(tag)))
+                    try:
+                        db.exe_commit(SQL['create_course_tags'].format(course, replace_string(tag)))
+                    except:
+                        pass
 
             return jsonify({'edit_course': 'Success'})
 

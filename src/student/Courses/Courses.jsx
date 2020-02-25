@@ -33,6 +33,8 @@ export default class Courses extends React.Component {
           console.log(result)
           this.setState({ 
             'new': result.courses.new,
+            'hot': result.courses.hot,
+            'recommand': result.courses.recommand,
           }, () => console.log(this.state))
         })
       }
@@ -130,9 +132,27 @@ export default class Courses extends React.Component {
               )}
             </ul>
             <h3>Hotest</h3>
-            <ul>2</ul>
+            <ul>
+              {this.state.hot.map(c => 
+                <li onClick={() => this.callCourse(c.course_id)}>
+                  <h4>{c.title}</h4>
+                  <h6>{c.nickname}</h6>
+                  <div dangerouslySetInnerHTML={{__html: c.description}}></div>
+                  <h6>{c.create_date}</h6>
+                </li>
+              )}
+            </ul>
             <h3>Recommand</h3>
-            <ul>3</ul>
+            <ul>
+              {this.state.recommand.map(c => 
+                <li onClick={() => this.callCourse(c.course_id)}>
+                  <h4>{c.title}</h4>
+                  <h6>{c.nickname}</h6>
+                  <div dangerouslySetInnerHTML={{__html: c.description}}></div>
+                  <h6>{c.create_date}</h6>
+                </li>
+              )}
+            </ul>
           </div>
         }
 
