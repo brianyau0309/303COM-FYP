@@ -116,8 +116,8 @@ CREATE TABLE `chatroom` (
   `date` datetime NOT NULL,
   PRIMARY KEY (`classroom`,`message_num`),
   KEY `member` (`member`),
-  CONSTRAINT `chatroom_ibfk_1` FOREIGN KEY (`classroom`) REFERENCES `classrooms` (`classroom_id`),
-  CONSTRAINT `chatroom_ibfk_2` FOREIGN KEY (`member`) REFERENCES `users` (`user_id`)
+  CONSTRAINT `chatroom_ibfk_1` FOREIGN KEY (`classroom`) REFERENCES `classrooms` (`classroom_id`) ON DELETE CASCADE,
+  CONSTRAINT `chatroom_ibfk_2` FOREIGN KEY (`member`) REFERENCES `users` (`user_id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -143,8 +143,8 @@ CREATE TABLE `classroom_members` (
   `join_date` datetime NOT NULL,
   PRIMARY KEY (`classroom`,`member`),
   KEY `member` (`member`),
-  CONSTRAINT `classroom_members_ibfk_1` FOREIGN KEY (`classroom`) REFERENCES `classrooms` (`classroom_id`),
-  CONSTRAINT `classroom_members_ibfk_2` FOREIGN KEY (`member`) REFERENCES `users` (`user_id`)
+  CONSTRAINT `classroom_members_ibfk_1` FOREIGN KEY (`classroom`) REFERENCES `classrooms` (`classroom_id`) ON DELETE CASCADE,
+  CONSTRAINT `classroom_members_ibfk_2` FOREIGN KEY (`member`) REFERENCES `users` (`user_id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -173,7 +173,7 @@ CREATE TABLE `classrooms` (
   `valid` tinyint(1) NOT NULL DEFAULT 1,
   PRIMARY KEY (`classroom_id`),
   KEY `create_by` (`create_by`),
-  CONSTRAINT `classrooms_ibfk_1` FOREIGN KEY (`create_by`) REFERENCES `users` (`user_id`)
+  CONSTRAINT `classrooms_ibfk_1` FOREIGN KEY (`create_by`) REFERENCES `users` (`user_id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -572,4 +572,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2020-02-25 22:21:51
+-- Dump completed on 2020-02-27 21:51:51

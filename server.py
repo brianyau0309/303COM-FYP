@@ -279,9 +279,7 @@ def api_courses():
             tags = db.exe_fetch(SQL['recommand_tags'].format(user), 'all')
             recommand = []
             for tag in tags:
-                print(tag)
                 if tag.get('tag') != None:
-                    print(SQL['top_in_tag'].format(replace_string(tag.get('tag'))))
                     course = db.exe_fetch(SQL['top_in_tag'].format(replace_string(tag.get('tag'))))
                     if course != None and course not in recommand:
                         recommand.append(course)
@@ -550,7 +548,7 @@ def api_lesson():
                 detail = replace_string(request.form['lesson_detail'])
                 video_link = request.form['youtube_link']
                 delete_file = request.form['delete_file']
-                print(request.form)
+
                 try:
                     file = request.files['file']
                 except:
@@ -590,6 +588,78 @@ def api_lesson():
                     if Path(UPLOAD_FILE_FOLDER+'/'+str(course)+'_'+str(lesson)+'.'+t).exists():
                         os.remove(UPLOAD_FILE_FOLDER+'/'+str(course)+'_'+str(lesson)+'.'+t)
                 db.exe_commit(SQL['delete_lesson'].format(course, lesson))
+
+    return jsonify({'result': 'Error'})
+
+@app.route('/api/classrooms')
+def classrooms():
+    if session.get('user') != None:
+        user = session.get('user')
+        if request.method == 'GET':
+            classrooms = db.exe_fetch(SQL['my_classrooms'].format(user), 'all')
+
+            print(classrooms)
+            return jsonify({'classrooms': classrooms})
+
+    return jsonify({'result': 'Error'})
+
+@app.route('/api/classroom', methods=['GET', 'POST', 'PUT', 'DELETE'])
+def classroom():
+    if session.get('user') != None:
+        user = session.get('user')
+        classroom = request.args.get('c')
+
+        if request.method == 'GET':
+            if classroom != None:
+                member = db.exe_fetch(SQL['classroom_member'].format(user, classroom))
+                if member:
+                    data = db.exe_fetch(SQL['classroom'].format(classroom))
+                    return jsonify({'classroom': data})
+                else:
+                    return jsonify({'classroom': 'Error'})
+
+        elif request.method == 'POST':
+            user_data = db.exe_fetch(SQL['user_data'].format(user))
+            if user_data.get('user_type') == 'teacher':
+                data = request.json.get('createClassroom')
+                name = replace_string(data.get('name'))
+                description = replace_string(data.get('description'))
+                now = datetime.now().strftime('%Y/%m/%d %H:%M:%S')
+
+                last_id = db.exe_commit_last_id(SQL['create_classroom'].format(user, name, description, now)).get('last_id')
+                try:
+                    db.exe_commit(SQL['join_classroom'].format(last_id, user, now))
+                except:
+                    pass
+
+                return jsonify({'create_classroom': 'Success'})
+
+        elif request.method == 'PUT':
+            pass
+
+        elif request.method == 'DELETE':
+            pass
+
+    return jsonify({'result': 'Error'})
+
+@app.route('/api/classroom_members', methods=['GET'])
+def classroom_members():
+    if session.get('user') != None:
+        user = session.get('user')
+        classroom = request.args.get('c')
+
+        if request.method == 'GET':
+            if classroom != None:
+                member = db.exe_fetch(SQL['classroom_member'].format(user, classroom))
+                if member:
+                    classroomData = db.exe_fetch(SQL['classroom'].format(classroom))
+                    memberData = db.exe_fetch(SQL['classroom_members'].format(classroom), 'all')
+                    return jsonify({
+                        'classroom': classroomData,
+                        'classroom_members': memberData
+                    })
+                else:
+                    return jsonify({'classroom_members': 'Error'})
 
     return jsonify({'result': 'Error'})
 

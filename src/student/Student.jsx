@@ -14,6 +14,9 @@ import MyQuestions from './Questions/MyQuestions.jsx'
 import QuestionCollection from './Questions/QuestionCollection.jsx'
 
 import Classrooms from './Classrooms/Classrooms.jsx'
+import Classroom from './Classrooms/Classroom.jsx'
+import ClassroomMember from './Classrooms/ClassroomMembers.jsx'
+
 import Notification from './Notification/Notification.jsx'
 import Setting from './Setting/Setting.jsx'
 
@@ -117,10 +120,25 @@ export default class Student extends React.Component {
                 <Questions user_id={this.state.user_data.user_id}/>
               </Route>
 
+              <Route path="/classrooms/:id/members">
+                <div className="header">
+                  <img className="header-icon" src={imgBack} onClick={() => window.history.back()}/>
+                  <span>Classroom Members</span>
+                </div>
+                <ClassroomMember/>
+              </Route>
+              <Route path="/classrooms/:id">
+                <div className="header">
+                  <img className="header-icon" src={imgBack} onClick={() => window.history.back()}/>
+                  <span>Classroom</span>
+                </div>
+                <Classroom/>
+              </Route>
               <Route path="/classrooms">
                 <Header title='Classrooms'/>
-                <Classrooms/>
+                <Classrooms user_type={this.state.user_data.user_type}/>
               </Route>
+
               <Route path="/notification">
                 <Header title='Notification'/>
                 <Notification/>

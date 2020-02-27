@@ -275,3 +275,14 @@ button {
 .EditAnswer .TextEditor > iframe {
   height: 75vh;
 }
+
+.Classrooms input,
+.Classrooms textarea {
+  display: block;
+  margin: 1vh auto;
+  width: 80%
+}
+
+.Classrooms textarea {
+  height: 10vh;
+}

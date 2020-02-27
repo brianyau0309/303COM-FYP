@@ -316,4 +316,31 @@ SQL = {
     DELETE FROM lessons
     WHERE course = {0} AND lesson_num = {1}
     ''',
+    'my_classrooms': '''
+    SELECT a.classroom_id, a.name, a.description, a.create_date
+    FROM classrooms a, classroom_members b
+    WHERE a.classroom_id = b.classroom AND a.valid = true AND b.member = {0}
+    ''',
+    'classroom': '''
+    SELECT a.classroom_id, a.create_by, a.name, a.description, a.create_date, b.nickname
+    FROM classrooms a, users b
+    WHERE a.create_by = b.user_id
+    ''',
+    'classroom_member': '''
+    SELECT *
+    FROM classroom_members
+    WHERE member = {0} AND classroom = {1}
+    ''',
+    'classroom_members': '''
+    SELECT b.nickname, b.user_type
+    FROM classroom_members a, users b
+    WHERE a.member = b.user_id AND classroom = {0}
+    ''',
+    'create_classroom': '''
+    INSERT INTO classrooms (create_by, name, description, create_date) VALUES
+    ({0}, '{1}', '{2}', '{3}')
+    ''',
+    'join_classroom': '''
+    INSERT INTO classroom_members VALUES ({0}, {1}, '{2}')
+    '''
 }
