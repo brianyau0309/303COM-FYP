@@ -14,6 +14,7 @@ class Classroom extends React.Component {
   componentDidMount() {
     this.loadClassroom()
   }
+
   componentDidUpdate(prevProps) {
     if (prevProps.match.params !== this.props.match.params) {
       this.loadClassroom()
@@ -56,10 +57,10 @@ class Classroom extends React.Component {
             </div>
             <ul>
               <Link to={'/classrooms/'+this.state.classroom_id+'/members'}><li>Members</li></Link>
-              <Link to=''><li>Task</li></Link>
-              <Link to=''><li>Create Task</li></Link>
-              <Link to=''><li>Calendar</li></Link>
-              <Link to=''><li>Chatroom</li></Link>
+              <Link to={'/classrooms/'+this.state.classroom_id+'/tasks'}><li>Tasks</li></Link>
+              <Link to={'/classrooms/'+this.state.classroom_id+'/create_task'}><li>Create Task</li></Link>
+              <Link to={'/classrooms/'+this.state.classroom_id+'/calendar'}><li>Calendar</li></Link>
+              <Link to={'/classrooms/'+this.state.classroom_id+'/chat'}><li>Chatroom</li></Link>
             </ul>
           </div>
           : <div>Please Wait...</div>}

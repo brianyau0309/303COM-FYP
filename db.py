@@ -342,5 +342,20 @@ SQL = {
     ''',
     'join_classroom': '''
     INSERT INTO classroom_members VALUES ({0}, {1}, '{2}')
-    '''
+    ''',
+    'task_last_num': '''
+    SELECT MAX(task_num) as last_num FROM tasks WHERE classroom = {0}
+    ''',
+    'create_task': '''
+    INSERT INTO tasks (classroom, task_num, title, create_by, create_date, deadline)
+    VALUES ({0}, {1}, '{2}', {3}, '{4}', '{5}')
+    ''',
+    'create_task_question_MC': '''
+    INSERT INTO task_questions (classroom, task_num, question_num, category, question_type, question, answer{6})
+    VALUES ({0}, {1}, {2}, {3}, '{4}', '{5}' {7})
+    ''',
+    'create_task_question_SQ': '''
+    INSERT INTO task_questions (classroom, task_num, question_num, category, question_type, question, answer)
+    VALUES ({0}, {1}, {2}, {3}, '{4}', '{5}', '{6}')
+    ''',
 }

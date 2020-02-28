@@ -154,6 +154,7 @@ CREATE TABLE `classroom_members` (
 
 LOCK TABLES `classroom_members` WRITE;
 /*!40000 ALTER TABLE `classroom_members` DISABLE KEYS */;
+INSERT INTO `classroom_members` VALUES (1,2,'2020-02-27 22:16:53');
 /*!40000 ALTER TABLE `classroom_members` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -174,7 +175,7 @@ CREATE TABLE `classrooms` (
   PRIMARY KEY (`classroom_id`),
   KEY `create_by` (`create_by`),
   CONSTRAINT `classrooms_ibfk_1` FOREIGN KEY (`create_by`) REFERENCES `users` (`user_id`) ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -183,6 +184,7 @@ CREATE TABLE `classrooms` (
 
 LOCK TABLES `classrooms` WRITE;
 /*!40000 ALTER TABLE `classrooms` DISABLE KEYS */;
+INSERT INTO `classrooms` VALUES (00000001,2,'Classroom 1','hello\nTesting','2020-02-27 22:16:53',1);
 /*!40000 ALTER TABLE `classrooms` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -457,10 +459,12 @@ CREATE TABLE `task_questions` (
   `task_num` int(8) unsigned NOT NULL,
   `question_num` int(3) NOT NULL,
   `category` varchar(50) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `quesion_type` enum('mc','short','long') COLLATE utf8mb4_unicode_ci NOT NULL,
+  `question_type` enum('mc','sq') COLLATE utf8mb4_unicode_ci NOT NULL,
   `question` text COLLATE utf8mb4_unicode_ci NOT NULL,
-  `awnser` varchar(80) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `full_mark` int(3) NOT NULL,
+  `answer` varchar(80) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `answer2` varchar(80) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `answer3` varchar(80) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `answer4` varchar(80) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   PRIMARY KEY (`classroom`,`task_num`,`question_num`),
   CONSTRAINT `task_questions_ibfk_1` FOREIGN KEY (`classroom`, `task_num`) REFERENCES `tasks` (`classroom`, `task_num`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -486,14 +490,14 @@ CREATE TABLE `tasks` (
   `classroom` int(8) unsigned NOT NULL,
   `task_num` int(8) unsigned NOT NULL,
   `title` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `creator` int(8) unsigned NOT NULL,
+  `create_by` int(8) unsigned NOT NULL,
   `create_date` datetime NOT NULL,
   `deadline` datetime DEFAULT NULL,
   `publish` tinyint(1) NOT NULL DEFAULT 1,
   PRIMARY KEY (`classroom`,`task_num`),
-  KEY `creator` (`creator`),
+  KEY `create_by` (`create_by`),
   CONSTRAINT `tasks_ibfk_1` FOREIGN KEY (`classroom`) REFERENCES `classrooms` (`classroom_id`) ON DELETE CASCADE,
-  CONSTRAINT `tasks_ibfk_2` FOREIGN KEY (`creator`) REFERENCES `users` (`user_id`) ON DELETE CASCADE
+  CONSTRAINT `tasks_ibfk_2` FOREIGN KEY (`create_by`) REFERENCES `users` (`user_id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -503,6 +507,7 @@ CREATE TABLE `tasks` (
 
 LOCK TABLES `tasks` WRITE;
 /*!40000 ALTER TABLE `tasks` DISABLE KEYS */;
+INSERT INTO `tasks` VALUES (1,1,'Task',2,'2020-02-29 06:33:30','2020-02-22 04:00:00',1),(1,2,'Task',2,'2020-02-29 06:34:34','2020-02-22 04:00:00',1),(1,3,'Task',2,'2020-02-29 06:35:12','2020-02-22 04:00:00',1),(1,4,'Task',2,'2020-02-29 06:36:17','2020-02-22 04:00:00',1);
 /*!40000 ALTER TABLE `tasks` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -572,4 +577,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2020-02-27 21:51:51
+-- Dump completed on 2020-02-29  6:37:07

@@ -22,6 +22,7 @@
     "whatwg-fetch": "^3.0.0"
   },
   "dependencies": {
-    "body-parser": "^1.19.0"
+    "body-parser": "^1.19.0",
+    "react-day-picker": "^7.4.0"
   }
 }
