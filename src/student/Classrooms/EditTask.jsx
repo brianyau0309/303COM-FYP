@@ -8,16 +8,17 @@ const imgBack = 'https://img.icons8.com/flat_round/64/000000/back--v1.png'
 let MCQ_format = { 'type': 'MC', 'question': '', 'answer': 1, 'choice': ['','','',''], 'category': ''}
 let SQ_format = { 'type': 'SQ', 'question': '', 'answer': '', 'choice': [], 'category': ''}
 
-class CreateTask extends React.Component {
+class EditTask extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
       'permission': false,
       'success_page': false,
-      'title': '', 'questions': [], 'deadline': undefined
+      'title': '', 'questions': [], 'deadline': new Date()
     }
     this.checkPermission = this.checkPermission.bind(this)
-    this.create_task = this.create_task.bind(this)
+    this.loadTaskQuestions = this.loadTaskQuestions.bind(this)
+    this.edit_task = this.edit_task.bind(this)
     this.titleOnChange = this.titleOnChange.bind(this)
     this.deadlineOnChange = this.deadlineOnChange.bind(this)
     this.newMCQ = this.newMCQ.bind(this)
@@ -41,7 +42,7 @@ class CreateTask extends React.Component {
       if (res.ok) {
         res.json().then(result => {
           if (result.member) {
-            this.setState({ 'permission': true })
+            this.setState({ 'permission': true }, () => this.loadTaskQuestions())
           } else {
             try {
               this.props.history.goBack()
@@ -54,7 +55,28 @@ class CreateTask extends React.Component {
     })
   }
 
-  create_task() {
+  loadTaskQuestions() {
+    if (this.state.permission) {
+      fetch('/api/task_questions?c='+this.props.match.params.class+'&t='+this.props.match.params.task).then(res => {
+        if (res.ok) {
+          res.json().then(result => {
+            console.log(result)
+            if (result.task !== 'Error') {
+              this.setState({
+                'title': result.task.title,
+                'deadline': new Date(result.task.deadline),
+                'questions': result.task.task_questions
+              })
+            } else {
+              this.props.history.goBack()
+            }
+          })
+        }
+      })
+    }
+  }
+
+  edit_task() {
     let questions = this.state.questions.slice(), fail = false
     questions.forEach(q => {
       if (q.question === '' || q.answer === '' || q.choice.includes('')) {
@@ -62,8 +84,8 @@ class CreateTask extends React.Component {
       }
     })
     if (this.state.title !== '' && this.state.deadline !== undefined &&questions.length > 0 && !fail) {
-      fetch('/api/task?c='+this.props.match.params.class, {
-        method: 'POST',
+      fetch('/api/task?c='+this.props.match.params.class+'&t='+this.props.match.params.task, {
+        method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ 'task': {
           'title': this.state.title,
@@ -154,25 +176,26 @@ class CreateTask extends React.Component {
   }
 
   render() {
+    console.log(this.props.match)
     const { deadline } = this.state
     return (
-      <div className="CreateTask content">
+      <div className="EditTask content">
         <div className="header">
           <img className='header-icon' src={imgBack} onClick={this.props.history.goBack}/>
-          <span>Create Task</span>
+          <span>Edit Task</span>
         </div>
         {this.state.permission ? 
           <div>
             { this.state.success_page ? 
               <div style={{top: '0', left: '0', position: 'absolute', width: '100%', height: '100vh', background: 'white'}}>
                 <div>Success!</div>
-                <Link to='/classrooms'>
-                  <div>Back to Classroom Page</div>
+                <Link to={this.props.match.url.replace('/edit', '')}>
+                  <div>Back to Task Page</div>
                 </Link>
               </div>
             : null }
               <input type="text" value={this.state.title} onChange={this.titleOnChange} placeholder='Task Title'/><br/>
-              <DayPickerInput onDayChange={this.deadlineOnChange} />
+              <DayPickerInput onDayChange={this.deadlineOnChange} value={new Date(this.state.deadline).toISOString().split('T')[0]} Format='YYYY-MM-DD'/>
 
               <div>Questions:</div>
               { this.state.questions.map((q, qi) => 
@@ -181,10 +204,10 @@ class CreateTask extends React.Component {
                   <div onClick={() => this.popQuestion(qi)}>Delete Question</div>
                     <ul>
                       <input type="text" value={q.category} onChange={e => this.categoryInputOnChange(e.target.value, qi)} placeholder='Question Cateory (Optional)'/>
-                      { q.type === 'MC' && q.choice.length < 4 ? 
+                      { q.type.toUpperCase() === 'MC' && q.choice.length < 4 ? 
                         <div>New Choice<img onClick={() => this.addChoice(qi)} src="https://img.icons8.com/flat_round/64/000000/plus.png"/></div>
                       : null }
-                      { q.type == 'MC' ? 
+                      { q.type.toUpperCase() == 'MC' ? 
                         q.choice.map((c, ci) =>
                           <li>A{ci+1}: 
                             <input type="text" value={c} onChange={e => this.choiceInputOnChange(e.target.value, qi, ci)} placeholder="Multiple Choice"/>
@@ -199,7 +222,7 @@ class CreateTask extends React.Component {
             <div onClick={ this.newMCQ }>New MC Question</div>
             <div onClick={ this.newSQ }>New Short Question</div>
 
-            <button onClick={this.create_task}>Create Task</button>
+            <button onClick={this.edit_task}>Edit Task</button>
           </div>
         : <div>Please Wait...</div>}
       </div>
@@ -207,4 +230,5 @@ class CreateTask extends React.Component {
   }
 }
 
-export default withRouter(CreateTask)
+export default withRouter(EditTask)
+

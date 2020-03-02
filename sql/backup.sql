@@ -462,9 +462,10 @@ CREATE TABLE `task_questions` (
   `question_type` enum('mc','sq') COLLATE utf8mb4_unicode_ci NOT NULL,
   `question` text COLLATE utf8mb4_unicode_ci NOT NULL,
   `answer` varchar(80) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `answer2` varchar(80) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `answer3` varchar(80) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `answer4` varchar(80) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `choice1` varchar(80) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `choice2` varchar(80) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `choice3` varchar(80) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `choice4` varchar(80) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   PRIMARY KEY (`classroom`,`task_num`,`question_num`),
   CONSTRAINT `task_questions_ibfk_1` FOREIGN KEY (`classroom`, `task_num`) REFERENCES `tasks` (`classroom`, `task_num`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -507,7 +508,6 @@ CREATE TABLE `tasks` (
 
 LOCK TABLES `tasks` WRITE;
 /*!40000 ALTER TABLE `tasks` DISABLE KEYS */;
-INSERT INTO `tasks` VALUES (1,1,'Task',2,'2020-02-29 06:33:30','2020-02-22 04:00:00',1),(1,2,'Task',2,'2020-02-29 06:34:34','2020-02-22 04:00:00',1),(1,3,'Task',2,'2020-02-29 06:35:12','2020-02-22 04:00:00',1),(1,4,'Task',2,'2020-02-29 06:36:17','2020-02-22 04:00:00',1);
 /*!40000 ALTER TABLE `tasks` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -577,4 +577,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2020-02-29  6:37:07
+-- Dump completed on 2020-03-02 21:01:58

@@ -1,0 +1,118 @@
+import React from 'react'
+import { Link, withRouter } from 'react-router-dom'
+
+const imgBack = 'https://img.icons8.com/flat_round/64/000000/back--v1.png'
+
+class Task extends React.Component {
+  constructor(props) {
+    super(props)
+    this.state = {
+      'title': '', 'create_date': '', 'deadline': '', 
+      'permission': false, 'success_page': false
+    }
+    this.loadTask = this.loadTask.bind(this)
+    this.checkPermission = this.checkPermission.bind(this)
+    this.deleteTask = this.deleteTask.bind(this)
+  }
+
+  componentDidMount() {
+    this.checkPermission()
+  }
+
+  componentDidUpdate(prevProps) {
+    if (prevProps.match.params !== this.props.match.params) {
+      this.checkPermission()
+    }     
+  }
+
+  checkPermission() {
+    fetch('/api/classroom_member?c='+this.props.match.params.class).then(res => {
+      if (res.ok) {
+        res.json().then(result => {
+          if (result.member) {
+            this.setState({ 'permission': true },() => this.loadTask())
+          } else {
+            try {
+              this.props.history.goBack()
+            } catch(err) {
+              window.history.back()
+            }
+          }
+        })
+      }
+    })
+  }
+  
+  loadTask() {
+    if (this.state.permission) {
+      fetch('/api/task?c='+this.props.match.params.class+'&t='+this.props.match.params.task).then(res => {
+        if (res.ok) {
+          res.json().then(result => {
+            console.log(result)
+            if (result.task !== 'Error') {
+              this.setState({
+                'classroom': result.classroom,
+                'title': result.task.title,
+                'create_date': result.task.create_date,
+                'deadline': result.task.deadline,
+              })
+            } else {
+              this.props.history.goBack()
+            }
+          })
+        }
+      })
+    }
+  }
+
+  deleteTask() {
+    fetch('/api/task?c='+this.props.match.params.class+'&t='+this.props.match.params.task, {method: 'DELETE'}).then(res => {
+      if (res.ok) {
+        res.json().then(result => {
+          console.log(result)
+          this.setState({'success_page': true})
+        })
+      }
+    })
+  }
+
+  render() {
+    return (
+      <div className="Task content">
+        <div className="header">
+          <Link className="header-icon" to={'/classrooms/'+this.props.match.params.class+'/tasks'}>
+            <img className='header-icon' src={imgBack}/>
+          </Link>
+          <span>Classroom Task</span>
+        </div>
+        {this.state.permission ? 
+          <div>
+            { this.state.success_page ? 
+              <div style={{top: '0', left: '0', position: 'absolute', width: '100%', height: '100vh', background: 'white'}}>
+                <div>Delete Success!</div>
+                <Link to={'/classrooms/'+this.props.match.params.class+'/tasks'}>
+                  <div>Back to Tasks Page</div>
+                </Link>
+              </div>
+            : null }
+            <div>Task Title: {this.state.title}</div>
+            <div>{this.state.create_date}</div>
+            <div>{this.state.deadline}</div>
+
+            {this.props.user_type === 'teacher' ?
+              <div>
+                <Link to={this.props.location.pathname+'/edit'}><button>Edit</button></Link>
+                <br/><button onClick={this.deleteTask}>Delete</button>
+              </div>
+            : <Link to={this.props.location.pathname+'/answer'}><button>Answer</button></Link>}
+
+          </div>
+        : <div>Please Wait...</div>}
+      </div>
+    )
+  }
+}
+
+export default withRouter(Task)
+
+

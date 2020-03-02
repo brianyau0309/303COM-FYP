@@ -324,7 +324,16 @@ SQL = {
     'classroom': '''
     SELECT a.classroom_id, a.create_by, a.name, a.description, a.create_date, b.nickname
     FROM classrooms a, users b
-    WHERE a.create_by = b.user_id
+    WHERE a.create_by = b.user_id AND classroom_id = {0}
+    ''',
+    'edit_classroom': '''
+    UPDATE classrooms
+    SET name = '{0}', description = '{1}'
+    WHERE classroom_id = {2}
+    ''',
+    'delete_classroom': '''
+    DELETE FROM classrooms
+    WHERE classroom_id = {0}
     ''',
     'classroom_member': '''
     SELECT *
@@ -350,12 +359,36 @@ SQL = {
     INSERT INTO tasks (classroom, task_num, title, create_by, create_date, deadline)
     VALUES ({0}, {1}, '{2}', {3}, '{4}', '{5}')
     ''',
+    'edit_task': '''
+    UPDATE tasks
+    SET title = '{0}', deadline = '{1}'
+    WHERE classroom = {2} AND task_num = {3}
+    ''',
+    'reset_task_question': '''
+    DELETE FROM task_questions
+    WHERE classroom = {0} AND task_num = {1}
+    ''',
     'create_task_question_MC': '''
-    INSERT INTO task_questions (classroom, task_num, question_num, category, question_type, question, answer{6})
-    VALUES ({0}, {1}, {2}, {3}, '{4}', '{5}' {7})
+    INSERT INTO task_questions (classroom, task_num, question_num, category, question_type, question, answer{7})
+    VALUES ({0}, {1}, {2}, {3}, '{4}', '{5}', '{6}' {8})
     ''',
     'create_task_question_SQ': '''
     INSERT INTO task_questions (classroom, task_num, question_num, category, question_type, question, answer)
     VALUES ({0}, {1}, {2}, {3}, '{4}', '{5}', '{6}')
+    ''',
+    'tasks': '''
+    SELECT *
+    FROM tasks
+    WHERE classroom = {0}
+    ''',
+    'task': '''
+    SELECT * FROM tasks WHERE classroom = {0} AND task_num = {1}
+    ''',
+    'task_questions': '''
+    SELECT * FROM task_questions WHERE classroom = {0} AND task_num = {1}
+    ''',
+    'delete_task': '''
+    DELETE FROM tasks
+    WHERE classroom = {0} and task_num = {1}
     ''',
 }

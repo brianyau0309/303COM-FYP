@@ -591,6 +591,10 @@ def api_lesson():
 
     return jsonify({'result': 'Error'})
 
+#
+# Classrooms API
+#
+
 @app.route('/api/classrooms')
 def classrooms():
     if session.get('user') != None:
@@ -598,7 +602,6 @@ def classrooms():
         if request.method == 'GET':
             classrooms = db.exe_fetch(SQL['my_classrooms'].format(user), 'all')
 
-            print(classrooms)
             return jsonify({'classrooms': classrooms})
 
     return jsonify({'result': 'Error'})
@@ -608,12 +611,15 @@ def classroom():
     if session.get('user') != None:
         user = session.get('user')
         classroom = request.args.get('c')
+        member = db.exe_fetch(SQL['classroom_member'].format(user, classroom))
 
         if request.method == 'GET':
             if classroom != None:
                 member = db.exe_fetch(SQL['classroom_member'].format(user, classroom))
                 if member:
                     data = db.exe_fetch(SQL['classroom'].format(classroom))
+                    print(SQL['classroom'].format(classroom))
+                    print(data)
                     return jsonify({'classroom': data})
                 else:
                     return jsonify({'classroom': 'Error'})
@@ -635,10 +641,22 @@ def classroom():
                 return jsonify({'create_classroom': 'Success'})
 
         elif request.method == 'PUT':
-            pass
+            if classroom != None:
+                user_data = db.exe_fetch(SQL['user_data'].format(user))
+                if user_data.get('user_type') == 'teacher':
+                    data = request.json.get('editClassroom')
+                    name = replace_string(data.get('name'))
+                    description = replace_string(data.get('description'))
+
+                    db.exe_commit(SQL['edit_classroom'].format(name, description, classroom))
+                    return jsonify({'edit_classroom': 'Success'})
 
         elif request.method == 'DELETE':
-            pass
+            if classroom != None:
+                user_data = db.exe_fetch(SQL['user_data'].format(user))
+                if user_data.get('user_type') == 'teacher' and member:
+                    db.exe_commit(SQL['delete_classroom'].format(classroom))
+                    return jsonify({'delete_classroom': 'Success'})
 
     return jsonify({'result': 'Error'})
 
@@ -674,14 +692,51 @@ def classroom_member():
 
     return jsonify({'member': False})
 
+#
+# Tasks API
+#
+
+@app.route('/api/tasks')
+def tasks():
+    if session.get('user') != None:
+        user = session.get('user')
+        classroom = request.args.get('c')
+
+        if classroom != None:
+            member = db.exe_fetch(SQL['classroom_member'].format(user, classroom))
+            if member:
+                classroomData = db.exe_fetch(SQL['classroom'].format(classroom))
+                tasksData = db.exe_fetch(SQL['tasks'].format(classroom), 'all')
+                return jsonify({
+                    'classroom': classroomData,
+                    'tasks': tasksData
+                })
+            else:
+                return jsonify({'tasks': 'Error'})
+
+    return jsonify({'result': 'Error'})
+
 @app.route('/api/task', methods=['GET', 'POST', 'PUT', 'DELETE'])
 def task():
     if session.get('user') != None:
         user = session.get('user')
         classroom = request.args.get('c')
+        task = request.args.get('t')
         member = db.exe_fetch(SQL['classroom_member'].format(user, classroom))
 
-        if request.method == 'POST':
+        if request.method == 'GET':
+            if classroom != None and task != None:
+                if member:
+                    classroomData = db.exe_fetch(SQL['classroom'].format(classroom))
+                    taskData = db.exe_fetch(SQL['task'].format(classroom, task))
+                    return jsonify({
+                        'classroom': classroomData,
+                        'task': taskData
+                    })
+                else:
+                    return jsonify({'task': 'Error'})
+
+        elif request.method == 'POST':
             if classroom != None:
                 user_data = db.exe_fetch(SQL['user_data'].format(user))
                 if user_data.get('user_type') == 'teacher' and member:
@@ -698,26 +753,103 @@ def task():
 
                     db.exe_commit(SQL['create_task'].format(classroom, task_num, title, user, now, deadline))
                     for (i, q) in enumerate(task.get('questions')):
+                        question_num = i+1
                         category = 'NULL'
                         if q.get('category') != '':
                             category = "'"+replace_string(q.get('category'))+"'"
                         if q.get('type').lower() == 'mc':
-                            answerCol = ''
-                            answers = ""
+                            choiceCol = ''
+                            answer = q.get('choice')[q.get('answer') - 1]
+                            choice = ""
                             for (i, c) in enumerate(q.get('choice')):
-                                answers += ",'" + replace_string(c) + "'"
-                                if i != 0:
-                                    answerCol += ',answer'+str(i+1)
+                                choice += ",'" + replace_string(c) + "'"
+                                choiceCol += ',choice'+str(i+1)
 
-                            print(SQL['create_task_question_MC'].format(classroom, task_num, i+1, category, 'mc', replace_string(q.get('question')), answerCol, answers))
-                            db.exe_commit(SQL['create_task_question_MC'].format(classroom, task_num, i+1, category, 'mc', replace_string(q.get('question')), answerCol, answers))
+                            db.exe_commit(SQL['create_task_question_MC'].format(classroom, task_num, question_num, category, 'mc', replace_string(q.get('question')), answer, choiceCol, choice))
+
                         elif q.get('type').lower() == 'sq':
-                            print(SQL['create_task_question_SQ'].format(classroom, task_num, i+1, category, 'sq', replace_string(q.get('question')), replace_string(q.get('answer'))))
-                            db.exe_commit(SQL['create_task_question_SQ'].format(classroom, task_num, i+1, category, 'sq', replace_string(q.get('question')), replace_string(q.get('answer'))))
+                            db.exe_commit(SQL['create_task_question_SQ'].format(classroom, task_num, question_num, category, 'sq', replace_string(q.get('question')), replace_string(q.get('answer'))))
                     return jsonify({'create_task':'Success'})
+
+        elif request.method == 'PUT':
+            if classroom != None and task != None:
+                user_data = db.exe_fetch(SQL['user_data'].format(user))
+                if user_data.get('user_type') == 'teacher' and member:
+                    taskData = request.json.get('task')
+                    print(taskData)
+                    deadline = datetime.strptime(taskData.get('deadline'), '%Y-%m-%dT%H:%M:%S.%fZ').strftime('%Y/%m/%d %H:%M:%S')
+                    title = replace_string(taskData.get('title'))
+                    task_num = task
+                    questions = taskData.get('questions')
+
+                    db.exe_commit(SQL['edit_task'].format(title, deadline, classroom, task_num))
+                    db.exe_commit(SQL['reset_task_question'].format(classroom, task_num))
+                    for (i, q) in enumerate(questions):
+                        question_num = i+1
+                        category = 'NULL'
+                        if q.get('category') != '':
+                            category = "'"+replace_string(q.get('category'))+"'"
+                        if q.get('type').lower() == 'mc':
+                            choiceCol = ''
+                            answer = q.get('choice')[q.get('answer') - 1]
+                            choice = ""
+                            for (i, c) in enumerate(q.get('choice')):
+                                choice += ",'" + replace_string(c) + "'"
+                                choiceCol += ',choice'+str(i+1)
+
+                            db.exe_commit(SQL['create_task_question_MC'].format(classroom, task_num, question_num, category, 'mc', replace_string(q.get('question')), answer, choiceCol, choice))
+
+                        elif q.get('type').lower() == 'sq':
+                            db.exe_commit(SQL['create_task_question_SQ'].format(classroom, task_num, question_num, category, 'sq', replace_string(q.get('question')), replace_string(q.get('answer'))))
+
+                    return jsonify({'edit_task':'Success'})
+
+        elif request.method == 'DELETE':
+            if classroom != None and task != None:
+                user_data = db.exe_fetch(SQL['user_data'].format(user))
+                if user_data.get('user_type') == 'teacher' and member:
+                    db.exe_commit(SQL['delete_task'].format(classroom, task))
+                    return jsonify({'delete_task': 'Success'})
 
     return jsonify({'result': 'Error'})
 
+@app.route('/api/task_questions')
+def task_questions():
+    if session.get('user') != None:
+        user = session.get('user')
+        classroom = request.args.get('c')
+        task = request.args.get('t')
+        member = db.exe_fetch(SQL['classroom_member'].format(user, classroom))
+
+        if classroom != None and task != None:
+            if member:
+                classroomData = db.exe_fetch(SQL['classroom'].format(classroom))
+                taskData = db.exe_fetch(SQL['task'].format(classroom, task))
+                taskQuestionData = db.exe_fetch(SQL['task_questions'].format(classroom, task), 'all')
+                for q in taskQuestionData:
+                    q['choice'] = []
+                    if q.get('question_type') == 'mc':
+                        for i in range(4):
+                            if q.get('choice'+str(i+1)) != None:
+                                q['choice'].append(q.get('choice'+str(i+1)))
+                        for (i, c) in enumerate(q.get('choice')):
+                            if q.get('answer') == c:
+                                q['answer'] = i+1
+                    del q['choice1']
+                    del q['choice2']
+                    del q['choice3']
+                    del q['choice4']
+                    q['type'] = q['question_type']
+                    del q['question_type']
+                taskData['task_questions'] = taskQuestionData
+                return jsonify({
+                    'classroom': classroomData,
+                    'task': taskData
+                })
+            else:
+                return jsonify({'task': 'Error'})
+
+    return jsonify({'result': 'Error'})
 
 if __name__ == '__main__':
     version = db.exe_fetch('select version()')['version()']

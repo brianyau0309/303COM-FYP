@@ -14,9 +14,6 @@ import MyQuestions from './Questions/MyQuestions.jsx'
 import QuestionCollection from './Questions/QuestionCollection.jsx'
 
 import Classrooms from './Classrooms/Classrooms.jsx'
-import Classroom from './Classrooms/Classroom.jsx'
-import ClassroomMember from './Classrooms/ClassroomMembers.jsx'
-import CreateTask from './Classrooms/CreateTask.jsx'
 
 import Notification from './Notification/Notification.jsx'
 import Setting from './Setting/Setting.jsx'
@@ -122,27 +119,44 @@ export default class Student extends React.Component {
               </Route>
 
               {this.state.user_data.user_type === 'teacher' ?
-                <Route path="/classrooms/:id/create_task">
-                  <div className="header">
-                    <img className="header-icon" src={imgBack} onClick={() => window.history.back()}/>
-                    <span>Create Task</span>
-                  </div>
-                  <CreateTask/>
+                <Route path="/classrooms/:class/create_task">
+                  <Header title='Classrooms'/>
+                  <Classrooms user_type={this.state.user_data.user_type}/>
                 </Route>
               : null}
-              <Route path="/classrooms/:id/members">
-                <div className="header">
-                  <img className="header-icon" src={imgBack} onClick={() => window.history.back()}/>
-                  <span>Classroom Members</span>
-                </div>
-                <ClassroomMember/>
+              {this.state.user_data.user_type === 'teacher' ?
+                <Route path="/classrooms/:class/tasks/:task/edit">
+                  <Header title='Classrooms'/>
+                  <Classrooms user_type={this.state.user_data.user_type}/>
+                </Route>
+              : null}
+              {this.state.user_data.user_type === 'teacher' ?
+                <Route path="/classrooms/:class/tasks/:task/result">
+                  <Header title='Classrooms'/>
+                  <Classrooms user_type={this.state.user_data.user_type}/>
+                </Route>
+              : null}
+              {this.state.user_data.user_type === 'student' ?
+                <Route path="/classrooms/:class/tasks/:task/answer">
+                  <Header title='Classrooms'/>
+                  <Classrooms user_type={this.state.user_data.user_type}/>
+                </Route>
+              : null}
+              <Route path="/classrooms/:class/tasks/:task">
+                <Header title='Classrooms'/>
+                <Classrooms user_type={this.state.user_data.user_type}/>
               </Route>
-              <Route path="/classrooms/:id">
-                <div className="header">
-                  <img className="header-icon" src={imgBack} onClick={() => window.history.back()}/>
-                  <span>Classroom</span>
-                </div>
-                <Classroom/>
+              <Route path="/classrooms/:class/tasks">
+                <Header title='Classrooms'/>
+                <Classrooms user_type={this.state.user_data.user_type}/>
+              </Route>
+              <Route path="/classrooms/:class/members">
+                <Header title='Classrooms'/>
+                <Classrooms user_type={this.state.user_data.user_type}/>
+              </Route>
+              <Route path="/classrooms/:class">
+                <Header title='Classrooms'/>
+                <Classrooms user_type={this.state.user_data.user_type}/>
               </Route>
               <Route path="/classrooms">
                 <Header title='Classrooms'/>
