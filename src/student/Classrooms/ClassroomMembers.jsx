@@ -12,6 +12,8 @@ class ClassroomMembers extends React.Component {
     }
     this.loadClassroomMembers = this.loadClassroomMembers.bind(this)
     this.checkPermission = this.checkPermission.bind(this)
+    this.inviteMember = this.inviteMember.bind(this)
+    this.kickFromClassroom = this.kickFromClassroom.bind(this)
   }
 
   componentDidMount() {
@@ -63,6 +65,34 @@ class ClassroomMembers extends React.Component {
     }
   }
 
+  inviteMember(e) {
+    e.preventDefault()
+    let form = document.forms.form_inviteMember
+    if (form.user.value && form.user.value > 0) {
+      fetch('/api/classroom_members?c='+this.props.match.params.class+'&i='+form.user.value, {method: 'POST'}).then(res => {
+        if (res.ok) {
+          res.json().then(result => {
+            console.log(result)
+            this.loadClassroomMembers()
+          })
+        }
+      })
+    } else {
+      alert('Please fill in a valid ID.')
+    }
+  }
+
+  kickFromClassroom(u) {
+    fetch('/api/classroom_members?c='+this.props.match.params.class+'&i='+u, {method: 'DELETE'}).then(res => {
+      if (res.ok) {
+        res.json().then(result => {
+          console.log(result)
+          this.loadClassroomMembers()
+        })
+      }
+    })
+  }
+
   render() {
     return (
       <div className="ClassroomMembers content">
@@ -73,11 +103,15 @@ class ClassroomMembers extends React.Component {
         {this.state.permission ? 
           <div>
             <div>{this.state.classroom ? this.state.classroom.name : null}: Member List</div>
+            <form onSubmit={this.inviteMember} name="form_inviteMember">Invite Member: <input type="number" name="user" required/> <input type="submit"/> </form>
             <ul>
               {this.state.ClassroomMembers.map(member => 
                 <li>
-                  <div>{member.nickname}</div>
-                  <div>{member.user_type}</div>
+                  <div>ID: {member.user_id}</div>
+                  <div>{member.fullname.toUpperCase()} {member.nickname}</div>
+                  <div>Type: {member.user_type}</div>
+                  <div>Join Date: {member.join_date}</div>
+                  {member.user_type === 'student' ? <button onClick={() => this.kickFromClassroom(member.user_id)}>Kick</button> : null}
                 </li>
               )}
             </ul>

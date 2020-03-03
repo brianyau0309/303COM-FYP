@@ -7,16 +7,18 @@ class Task extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      'title': '', 'create_date': '', 'deadline': '', 
+      'title': '', 'create_date': '', 'deadline': '', 'task_answers': [],
       'permission': false, 'success_page': false
     }
     this.loadTask = this.loadTask.bind(this)
+    this.loadAnswer = this.loadAnswer.bind(this)
     this.checkPermission = this.checkPermission.bind(this)
     this.deleteTask = this.deleteTask.bind(this)
   }
 
   componentDidMount() {
     this.checkPermission()
+    this.loadAnswer()
   }
 
   componentDidUpdate(prevProps) {
@@ -49,7 +51,7 @@ class Task extends React.Component {
         if (res.ok) {
           res.json().then(result => {
             console.log(result)
-            if (result.task !== 'Error') {
+            if (result.task !== 'Error' && result.task != null) {
               this.setState({
                 'classroom': result.classroom,
                 'title': result.task.title,
@@ -63,6 +65,16 @@ class Task extends React.Component {
         }
       })
     }
+  }
+
+  loadAnswer() {
+    fetch('/api/task_answers?c='+this.props.match.params.class+'&t='+this.props.match.params.task).then(res => {
+      if (res.ok) {
+        res.json().then(result => {
+          this.setState({'task_answers': result.task_answers})
+        })
+      }
+    })
   }
 
   deleteTask() {
@@ -99,12 +111,20 @@ class Task extends React.Component {
             <div>{this.state.create_date}</div>
             <div>{this.state.deadline}</div>
 
-            {this.props.user_type === 'teacher' ?
-              <div>
-                <Link to={this.props.location.pathname+'/edit'}><button>Edit</button></Link>
-                <br/><button onClick={this.deleteTask}>Delete</button>
-              </div>
-            : <Link to={this.props.location.pathname+'/answer'}><button>Answer</button></Link>}
+            { this.props.user_type === 'teacher' ?
+                new Date() > new Date(this.state.deadline) ?
+                  <Link to={this.props.location.pathname+'/result'}><button>Result</button></Link>
+                :
+                  <div>
+                    <Link to={this.props.location.pathname+'/edit'}><button>Edit</button></Link>
+                    <br/><button onClick={this.deleteTask}>Delete</button>
+                  </div>
+            : new Date() > new Date(this.state.deadline) ?
+                <Link to={this.props.location.pathname+'/result/'+this.props.user_id}><button>Result</button></Link>
+              : 
+                this.state.task_answers.length > 0 ? 
+                  <Link to={this.props.location.pathname+'/edit_answer/'+this.props.user_id}><button>Edit Answer</button></Link>
+                : <Link to={this.props.location.pathname+'/answer'}><button>Answer</button></Link>}
 
           </div>
         : <div>Please Wait...</div>}
@@ -114,5 +134,3 @@ class Task extends React.Component {
 }
 
 export default withRouter(Task)
-
-

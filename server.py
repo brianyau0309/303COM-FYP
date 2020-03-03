@@ -163,7 +163,7 @@ def api_my_questions():
     return jsonify({'result': 'Error'})
 
 @app.route('/api/question_collection', methods = ['GET', 'POST', 'DELETE'])
-def question_collection():
+def api_question_collection():
     if session.get('user') != None:
         user = session.get('user')
         question = request.args.get('q')
@@ -407,7 +407,7 @@ def api_my_courses():
     return jsonify({'result': 'Error'})
 
 @app.route('/api/course_collection', methods = ['GET', 'POST', 'DELETE'])
-def course_collection():
+def api_course_collection():
     if session.get('user') != None:
         user = session.get('user')
         course = request.args.get('c')
@@ -596,7 +596,7 @@ def api_lesson():
 #
 
 @app.route('/api/classrooms')
-def classrooms():
+def api_classrooms():
     if session.get('user') != None:
         user = session.get('user')
         if request.method == 'GET':
@@ -607,7 +607,7 @@ def classrooms():
     return jsonify({'result': 'Error'})
 
 @app.route('/api/classroom', methods=['GET', 'POST', 'PUT', 'DELETE'])
-def classroom():
+def api_classroom():
     if session.get('user') != None:
         user = session.get('user')
         classroom = request.args.get('c')
@@ -660,15 +660,20 @@ def classroom():
 
     return jsonify({'result': 'Error'})
 
-@app.route('/api/classroom_members', methods=['GET'])
-def classroom_members():
+#
+# Classroom_Member API
+#
+
+@app.route('/api/classroom_members', methods=['GET', 'POST', 'DELETE'])
+def api_classroom_members():
     if session.get('user') != None:
         user = session.get('user')
         classroom = request.args.get('c')
+        invite = request.args.get('i')
+        member = db.exe_fetch(SQL['classroom_member'].format(user, classroom))
 
         if request.method == 'GET':
             if classroom != None:
-                member = db.exe_fetch(SQL['classroom_member'].format(user, classroom))
                 if member:
                     classroomData = db.exe_fetch(SQL['classroom'].format(classroom))
                     memberData = db.exe_fetch(SQL['classroom_members'].format(classroom), 'all')
@@ -679,10 +684,31 @@ def classroom_members():
                 else:
                     return jsonify({'classroom_members': 'Error'})
 
+        if request.method == 'POST':
+            if classroom != None and user != None:
+                if member:
+                    now = datetime.now().strftime('%Y/%m/%d %H:%M:%S')
+                    try:
+                        db.exe_commit(SQL['join_classroom'].format(classroom, invite, now))
+                    except Exception as e:
+                        return jsonify({ 'invite_member': 'Error' })
+
+                    return jsonify({ 'invite_member': 'Success' })
+                else:
+                    return jsonify({ 'invite_member': 'Error' })
+
+        if request.method == 'DELETE':
+            if classroom != None and user != None:
+                if member:
+                    db.exe_commit(SQL['kick_from_classroom'].format(classroom, invite))
+                    return jsonify({ 'kick_from_classroom': 'Success' })
+                else:
+                    return jsonify({ 'kick_from_classroom': 'Error' })
+
     return jsonify({'result': 'Error'})
 
 @app.route('/api/classroom_member', methods=['GET'])
-def classroom_member():
+def api_classroom_member():
     if session.get('user') != None:
         user = session.get('user')
         classroom = request.args.get('c')
@@ -697,7 +723,7 @@ def classroom_member():
 #
 
 @app.route('/api/tasks')
-def tasks():
+def api_tasks():
     if session.get('user') != None:
         user = session.get('user')
         classroom = request.args.get('c')
@@ -717,7 +743,7 @@ def tasks():
     return jsonify({'result': 'Error'})
 
 @app.route('/api/task', methods=['GET', 'POST', 'PUT', 'DELETE'])
-def task():
+def api_task():
     if session.get('user') != None:
         user = session.get('user')
         classroom = request.args.get('c')
@@ -814,15 +840,16 @@ def task():
     return jsonify({'result': 'Error'})
 
 @app.route('/api/task_questions')
-def task_questions():
+def api_task_questions():
     if session.get('user') != None:
         user = session.get('user')
         classroom = request.args.get('c')
         task = request.args.get('t')
         member = db.exe_fetch(SQL['classroom_member'].format(user, classroom))
+        user_data = db.exe_fetch(SQL['user_data'].format(user))
 
         if classroom != None and task != None:
-            if member:
+            if member and user_data.get('user_type') == 'teacher':
                 classroomData = db.exe_fetch(SQL['classroom'].format(classroom))
                 taskData = db.exe_fetch(SQL['task'].format(classroom, task))
                 taskQuestionData = db.exe_fetch(SQL['task_questions'].format(classroom, task), 'all')
@@ -848,6 +875,116 @@ def task_questions():
                 })
             else:
                 return jsonify({'task': 'Error'})
+
+    return jsonify({'result': 'Error'})
+
+@app.route('/api/student_task_questions')
+def api_student_task_questions():
+    if session.get('user') != None:
+        user = session.get('user')
+        classroom = request.args.get('c')
+        task = request.args.get('t')
+        member = db.exe_fetch(SQL['classroom_member'].format(user, classroom))
+
+        if classroom != None and task != None:
+            if member:
+                classroomData = db.exe_fetch(SQL['classroom'].format(classroom))
+                taskData = db.exe_fetch(SQL['task'].format(classroom, task))
+                taskQuestionData = db.exe_fetch(SQL['student_task_questions'].format(classroom, task), 'all')
+                for q in taskQuestionData:
+                    q['choice'] = []
+                    if q.get('question_type') == 'mc':
+                        for i in range(4):
+                            if q.get('choice'+str(i+1)) != None:
+                                q['choice'].append(q.get('choice'+str(i+1)))
+                        for (i, c) in enumerate(q.get('choice')):
+                            if q.get('answer') == c:
+                                q['answer'] = i+1
+                    del q['choice1']
+                    del q['choice2']
+                    del q['choice3']
+                    del q['choice4']
+                    q['answer'] = ''
+                    q['type'] = q['question_type']
+                    del q['question_type']
+                taskData['task_questions'] = taskQuestionData
+                return jsonify({
+                    'classroom': classroomData,
+                    'task': taskData
+                })
+            else:
+                return jsonify({'task': 'Error'})
+
+    return jsonify({'result': 'Error'})
+
+@app.route('/api/task_answers', methods=['GET', 'POST', 'PUT'])
+def api_task_answers():
+    if session.get('user') != None:
+        user = session.get('user')
+        classroom = request.args.get('c')
+        task = request.args.get('t')
+        student = request.args.get('s')
+        member = db.exe_fetch(SQL['classroom_member'].format(user, classroom))
+
+        if request.method == 'GET':
+            if classroom != None and task != None and student == None:
+                if member:
+                    answers = db.exe_fetch(SQL['task_answers'].format(classroom, task, user), 'all')
+                    return jsonify({'task_answers': answers})
+                else:
+                    return jsonify({'task_answers': 'Error'})
+            elif classroom != None and task != None and student != None:
+                if member:
+                    answers = db.exe_fetch(SQL['task_answers'].format(classroom, task, student))
+                    if answers != None and int(user) == int(student):
+                        return jsonify({'edit_task': 'OK'})
+                    else:
+                        return jsonify({'edit_task': 'Error'})
+
+        elif request.method == 'POST':
+            if classroom != None and task != None:
+                if member:
+                    questions = request.json.get('answer_task').get('questions')
+                    for q in questions:
+                        db.exe_commit(SQL['answer_task'].format(classroom, task, q.get('question_num'), user, replace_string(q.get('answer'))))
+                    return jsonify({'answer_task': 'Success'})
+                else:
+                    return jsonify({'answer_task': 'Error'})
+
+        elif request.method == 'PUT':
+            if classroom != None and task != None:
+                if member:
+                    questions = request.json.get('answer_task').get('questions')
+                    for q in questions:
+                        db.exe_commit(SQL['edit_task_answer'].format(replace_string(q.get('answer')), classroom, task, q.get('question_num'), user))
+                    return jsonify({'edit_task_answer': 'Success'})
+                else:
+                    return jsonify({'edit_task_answer': 'Error'})
+
+    return jsonify({'result': 'Error'})
+
+@app.route('/api/task_results', methods=['GET'])
+def api_task_result():
+    if session.get('user') != None:
+        user = session.get('user')
+        classroom = request.args.get('c')
+        task = request.args.get('t')
+        member = db.exe_fetch(SQL['classroom_member'].format(user, classroom))
+
+        if request.method == 'GET':
+            if classroom != None and task != None:
+                if member:
+                    taskData = db.exe_fetch(SQL['task_results'].format(classroom, task))
+                    if taskData != None:
+                        taskData['student_answers'] = db.exe_fetch(SQL['task_results_student'].format(classroom, task), 'all')
+                        taskData['performance_question'] = db.exe_fetch(SQL['task_performance_question'].format(classroom, task), 'all')
+                        taskData['performance_category'] = db.exe_fetch(SQL['task_performance_category'].format(classroom, task), 'all')
+                    else:
+                        return jsonify({'task_results': 'Error'})
+
+                    return jsonify({ 'task_results': taskData })
+                else:
+                    return jsonify({'task_results': 'Error'})
 
     return jsonify({'result': 'Error'})
 

@@ -145,7 +145,7 @@ class Classroom extends React.Component {
               : null }
               <Link to={'/classrooms/'+this.state.classroom_id+'/members'}><li>Members</li></Link>
               <Link to={'/classrooms/'+this.state.classroom_id+'/tasks'}><li>Tasks</li></Link>
-              <Link to={'/classrooms/'+this.state.classroom_id+'/create_task'}><li>Create Task</li></Link>
+              {this.props.user_type === 'teacher' ? <Link to={'/classrooms/'+this.state.classroom_id+'/create_task'}><li>Create Task</li></Link> : null}
               <Link to={'/classrooms/'+this.state.classroom_id+'/calendar'}><li>Calendar</li></Link>
               <Link to={'/classrooms/'+this.state.classroom_id+'/chat'}><li>Chatroom</li></Link>
               <li></li>

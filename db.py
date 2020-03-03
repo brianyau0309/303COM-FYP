@@ -341,7 +341,7 @@ SQL = {
     WHERE member = {0} AND classroom = {1}
     ''',
     'classroom_members': '''
-    SELECT b.nickname, b.user_type
+    SELECT LPAD(a.member, 8, 0) user_id, CONCAT(b.surname, ' ', b.lastname) fullname, b.nickname, b.user_type, a.join_date
     FROM classroom_members a, users b
     WHERE a.member = b.user_id AND classroom = {0}
     ''',
@@ -351,6 +351,10 @@ SQL = {
     ''',
     'join_classroom': '''
     INSERT INTO classroom_members VALUES ({0}, {1}, '{2}')
+    ''',
+    'kick_from_classroom': '''
+    DELETE FROM classroom_members
+    WHERE classroom = {0} AND member = {1}
     ''',
     'task_last_num': '''
     SELECT MAX(task_num) as last_num FROM tasks WHERE classroom = {0}
@@ -387,8 +391,82 @@ SQL = {
     'task_questions': '''
     SELECT * FROM task_questions WHERE classroom = {0} AND task_num = {1}
     ''',
+    'student_task_questions': '''
+    SELECT question_num, question, question_type, choice1, choice2, choice3, choice4
+    FROM task_questions
+    WHERE classroom = {0} AND task_num = {1}
+    ''',
+    'answer_task': '''
+    INSERT INTO task_answers VALUES
+    ({0}, {1}, {2}, {3}, '{4}')
+    ''',
+    'edit_task_answer': '''
+    UPDATE task_answers
+    SET answer = '{0}'
+    WHERE classroom = {1} AND task_num = {2} AND question_num = {3} AND student = {4}
+    ''',
+    'task_answers': '''
+    SELECT classroom, task_num, question_num, answer
+    FROM task_answers
+    WHERE classroom = {0} AND task_num = {1} AND student = {2}
+    ''',
     'delete_task': '''
     DELETE FROM tasks
     WHERE classroom = {0} and task_num = {1}
+    ''',
+    'task_results': '''
+    SELECT a.title, a.create_date, a.deadline,
+      CASE WHEN b.submitted IS NOT NULL
+        then b.submitted
+        else 0
+      END as submitted,
+      c.question_count
+    FROM tasks a
+      LEFT JOIN (
+        SELECT classroom, task_num, COUNT(*) submitted
+        FROM task_answers
+        WHERE question_num = 1
+        GROUP BY classroom, task_num
+        ) b ON a.classroom = b.classroom AND a.task_num = b.task_num
+      LEFT JOIN (
+        SELECT classroom, task_num, COUNT(*) question_count
+        FROM task_questions
+        WHERE classroom = {0} AND task_num = {1}
+        GROUP BY classroom, task_num
+        ) c ON a.classroom = c.classroom AND a.task_num = c.task_num
+    WHERE a.classroom = {0} AND a.task_num = {1}
+    ''',
+    'task_results_student': '''
+    SELECT LPAD(a.student, 8, 0) student, CONCAT(b.surname,' ',b.lastname) name,
+      CAST(SUM(CASE WHEN a.answer = c.answer
+        then 1
+        else 0
+      END) AS INT) correct
+    FROM task_answers a, users b, task_questions c
+    WHERE a.student = b.user_id AND a.classroom = c.classroom AND a.task_num = c.task_num AND a.question_num = c.question_num AND
+    a.classroom = {0} AND a.task_num = {1}
+    GROUP BY a.student
+    ''',
+    'task_performance_question': '''
+    SELECT a.question_num,
+      CAST(SUM(CASE WHEN a.answer = b.answer
+        then 1
+        else 0
+      END) AS INT) correct
+    FROM task_answers a, task_questions b
+    WHERE a.classroom = b.classroom AND a.task_num = b.task_num AND a.question_num = b.question_num AND
+    a.classroom = {0} AND a.task_num = {1}
+    GROUP BY a.question_num
+    ''',
+    'task_performance_category': '''
+    SELECT b.category,
+      CAST(SUM(CASE WHEN a.answer = b.answer
+        then 1
+        else 0
+      END) AS INT) correct
+    FROM task_answers a, task_questions b
+    WHERE a.classroom = b.classroom AND a.task_num = b.task_num AND a.question_num = b.question_num AND
+    a.classroom = {0} AND a.task_num = {1}
+    GROUP BY b.category
     ''',
 }

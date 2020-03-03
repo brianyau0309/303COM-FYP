@@ -121,46 +121,56 @@ export default class Student extends React.Component {
               {this.state.user_data.user_type === 'teacher' ?
                 <Route path="/classrooms/:class/create_task">
                   <Header title='Classrooms'/>
-                  <Classrooms user_type={this.state.user_data.user_type}/>
+                  <Classrooms user_type={this.state.user_data.user_type} user_id={this.state.user_data.user_id}/>
                 </Route>
               : null}
               {this.state.user_data.user_type === 'teacher' ?
                 <Route path="/classrooms/:class/tasks/:task/edit">
                   <Header title='Classrooms'/>
-                  <Classrooms user_type={this.state.user_data.user_type}/>
+                  <Classrooms user_type={this.state.user_data.user_type} user_id={this.state.user_data.user_id}/>
                 </Route>
               : null}
+              <Route path="/classrooms/:class/tasks/:task/results/:student">
+                <Header title='Classrooms'/>
+                <Classrooms user_type={this.state.user_data.user_type} user_id={this.state.user_data.user_id}/>
+              </Route>
               {this.state.user_data.user_type === 'teacher' ?
-                <Route path="/classrooms/:class/tasks/:task/result">
+                <Route path="/classrooms/:class/tasks/:task/results">
                   <Header title='Classrooms'/>
-                  <Classrooms user_type={this.state.user_data.user_type}/>
+                  <Classrooms user_type={this.state.user_data.user_type} user_id={this.state.user_data.user_id}/>
+                </Route>
+              : null}
+              {this.state.user_data.user_type === 'student' ?
+                <Route path="/classrooms/:class/tasks/:task/edit_answer/:student">
+                  <Header title='Classrooms'/>
+                  <Classrooms user_type={this.state.user_data.user_type} user_id={this.state.user_data.user_id}/>
                 </Route>
               : null}
               {this.state.user_data.user_type === 'student' ?
                 <Route path="/classrooms/:class/tasks/:task/answer">
                   <Header title='Classrooms'/>
-                  <Classrooms user_type={this.state.user_data.user_type}/>
+                  <Classrooms user_type={this.state.user_data.user_type} user_id={this.state.user_data.user_id}/>
                 </Route>
               : null}
               <Route path="/classrooms/:class/tasks/:task">
                 <Header title='Classrooms'/>
-                <Classrooms user_type={this.state.user_data.user_type}/>
+                <Classrooms user_type={this.state.user_data.user_type} user_id={this.state.user_data.user_id}/>
               </Route>
               <Route path="/classrooms/:class/tasks">
                 <Header title='Classrooms'/>
-                <Classrooms user_type={this.state.user_data.user_type}/>
+                <Classrooms user_type={this.state.user_data.user_type} user_id={this.state.user_data.user_id}/>
               </Route>
               <Route path="/classrooms/:class/members">
                 <Header title='Classrooms'/>
-                <Classrooms user_type={this.state.user_data.user_type}/>
+                <Classrooms user_type={this.state.user_data.user_type} user_id={this.state.user_data.user_id}/>
               </Route>
               <Route path="/classrooms/:class">
                 <Header title='Classrooms'/>
-                <Classrooms user_type={this.state.user_data.user_type}/>
+                <Classrooms user_type={this.state.user_data.user_type} user_id={this.state.user_data.user_id}/>
               </Route>
               <Route path="/classrooms">
                 <Header title='Classrooms'/>
-                <Classrooms user_type={this.state.user_data.user_type}/>
+                <Classrooms user_type={this.state.user_data.user_type} user_id={this.state.user_data.user_id}/>
               </Route>
 
               <Route path="/notification">

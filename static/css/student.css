@@ -96,14 +96,13 @@ button {
 #nav > a {
   text-decoration: none;
   color: black;
-  cursor: none;
+  cursor: pointer;
 }
 
 .nav-items {
   list-style: none;
   width: 20%;
   margin: 8vh 12vw 8vh 12vw;
-  cursor: pointer;
 }
 
 .nav-items > img {
@@ -246,7 +245,11 @@ button {
 .CreateTask,
 .Tasks,
 .Task,
-.EditTask {
+.EditTask,
+.AnswerTask,
+.EditAnswer,
+.TaskResults,
+.TaskResult {
   position: absolute;
   top: 0;
   left: 0;

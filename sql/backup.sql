@@ -154,7 +154,7 @@ CREATE TABLE `classroom_members` (
 
 LOCK TABLES `classroom_members` WRITE;
 /*!40000 ALTER TABLE `classroom_members` DISABLE KEYS */;
-INSERT INTO `classroom_members` VALUES (1,2,'2020-02-27 22:16:53');
+INSERT INTO `classroom_members` VALUES (1,1,'2020-03-03 20:38:23'),(1,2,'2020-02-27 22:16:53'),(1,4,'2020-03-04 02:54:39'),(1,5,'2020-03-04 02:54:42'),(1,6,'2020-03-04 02:54:43');
 /*!40000 ALTER TABLE `classroom_members` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -175,7 +175,7 @@ CREATE TABLE `classrooms` (
   PRIMARY KEY (`classroom_id`),
   KEY `create_by` (`create_by`),
   CONSTRAINT `classrooms_ibfk_1` FOREIGN KEY (`create_by`) REFERENCES `users` (`user_id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -184,7 +184,7 @@ CREATE TABLE `classrooms` (
 
 LOCK TABLES `classrooms` WRITE;
 /*!40000 ALTER TABLE `classrooms` DISABLE KEYS */;
-INSERT INTO `classrooms` VALUES (00000001,2,'Classroom 1','hello\nTesting','2020-02-27 22:16:53',1);
+INSERT INTO `classrooms` VALUES (00000001,2,'Classroom 1','hello\nTesting\nClassroom 1','2020-02-27 22:16:53',1);
 /*!40000 ALTER TABLE `classrooms` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -428,11 +428,9 @@ CREATE TABLE `task_answers` (
   `task_num` int(8) unsigned NOT NULL,
   `question_num` int(3) NOT NULL,
   `student` int(8) unsigned NOT NULL,
-  `answer` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `mark` int(3) DEFAULT NULL,
-  `answers_comment` text COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  PRIMARY KEY (`student`),
-  KEY `classroom` (`classroom`,`task_num`,`question_num`),
+  `answer` varchar(80) COLLATE utf8mb4_unicode_ci NOT NULL,
+  PRIMARY KEY (`classroom`,`task_num`,`question_num`,`student`),
+  KEY `task_answers_ibfk_2` (`student`),
   CONSTRAINT `task_answers_ibfk_1` FOREIGN KEY (`classroom`, `task_num`, `question_num`) REFERENCES `task_questions` (`classroom`, `task_num`, `question_num`) ON DELETE CASCADE,
   CONSTRAINT `task_answers_ibfk_2` FOREIGN KEY (`student`) REFERENCES `users` (`user_id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -444,6 +442,7 @@ CREATE TABLE `task_answers` (
 
 LOCK TABLES `task_answers` WRITE;
 /*!40000 ALTER TABLE `task_answers` DISABLE KEYS */;
+INSERT INTO `task_answers` VALUES (1,7,1,1,'MC2'),(1,7,1,4,'MC1MC'),(1,7,1,5,'MC2'),(1,7,2,1,'answer'),(1,7,2,4,'answer'),(1,7,2,5,'answer1'),(1,7,3,1,'MC23'),(1,7,3,4,'MC2'),(1,7,3,5,'MC34');
 /*!40000 ALTER TABLE `task_answers` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -477,6 +476,7 @@ CREATE TABLE `task_questions` (
 
 LOCK TABLES `task_questions` WRITE;
 /*!40000 ALTER TABLE `task_questions` DISABLE KEYS */;
+INSERT INTO `task_questions` VALUES (1,5,1,'tEst','sq','SQ','answer',NULL,NULL,NULL,NULL),(1,5,2,'test','mc','MC Test','answer3','answer1','answer2','answer3','answer4'),(1,6,1,'tEst','sq','SQ','answer1',NULL,NULL,NULL,NULL),(1,6,2,'Test','mc','MC 2','123','123','456',NULL,NULL),(1,6,3,'test','mc','MC Test','answer4','answer1','answer2','answer4',NULL),(1,7,1,'MC','mc','MC','MC2','MC1MC','MC2',NULL,NULL),(1,7,2,NULL,'sq','SQ1','qwwq212',NULL,NULL,NULL,NULL),(1,7,3,'Test','mc','MC2','MC23','MC2','MC23','MC34',NULL);
 /*!40000 ALTER TABLE `task_questions` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -508,6 +508,7 @@ CREATE TABLE `tasks` (
 
 LOCK TABLES `tasks` WRITE;
 /*!40000 ALTER TABLE `tasks` DISABLE KEYS */;
+INSERT INTO `tasks` VALUES (1,5,'Task',2,'2020-03-02 21:12:26','2020-03-24 04:00:00',1),(1,6,'Task',2,'2020-03-02 23:47:05','2020-03-24 04:00:00',1),(1,7,'Task7',2,'2020-03-02 23:48:43','2020-03-18 04:00:00',1);
 /*!40000 ALTER TABLE `tasks` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -577,4 +578,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2020-03-02 21:01:58
+-- Dump completed on 2020-03-04  5:13:24

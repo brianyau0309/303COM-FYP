@@ -5,16 +5,17 @@ import TextEditor from '../../TextEditor.jsx'
 
 const imgBack = 'https://img.icons8.com/flat_round/64/000000/back--v1.png'
 
-class AnswerTask extends React.Component {
+class EditAnswer extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      'questions': [],
+      'questions': [], 'task_answers': [],
       'permission': false, 'success_page': false
     }
     this.checkPermission = this.checkPermission.bind(this)
+    this.loadAnswer = this.loadAnswer.bind(this)
     this.loadTaskQuestions = this.loadTaskQuestions.bind(this)
-    this.answerTask = this.answerTask.bind(this)
+    this.editAnswer = this.editAnswer.bind(this)
     this.answerInputOnChange = this.answerInputOnChange.bind(this)
     this.mcAnswerToggle = this.mcAnswerToggle.bind(this)
   }
@@ -24,10 +25,11 @@ class AnswerTask extends React.Component {
   }
 
   checkPermission() {
-    fetch('/api/classroom_member?c='+this.props.match.params.class).then(res => {
+    fetch('/api/task_answers?c='+this.props.match.params.class+'&t='+this.props.match.params.task+'&s='+this.props.match.params.student).then(res => {
       if (res.ok) {
         res.json().then(result => {
-          if (result.member) {
+          console.log(result)
+          if (result.edit_task === 'OK') {
             this.setState({ 'permission': true }, () => this.loadTaskQuestions())
           } else {
             try {
@@ -36,6 +38,20 @@ class AnswerTask extends React.Component {
               window.history.back()
             }
           }
+        })
+      }
+    })
+  }
+
+  loadAnswer() {
+    fetch('/api/task_answers?c='+this.props.match.params.class+'&t='+this.props.match.params.task).then(res => {
+      if (res.ok) {
+        res.json().then(result => {
+          let temp = this.state.questions.slice()
+          temp.map((q, i) => {
+            q['answer'] = result.task_answers[i]['answer']
+          })
+          this.setState({'questions': temp})
         })
       }
     })
@@ -50,7 +66,7 @@ class AnswerTask extends React.Component {
             if (result.task !== 'Error' && !(new Date() > new Date(result.task.deadline))) {
               this.setState({
                 'questions': result.task.task_questions
-              })
+              }, () => this.loadAnswer() )
             } else {
               this.props.history.goBack()
             }
@@ -60,7 +76,7 @@ class AnswerTask extends React.Component {
     }
   }
 
-  answerTask() {
+  editAnswer() {
     let questions = this.state.questions.slice(), fail = false
     questions.forEach(q => {
       if (q.answer === '') {
@@ -69,7 +85,7 @@ class AnswerTask extends React.Component {
     })
     if (!fail) {
       fetch('/api/task_answers?c='+this.props.match.params.class+'&t='+this.props.match.params.task, {
-        method: 'POST',
+        method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ 'answer_task': {
           'questions': this.state.questions
@@ -101,17 +117,17 @@ class AnswerTask extends React.Component {
 
   render() {
     return (
-      <div className="AnswerTask content">
+      <div className="EditAnswer content">
         <div className="header">
           <img className='header-icon' src={imgBack} onClick={this.props.history.goBack}/>
-          <span>Answer Task</span>
+          <span>Edit Answer</span>
         </div>
         {this.state.permission ? 
           <div>
             { this.state.success_page ? 
               <div style={{top: '0', left: '0', position: 'absolute', width: '100%', height: '100vh', background: 'white'}}>
                 <div>Success!</div>
-                <Link to={this.props.match.url.replace('/answer', '')}>
+                <Link to={'/classrooms/'+this.props.match.params.class+'/tasks/'+this.props.match.params.task}>
                   <div>Back to Task Page</div>
                 </Link>
               </div>
@@ -127,7 +143,7 @@ class AnswerTask extends React.Component {
                           <li> 
                             <div className={c === q.answer ? 'task_answer_toggle yes' : 'task_answer_toggle no'} 
                                  onClick={() => this.mcAnswerToggle(qi, ci)}>
-                                 A{ci+1}:{c}
+                                 A{ci+1}: {c}
                             </div>
                           </li>
                         ) 
@@ -136,7 +152,7 @@ class AnswerTask extends React.Component {
                 </div>
               ) }
 
-            <button onClick={this.answerTask}>Answer Task</button>
+            <button onClick={this.editAnswer}>Edit Answer</button>
           </div>
         : <div>Please Wait...</div>}
       </div>
@@ -144,4 +160,5 @@ class AnswerTask extends React.Component {
   }
 }
 
-export default withRouter(AnswerTask)
+export default withRouter(EditAnswer)
+

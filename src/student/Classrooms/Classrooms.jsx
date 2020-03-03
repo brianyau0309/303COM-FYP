@@ -7,6 +7,10 @@ import CreateTask from './CreateTask.jsx'
 import Tasks from './Tasks.jsx'
 import Task from './Task.jsx'
 import EditTask from './EditTask.jsx'
+import AnswerTask from './AnswerTask.jsx'
+import EditAnswer from './EditAnswer.jsx'
+import TaskResults from './TaskResults.jsx'
+import TaskResult from './TaskResult.jsx'
 
 class Classrooms extends React.Component {
   constructor(props) {
@@ -32,7 +36,11 @@ class Classrooms extends React.Component {
       else if (this.props.match.path === "/classrooms/:class/create_task") {this.setState({'part': 'createTask'})}
       else if (this.props.match.path === "/classrooms/:class/tasks") {this.setState({'part': 'tasks'})}
       else if (this.props.match.path === "/classrooms/:class/tasks/:task") {this.setState({'part': 'task'})}
-      else if (this.props.match.path === "/classrooms/:class/tasks/:task/edit") {this.setState({'part': 'editTask'})}
+      else if (this.props.match.path === "/classrooms/:class/tasks/:task/edit" && this.props.user_type === 'teacher') {this.setState({'part': 'editTask'})}
+      else if (this.props.match.path === "/classrooms/:class/tasks/:task/results" && this.props.user_type === 'teacher') {this.setState({'part': 'results'})}
+      else if (this.props.match.path === "/classrooms/:class/tasks/:task/results/:student") {this.setState({'part': 'result'})}
+      else if (this.props.match.path === "/classrooms/:class/tasks/:task/answer" && this.props.user_type === 'student') {this.setState({'part': 'answerTask'})}
+      else if (this.props.match.path === "/classrooms/:class/tasks/:task/edit_answer/:student" && this.props.user_type === 'student') {this.setState({'part': 'editAnswer'})}
       else if (this.props.match.path === "/classrooms/:class") {this.setState({'part': 'class'})}     
       else {this.setState({'part': ''})}
     }
@@ -112,14 +120,20 @@ class Classrooms extends React.Component {
               </Link>
             )}
           </ul>
+          <div style={{textAlign: 'center'}}>--- Bottom ---</div>
         </div>
 
-        {this.state.part === 'class' ? <Classroom reload={this.loadClassrooms}/> : null}
+        {this.state.part === 'class' ? <Classroom user_type={this.props.user_type} reload={this.loadClassrooms}/> : null}
         {this.state.part === 'classMembers' ? <ClassroomMembers/> : null}
         {this.state.part === 'createTask' ? <CreateTask/> : null}
-        {this.state.part === 'tasks' ? <Tasks/> : null}
-        {this.state.part === 'task' ? <Task user_type={this.props.user_type}/> : null}
+        {this.state.part === 'tasks' ? <Tasks user_id={this.props.user_id}/> : null}
+        {this.state.part === 'task' ? <Task user_id={this.props.user_id}  user_type={this.props.user_type}/> : null}
         {this.state.part === 'editTask' && this.props.user_type === 'teacher' ? <EditTask/> : null}
+        {this.state.part === 'answerTask' && this.props.user_type === 'student' ? <AnswerTask/> : null}
+        {this.state.part === 'editAnswer' && this.props.user_type === 'student' ? <EditAnswer/> : null}
+        {this.state.part === 'results' && this.props.user_type === 'teacher' ? <TaskResults/> : null}
+        {this.state.part === 'result' ? <TaskResult/> : null}
+
       </div>
     )
   }
