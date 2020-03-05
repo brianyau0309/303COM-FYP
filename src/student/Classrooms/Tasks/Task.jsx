@@ -113,14 +113,14 @@ class Task extends React.Component {
 
             { this.props.user_type === 'teacher' ?
                 new Date() > new Date(this.state.deadline) ?
-                  <Link to={this.props.location.pathname+'/result'}><button>Result</button></Link>
+                  <Link to={this.props.location.pathname+'/results'}><button>Result</button></Link>
                 :
                   <div>
                     <Link to={this.props.location.pathname+'/edit'}><button>Edit</button></Link>
                     <br/><button onClick={this.deleteTask}>Delete</button>
                   </div>
             : new Date() > new Date(this.state.deadline) ?
-                <Link to={this.props.location.pathname+'/result/'+this.props.user_id}><button>Result</button></Link>
+                <Link to={this.props.location.pathname+'/results/'+this.props.user_id}><button>Result</button></Link>
               : 
                 this.state.task_answers.length > 0 ? 
                   <Link to={this.props.location.pathname+'/edit_answer/'+this.props.user_id}><button>Edit Answer</button></Link>

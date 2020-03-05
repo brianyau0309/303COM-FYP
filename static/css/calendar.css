@@ -1,0 +1,83 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: 0;
+}
+.Calendar {
+    margin: 0;
+    padding: 0;
+    box-sizing: 0;
+    display: grid;
+    grid-template-rows: 7vh 5vh 5vh 1fr;
+    grid-template-areas: 
+      'header'
+      'month'
+      'weeks'
+      'days';
+    font-size: 4.5vw;
+}
+.month {
+  grid-area: month;
+  color: gray;
+  text-decoration: none;
+  display: grid;
+  width: 100%;
+  grid-template-columns: 15% 1fr 15%;
+}
+.month .middle{
+  justify-self: center;
+  align-self: center;
+}
+.month .left,
+.month .right{
+  cursor: pointer;
+  justify-self: center;
+  align-self: center;
+  width: 4vh;
+  height: 4vh;
+}
+.month .right{
+  transform: rotate(180deg);
+}
+.sunday {
+  color: red;
+}
+.weeks {
+  grid-area: weeks;
+  list-style: none;
+  display: flex;
+  flex-flow: row;
+  border-bottom: 1px solid #B8B8B8;
+}
+.week {
+    width: 14.2857142857%;
+    text-align: center;
+}
+.day-list {
+    overflow: scroll;
+    height: 100%;
+}
+.days {
+  grid-area: days;
+  display: flex;
+  flex-flow: row wrap;
+  list-style: none;
+  height: 100%;
+}
+.day {
+    width: 14.2857142857%;
+    text-align: right;
+    height: 17%;
+}
+.day:nth-child(7n+1) {
+    color: red;
+}
+.dayHead {
+    height: 20%;
+    font-size: 2.5vh;
+    background: lightblue;
+}
+.dayDetail {
+    height: 80%;
+    border-bottom: 1px solid lightgray;
+}

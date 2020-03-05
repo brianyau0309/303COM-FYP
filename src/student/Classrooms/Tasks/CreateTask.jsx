@@ -2,8 +2,6 @@ import React from 'react'
 import { Link, withRouter } from 'react-router-dom'
 import DayPickerInput from 'react-day-picker/DayPickerInput'
 
-import TextEditor from '../../TextEditor.jsx'
-
 const imgBack = 'https://img.icons8.com/flat_round/64/000000/back--v1.png'
 let MCQ_format = { 'type': 'MC', 'question': '', 'answer': 1, 'choice': ['','','',''], 'category': ''}
 let SQ_format = { 'type': 'SQ', 'question': '', 'answer': '', 'choice': [], 'category': ''}

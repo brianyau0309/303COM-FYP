@@ -3,14 +3,15 @@ import { Link, withRouter } from 'react-router-dom'
 
 import Classroom from './Classroom.jsx'
 import ClassroomMembers from './ClassroomMembers.jsx'
-import CreateTask from './CreateTask.jsx'
-import Tasks from './Tasks.jsx'
-import Task from './Task.jsx'
-import EditTask from './EditTask.jsx'
-import AnswerTask from './AnswerTask.jsx'
-import EditAnswer from './EditAnswer.jsx'
-import TaskResults from './TaskResults.jsx'
-import TaskResult from './TaskResult.jsx'
+import Tasks from './Tasks/Tasks.jsx'
+import Task from './Tasks/Task.jsx'
+import CreateTask from './Tasks/CreateTask.jsx'
+import EditTask from './Tasks/EditTask.jsx'
+import AnswerTask from './Tasks/AnswerTask.jsx'
+import EditAnswer from './Tasks/EditAnswer.jsx'
+import TaskResults from './Tasks/TaskResults.jsx'
+import TaskResult from './Tasks/TaskResult.jsx'
+import Calendar from './Calendar.jsx'
 
 class Classrooms extends React.Component {
   constructor(props) {
@@ -41,6 +42,7 @@ class Classrooms extends React.Component {
       else if (this.props.match.path === "/classrooms/:class/tasks/:task/results/:student") {this.setState({'part': 'result'})}
       else if (this.props.match.path === "/classrooms/:class/tasks/:task/answer" && this.props.user_type === 'student') {this.setState({'part': 'answerTask'})}
       else if (this.props.match.path === "/classrooms/:class/tasks/:task/edit_answer/:student" && this.props.user_type === 'student') {this.setState({'part': 'editAnswer'})}
+      else if (this.props.match.path === "/classrooms/:class/calendar") {this.setState({'part': 'calendar'})}     
       else if (this.props.match.path === "/classrooms/:class") {this.setState({'part': 'class'})}     
       else {this.setState({'part': ''})}
     }
@@ -123,6 +125,7 @@ class Classrooms extends React.Component {
           <div style={{textAlign: 'center'}}>--- Bottom ---</div>
         </div>
 
+        {this.state.part !== '' ? <div className="coverboard"></div> : null}
         {this.state.part === 'class' ? <Classroom user_type={this.props.user_type} reload={this.loadClassrooms}/> : null}
         {this.state.part === 'classMembers' ? <ClassroomMembers/> : null}
         {this.state.part === 'createTask' ? <CreateTask/> : null}
@@ -133,6 +136,7 @@ class Classrooms extends React.Component {
         {this.state.part === 'editAnswer' && this.props.user_type === 'student' ? <EditAnswer/> : null}
         {this.state.part === 'results' && this.props.user_type === 'teacher' ? <TaskResults/> : null}
         {this.state.part === 'result' ? <TaskResult/> : null}
+        {this.state.part === 'calendar' ? <Calendar/> : null}
 
       </div>
     )

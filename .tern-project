@@ -1,0 +1,25 @@
+{
+  "ecmaVersion": 6,
+  "libs": [
+    "browser",
+    "ecma6",
+    "es6",
+    "es2016",
+    "es2017",
+    "ecmascript",
+    "react",
+    "underscore"
+  ],
+  "loadEagerly":[
+    "node_modules/react-dom/dist/react-dom.js",
+    "node_modules/react/dist/react.js",
+    "node_modules/react-dom/dist/react-dom.js",
+    "node_modules/react-dom/dist/react-dom-server.js"
+  ],
+  "dontLoad": [],
+  "plugins": {
+    "es_modules": {},
+    "node": {},
+    "jsx": {}
+  }
+}

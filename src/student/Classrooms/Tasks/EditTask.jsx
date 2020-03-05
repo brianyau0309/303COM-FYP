@@ -2,7 +2,6 @@ import React from 'react'
 import { Link, withRouter } from 'react-router-dom'
 import DayPickerInput from 'react-day-picker/DayPickerInput'
 
-import TextEditor from '../../TextEditor.jsx'
 
 const imgBack = 'https://img.icons8.com/flat_round/64/000000/back--v1.png'
 let MCQ_format = { 'type': 'MC', 'question': '', 'answer': 1, 'choice': ['','','',''], 'category': ''}
@@ -61,8 +60,7 @@ class EditTask extends React.Component {
         if (res.ok) {
           res.json().then(result => {
             console.log(result)
-            overDeadline = (new Date() > new Date(result.task.deadline))
-            if (result.task !== 'Error' && !overDeadline) {
+            if (result.task !== 'Error' && !(new Date() > new Date(result.task.deadline))) {
               this.setState({
                 'title': result.task.title,
                 'deadline': new Date(result.task.deadline),

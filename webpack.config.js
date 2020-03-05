@@ -13,10 +13,18 @@ module.exports = {
     rules: [{
       test: /\.jsx$/,
       use: [{ loader: 'babel-loader',
-              options: { presets: ['@babel/preset-react'] }
+              options: { 
+                presets: ['@babel/preset-react'],
+                plugins: ['@babel/plugin-proposal-class-properties']
+              }
            }]
     }]
   },
-  devtool: 'source-map'
+  devtool: 'source-map',
+	optimization: {
+    splitChunks: {
+      chunks: 'all',
+    },
+	}
 }
 

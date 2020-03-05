@@ -3,6 +3,7 @@ import pymysql
 
 class DBConn():
     def exe_fetch(self, SQL, fetch = "one"):
+        '''Execute SQL and Fetch Data'''
         connection = pymysql.connect(user='root', password='1234', db='FYP', cursorclass=pymysql.cursors.DictCursor, charset='utf8')
         cursor = connection.cursor()
         cursor.execute(SQL)
@@ -13,6 +14,7 @@ class DBConn():
         connection.close()
 
     def exe_commit(self, SQL):
+        '''Execute SQL and Commit'''
         connection = pymysql.connect(user='root', password='1234', db='FYP', cursorclass=pymysql.cursors.DictCursor, charset='utf8')
         cursor = connection.cursor()
         cursor.execute(SQL)
@@ -20,6 +22,7 @@ class DBConn():
         connection.close()
 
     def exe_commit_last_id(self, SQL):
+        '''Execute SQL and Get Last Insert Id and Commit'''
         connection = pymysql.connect(user='root', password='1234', db='FYP', cursorclass=pymysql.cursors.DictCursor, charset='utf8')
         cursor = connection.cursor()
         cursor.execute(SQL)
@@ -447,6 +450,17 @@ SQL = {
     a.classroom = {0} AND a.task_num = {1}
     GROUP BY a.student
     ''',
+    'task_results_onestudent': '''
+    SELECT LPAD(a.student, 8, 0) student, CONCAT(b.surname,' ',b.lastname) name,
+      CAST(SUM(CASE WHEN a.answer = c.answer
+        then 1
+        else 0
+      END) AS INT) correct
+    FROM task_answers a, users b, task_questions c
+    WHERE a.student = b.user_id AND a.classroom = c.classroom AND a.task_num = c.task_num AND a.question_num = c.question_num AND
+    a.classroom = {0} AND a.task_num = {1} AND student = {2}
+    GROUP BY a.student
+    ''',
     'task_performance_question': '''
     SELECT a.question_num,
       CAST(SUM(CASE WHEN a.answer = b.answer
@@ -459,7 +473,7 @@ SQL = {
     GROUP BY a.question_num
     ''',
     'task_performance_category': '''
-    SELECT b.category,
+    SELECT b.category, COUNT(*) category_count,
       CAST(SUM(CASE WHEN a.answer = b.answer
         then 1
         else 0
@@ -469,4 +483,21 @@ SQL = {
     a.classroom = {0} AND a.task_num = {1}
     GROUP BY b.category
     ''',
+    'task_performance_category_onestudent': '''
+    SELECT b.category, COUNT(*) category_count,
+      CAST(SUM(CASE WHEN a.answer = b.answer
+        then 1
+        else 0
+      END) AS INT) correct
+    FROM task_answers a, task_questions b
+    WHERE a.classroom = b.classroom AND a.task_num = b.task_num AND a.question_num = b.question_num AND
+    a.classroom = {0} AND a.task_num = {1} AND a.student = {2}
+    GROUP BY b.category
+    ''',
+    'student_answers': '''
+    SELECT a.question_num, b.question, a.answer student_answer, b.answer
+    FROM task_answers a, task_questions b
+    WHERE a.classroom = b.classroom AND a.task_num = b.task_num AND a.question_num = b.question_num AND
+    a.classroom = {0} AND a.task_num = {1} AND a.student = {2}
+    '''
 }

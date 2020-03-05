@@ -964,7 +964,7 @@ def api_task_answers():
     return jsonify({'result': 'Error'})
 
 @app.route('/api/task_results', methods=['GET'])
-def api_task_result():
+def api_task_results():
     if session.get('user') != None:
         user = session.get('user')
         classroom = request.args.get('c')
@@ -979,6 +979,33 @@ def api_task_result():
                         taskData['student_answers'] = db.exe_fetch(SQL['task_results_student'].format(classroom, task), 'all')
                         taskData['performance_question'] = db.exe_fetch(SQL['task_performance_question'].format(classroom, task), 'all')
                         taskData['performance_category'] = db.exe_fetch(SQL['task_performance_category'].format(classroom, task), 'all')
+                    else:
+                        return jsonify({'task_results': 'Error'})
+
+                    return jsonify({ 'task_results': taskData })
+                else:
+                    return jsonify({'task_results': 'Error'})
+
+    return jsonify({'result': 'Error'})
+
+@app.route('/api/task_result', methods=['GET'])
+def api_task_result():
+    if session.get('user') != None:
+        user = session.get('user')
+        classroom = request.args.get('c')
+        task = request.args.get('t')
+        student = request.args.get('s')
+        user_data = db.exe_fetch(SQL['user_data'].format(user))
+        member = db.exe_fetch(SQL['classroom_member'].format(user, classroom))
+
+        if request.method == 'GET':
+            if classroom != None and task != None:
+                if member and (int(user) == int(student) or user_data.get('user_type') == 'teacher'):
+                    taskData = db.exe_fetch(SQL['task_results'].format(classroom, task))
+                    if taskData != None:
+                        taskData['student_result'] = db.exe_fetch(SQL['task_results_onestudent'].format(classroom, task, student))
+                        taskData['student_answers'] = db.exe_fetch(SQL['student_answers'].format(classroom, task, student), 'all')
+                        taskData['performance_category'] = db.exe_fetch(SQL['task_performance_category_onestudent'].format(classroom, task, student), 'all')
                     else:
                         return jsonify({'task_results': 'Error'})
 
