@@ -1,5 +1,6 @@
 import os
 from flask import Flask, flash, session, request, send_file, render_template, redirect, url_for, jsonify
+from flask_socketio import SocketIO, send, join_room, leave_room, emit
 from flask_cors import cross_origin
 from datetime import datetime
 from db import DBConn, SQL
@@ -14,7 +15,7 @@ app = Flask(__name__)
 app.config['SECRET_KEY'] = 'SecretKeyHERE!'
 app.config['UPLOAD_ICON_FOLDER'] = UPLOAD_ICON_FOLDER
 app.config['UPLOAD_FILE_FOLDER'] = UPLOAD_FILE_FOLDER
-
+socketio = SocketIO(app)
 db = DBConn()
 
 def replace_string(string):
@@ -611,15 +612,12 @@ def api_classroom():
     if session.get('user') != None:
         user = session.get('user')
         classroom = request.args.get('c')
-        member = db.exe_fetch(SQL['classroom_member'].format(user, classroom))
 
         if request.method == 'GET':
             if classroom != None:
                 member = db.exe_fetch(SQL['classroom_member'].format(user, classroom))
                 if member:
                     data = db.exe_fetch(SQL['classroom'].format(classroom))
-                    print(SQL['classroom'].format(classroom))
-                    print(data)
                     return jsonify({'classroom': data})
                 else:
                     return jsonify({'classroom': 'Error'})
@@ -643,7 +641,8 @@ def api_classroom():
         elif request.method == 'PUT':
             if classroom != None:
                 user_data = db.exe_fetch(SQL['user_data'].format(user))
-                if user_data.get('user_type') == 'teacher':
+                member = db.exe_fetch(SQL['classroom_member'].format(user, classroom))
+                if user_data.get('user_type') == 'teacher' and member:
                     data = request.json.get('editClassroom')
                     name = replace_string(data.get('name'))
                     description = replace_string(data.get('description'))
@@ -654,6 +653,7 @@ def api_classroom():
         elif request.method == 'DELETE':
             if classroom != None:
                 user_data = db.exe_fetch(SQL['user_data'].format(user))
+                member = db.exe_fetch(SQL['classroom_member'].format(user, classroom))
                 if user_data.get('user_type') == 'teacher' and member:
                     db.exe_commit(SQL['delete_classroom'].format(classroom))
                     return jsonify({'delete_classroom': 'Success'})
@@ -670,10 +670,10 @@ def api_classroom_members():
         user = session.get('user')
         classroom = request.args.get('c')
         invite = request.args.get('i')
-        member = db.exe_fetch(SQL['classroom_member'].format(user, classroom))
 
         if request.method == 'GET':
             if classroom != None:
+                member = db.exe_fetch(SQL['classroom_member'].format(user, classroom))
                 if member:
                     classroomData = db.exe_fetch(SQL['classroom'].format(classroom))
                     memberData = db.exe_fetch(SQL['classroom_members'].format(classroom), 'all')
@@ -686,6 +686,7 @@ def api_classroom_members():
 
         if request.method == 'POST':
             if classroom != None and user != None:
+                member = db.exe_fetch(SQL['classroom_member'].format(user, classroom))
                 if member:
                     now = datetime.now().strftime('%Y/%m/%d %H:%M:%S')
                     try:
@@ -699,6 +700,7 @@ def api_classroom_members():
 
         if request.method == 'DELETE':
             if classroom != None and user != None:
+                member = db.exe_fetch(SQL['classroom_member'].format(user, classroom))
                 if member:
                     db.exe_commit(SQL['kick_from_classroom'].format(classroom, invite))
                     return jsonify({ 'kick_from_classroom': 'Success' })
@@ -712,9 +714,10 @@ def api_classroom_member():
     if session.get('user') != None:
         user = session.get('user')
         classroom = request.args.get('c')
-        member = db.exe_fetch(SQL['classroom_member'].format(user, classroom))
-        if member:
-            return jsonify({'member': True})
+        if classroom != None:
+            member = db.exe_fetch(SQL['classroom_member'].format(user, classroom))
+            if member:
+                return jsonify({'member': True})
 
     return jsonify({'member': False})
 
@@ -742,16 +745,16 @@ def api_tasks():
 
     return jsonify({'result': 'Error'})
 
-@app.route('/api/task', methods=['GET', 'POST', 'PUT', 'DELETE'])
+@app.route('/api/task', methods=['GET', 'POST', 'PUT', 'PATCH', 'DELETE'])
 def api_task():
     if session.get('user') != None:
         user = session.get('user')
         classroom = request.args.get('c')
         task = request.args.get('t')
-        member = db.exe_fetch(SQL['classroom_member'].format(user, classroom))
 
         if request.method == 'GET':
             if classroom != None and task != None:
+                member = db.exe_fetch(SQL['classroom_member'].format(user, classroom))
                 if member:
                     classroomData = db.exe_fetch(SQL['classroom'].format(classroom))
                     taskData = db.exe_fetch(SQL['task'].format(classroom, task))
@@ -764,10 +767,10 @@ def api_task():
 
         elif request.method == 'POST':
             if classroom != None:
+                member = db.exe_fetch(SQL['classroom_member'].format(user, classroom))
                 user_data = db.exe_fetch(SQL['user_data'].format(user))
                 if user_data.get('user_type') == 'teacher' and member:
                     task = request.json.get('task')
-                    print(task)
                     now = datetime.now().strftime('%Y/%m/%d %H:%M:%S')
                     deadline = datetime.strptime(task.get('deadline'), '%Y-%m-%dT%H:%M:%S.%fZ').strftime('%Y/%m/%d %H:%M:%S')
                     title = replace_string(task.get('title'))
@@ -799,10 +802,10 @@ def api_task():
 
         elif request.method == 'PUT':
             if classroom != None and task != None:
+                member = db.exe_fetch(SQL['classroom_member'].format(user, classroom))
                 user_data = db.exe_fetch(SQL['user_data'].format(user))
                 if user_data.get('user_type') == 'teacher' and member:
                     taskData = request.json.get('task')
-                    print(taskData)
                     deadline = datetime.strptime(taskData.get('deadline'), '%Y-%m-%dT%H:%M:%S.%fZ').strftime('%Y/%m/%d %H:%M:%S')
                     title = replace_string(taskData.get('title'))
                     task_num = task
@@ -830,8 +833,17 @@ def api_task():
 
                     return jsonify({'edit_task':'Success'})
 
+        elif request.method == 'PATCH':
+            if classroom != None and task != None:
+                member = db.exe_fetch(SQL['classroom_member'].format(user, classroom))
+                user_data = db.exe_fetch(SQL['user_data'].format(user))
+                if user_data.get('user_type') == 'teacher' and member:
+                    db.exe_commit(SQL['force_close_task'].format(classroom, task))
+                    return jsonify({'force_close_task': 'Success'})
+
         elif request.method == 'DELETE':
             if classroom != None and task != None:
+                member = db.exe_fetch(SQL['classroom_member'].format(user, classroom))
                 user_data = db.exe_fetch(SQL['user_data'].format(user))
                 if user_data.get('user_type') == 'teacher' and member:
                     db.exe_commit(SQL['delete_task'].format(classroom, task))
@@ -845,10 +857,10 @@ def api_task_questions():
         user = session.get('user')
         classroom = request.args.get('c')
         task = request.args.get('t')
-        member = db.exe_fetch(SQL['classroom_member'].format(user, classroom))
-        user_data = db.exe_fetch(SQL['user_data'].format(user))
 
         if classroom != None and task != None:
+            member = db.exe_fetch(SQL['classroom_member'].format(user, classroom))
+            user_data = db.exe_fetch(SQL['user_data'].format(user))
             if member and user_data.get('user_type') == 'teacher':
                 classroomData = db.exe_fetch(SQL['classroom'].format(classroom))
                 taskData = db.exe_fetch(SQL['task'].format(classroom, task))
@@ -884,9 +896,9 @@ def api_student_task_questions():
         user = session.get('user')
         classroom = request.args.get('c')
         task = request.args.get('t')
-        member = db.exe_fetch(SQL['classroom_member'].format(user, classroom))
 
         if classroom != None and task != None:
+            member = db.exe_fetch(SQL['classroom_member'].format(user, classroom))
             if member:
                 classroomData = db.exe_fetch(SQL['classroom'].format(classroom))
                 taskData = db.exe_fetch(SQL['task'].format(classroom, task))
@@ -924,10 +936,10 @@ def api_task_answers():
         classroom = request.args.get('c')
         task = request.args.get('t')
         student = request.args.get('s')
-        member = db.exe_fetch(SQL['classroom_member'].format(user, classroom))
 
         if request.method == 'GET':
             if classroom != None and task != None and student == None:
+                member = db.exe_fetch(SQL['classroom_member'].format(user, classroom))
                 if member:
                     answers = db.exe_fetch(SQL['task_answers'].format(classroom, task, user), 'all')
                     return jsonify({'task_answers': answers})
@@ -943,6 +955,7 @@ def api_task_answers():
 
         elif request.method == 'POST':
             if classroom != None and task != None:
+                member = db.exe_fetch(SQL['classroom_member'].format(user, classroom))
                 if member:
                     questions = request.json.get('answer_task').get('questions')
                     for q in questions:
@@ -953,6 +966,7 @@ def api_task_answers():
 
         elif request.method == 'PUT':
             if classroom != None and task != None:
+                member = db.exe_fetch(SQL['classroom_member'].format(user, classroom))
                 if member:
                     questions = request.json.get('answer_task').get('questions')
                     for q in questions:
@@ -969,10 +983,10 @@ def api_task_results():
         user = session.get('user')
         classroom = request.args.get('c')
         task = request.args.get('t')
-        member = db.exe_fetch(SQL['classroom_member'].format(user, classroom))
 
         if request.method == 'GET':
             if classroom != None and task != None:
+                member = db.exe_fetch(SQL['classroom_member'].format(user, classroom))
                 if member:
                     taskData = db.exe_fetch(SQL['task_results'].format(classroom, task))
                     if taskData != None:
@@ -995,11 +1009,11 @@ def api_task_result():
         classroom = request.args.get('c')
         task = request.args.get('t')
         student = request.args.get('s')
-        user_data = db.exe_fetch(SQL['user_data'].format(user))
-        member = db.exe_fetch(SQL['classroom_member'].format(user, classroom))
 
         if request.method == 'GET':
             if classroom != None and task != None:
+                user_data = db.exe_fetch(SQL['user_data'].format(user))
+                member = db.exe_fetch(SQL['classroom_member'].format(user, classroom))
                 if member and (int(user) == int(student) or user_data.get('user_type') == 'teacher'):
                     taskData = db.exe_fetch(SQL['task_results'].format(classroom, task))
                     if taskData != None:
@@ -1015,6 +1029,82 @@ def api_task_result():
 
     return jsonify({'result': 'Error'})
 
+@app.route('/api/calendar', methods=['GET', 'POST', 'DELETE'])
+def api_calendar():
+    if session.get('user') != None:
+        user = session.get('user')
+        classroom = request.args.get('class')
+        date = request.args.get('date')
+        event = request.args.get('event')
+
+        if request.method == 'GET':
+            if classroom != None and date == None and event == None:
+                member = db.exe_fetch(SQL['classroom_member'].format(user, classroom))
+                if member:
+                    events = db.exe_fetch(SQL['events'].format(classroom), 'all')
+                    deadline = db.exe_fetch(SQL['deadline'].format(classroom), 'all')
+                    return jsonify({ 'calendar': { 'deadline': deadline, 'events': events } })
+                else:
+                    return jsonify({'calendar': 'Error'})
+            if classroom != None and date != None and event == None:
+                member = db.exe_fetch(SQL['classroom_member'].format(user, classroom))
+                if member:
+                    date = date.replace('_', '-')
+                    events = db.exe_fetch(SQL['events_byDate'].format(classroom, date), 'all')
+                    deadline = db.exe_fetch(SQL['deadline_byDate'].format(classroom, date), 'all')
+                    return jsonify({ 'calendar': { 'deadline': deadline, 'events': events } })
+                else:
+                    return jsonify({'calendar': 'Error'})
+
+        if request.method == 'POST':
+            if classroom != None and date == None and event == None:
+                user_data = db.exe_fetch(SQL['user_data'].format(user))
+                member = db.exe_fetch(SQL['classroom_member'].format(user, classroom))
+                if member and user_data.get('user_type') == 'teacher':
+                    data = request.json.get('createEvent')
+                    name = replace_string(data.get('name'))
+                    description = replace_string(data.get('description'))
+                    event_date = data.get('date').replace('_', '-')
+                    event_num = 1
+                    event_last_num = db.exe_fetch(SQL['event_last_num'].format(classroom)).get('last_num')
+                    if event_last_num != None:
+                        event_num = event_last_num + 1
+
+                    db.exe_commit(SQL['create_event'].format(classroom, event_num, name, description, event_date))
+                    return jsonify({ 'cretae_event': 'Success' })
+
+        if request.method == 'DELETE':
+            if classroom != None and event != None and date == None:
+                user_data = db.exe_fetch(SQL['user_data'].format(user))
+                member = db.exe_fetch(SQL['classroom_member'].format(user, classroom))
+                if member and user_data.get('user_type') == 'teacher':
+                    db.exe_commit(SQL['delete_event'].format(classroom, event))
+                    return jsonify({ 'delete_event': 'Success' })
+
+    return jsonify({'result': 'Error'})
+
+#
+# Socket.io
+#
+@socketio.on('message') # for testing
+def handleMessage(msg):
+    print('Message: ', msg)
+    send(msg, broadcast=True)
+
+@socketio.on('addRoom')
+def on_join(data):
+    room = data['room']
+    join_room(room)
+    print('addRoom: ',room)
+    send('some one has join ' + room,room=room)
+
+@socketio.on('leaveRoom')
+def on_leave(data):
+    room = data['room']
+    leave_room(room)
+    print('leave: ',room)
+    send('some one has leave ' + room,room=room)
+
 if __name__ == '__main__':
     version = db.exe_fetch('select version()')['version()']
     print(' ~ Running on port 3000.\n ~ Database:', version)
@@ -1022,5 +1112,5 @@ if __name__ == '__main__':
     cer = os.path.dirname(os.path.realpath(__file__))+"/ssl/certificate.crt"
     key = os.path.dirname(os.path.realpath(__file__))+"/ssl/private.key"
 
-    app.run(host='192.168.1.160', port=3000, debug=True, ssl_context=(cer,key))
+    socketio.run(app, debug = True, host='192.168.1.160', port=3000, keyfile=key, certfile=cer)
 

@@ -30,7 +30,7 @@ class TaskResults extends React.Component {
       if (res.ok) {
         res.json().then(result => {
           console.log(result)
-          if (result.task !== 'Error' && (new Date() > new Date(result.task_results.deadline))) {
+          if (result.task !== 'Error' && ((new Date() > new Date(result.task_results.deadline)) || result.task_results.force_close)) {
             this.setState({ 
               'title': result.task_results.title,
               'create_date': result.task_results.create_date,

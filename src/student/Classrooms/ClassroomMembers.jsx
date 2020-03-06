@@ -111,7 +111,7 @@ class ClassroomMembers extends React.Component {
                   <div>{member.fullname.toUpperCase()} {member.nickname}</div>
                   <div>Type: {member.user_type}</div>
                   <div>Join Date: {member.join_date}</div>
-                  {member.user_type === 'student' ? <button onClick={() => this.kickFromClassroom(member.user_id)}>Kick</button> : null}
+                  {member.user_type === 'student' && this.props.user_type === 'teacher' ? <button onClick={() => this.kickFromClassroom(member.user_id)}>Kick</button> : null}
                 </li>
               )}
             </ul>

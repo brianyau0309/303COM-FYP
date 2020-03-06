@@ -1,20 +1,15 @@
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: 0;
-}
 .Calendar {
-    margin: 0;
-    padding: 0;
-    box-sizing: 0;
-    display: grid;
-    grid-template-rows: 7vh 5vh 5vh 1fr;
-    grid-template-areas: 
-      'header'
-      'month'
-      'weeks'
-      'days';
-    font-size: 4.5vw;
+  margin: 0;
+  padding: 0;
+  box-sizing: 0;
+  display: grid;
+  grid-template-rows: 7vh 5vh 5vh 1fr;
+  grid-template-areas: 
+    'header'
+    'month'
+    'weeks'
+    'days';
+  font-size: 4.5vw;
 }
 .month {
   grid-area: month;
@@ -50,12 +45,12 @@
   border-bottom: 1px solid #B8B8B8;
 }
 .week {
-    width: 14.2857142857%;
-    text-align: center;
+  width: 14.2857142857%;
+  text-align: center;
 }
 .day-list {
-    overflow: scroll;
-    height: 100%;
+  overflow: scroll;
+  height: 100%;
 }
 .days {
   grid-area: days;
@@ -65,19 +60,54 @@
   height: 100%;
 }
 .day {
-    width: 14.2857142857%;
-    text-align: right;
-    height: 17%;
+  width: 14.2857142857%;
+  text-align: right;
+  height: 20%;
+  text-decoration: none;
+  color: blue;
 }
 .day:nth-child(7n+1) {
-    color: red;
+  color: red;
 }
 .dayHead {
-    height: 20%;
-    font-size: 2.5vh;
-    background: lightblue;
+  height: 20%;
+  font-size: 2.5vh;
+  background: lightblue;
+}
+.dayHead.today {
+  background: lightgreen;
+  color: darkmagenta;
 }
 .dayDetail {
-    height: 80%;
-    border-bottom: 1px solid lightgray;
+  height: 80%;
+  border-bottom: 1px solid lightgray;
+  font-size: 1.8vh;
+}
+.dayDetail .deadline {
+  background: red;
+  border-bottom: none;
+  text-align: center;
+  color: black;
+}
+.dayDetail .event {
+  background: yellow;
+  border-bottom: none;
+  text-align: center;
+  color: black;
+}
+.dayPannel {
+  display: grid;
+  grid-template-columns: 30% 1fr 15%;
+  justify-items: center;
+  align-items: center;
+  width: 100%;
+  height: 5vh;
+  background: #32bea6;
+}
+.dayPannel img {
+  width: 4vh;
+  height: 4vh;
+}
+.dayPannel + div {
+  background: #32bea6;
 }

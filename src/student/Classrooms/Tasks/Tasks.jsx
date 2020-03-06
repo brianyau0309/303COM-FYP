@@ -78,7 +78,7 @@ class Tasks extends React.Component {
               {this.state.tasks.map(task => 
                 <Link to={this.props.location.pathname+'/'+task.task_num}>
                   <li>
-                    <div>Title: {task.title}</div>
+                    <div>Title: {task.title}{task.force_close ? "(Closed)" : null}</div>
                     <div>Deadline: {task.deadline}</div>
                   </li>
                 </Link>

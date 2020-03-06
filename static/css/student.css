@@ -256,7 +256,9 @@ pre {
 .AnswerTask,
 .TaskResults,
 .TaskResult,
-.Calendar {
+.Calendar,
+.Day,
+.Chatroom {
   position: absolute;
   top: 0;
   left: 0;
@@ -266,6 +268,8 @@ pre {
   transition: top .2s;
 }
 
+.Calendar.hide {
+}
 .coverboard {
   background: white;
 }
@@ -290,7 +294,8 @@ pre {
 .CreateLesson.open,
 .EditLesson.open,
 .EditComment.open,
-.EditAnswer.open {
+.EditAnswer.open,
+.Day.open {
   top: 0;
 }
 
@@ -301,7 +306,8 @@ pre {
 .CreateLesson.close,
 .EditLesson.close,
 .EditComment.close,
-.EditAnswer.close {
+.EditAnswer.close,
+.Day.close {
   top: 100vh;
   overflow: hidden;
   height: 0;
@@ -316,13 +322,18 @@ pre {
 }
 
 .Classrooms input,
-.Classrooms textarea {
+.Classrooms textarea,
+.Day input,
+.Day textarea {
+  font-size: 2vh;
   display: block;
-  margin: 1vh auto;
+  margin: 0 auto;
+  margin-bottom: 1.5vh;
   width: 80%
 }
 
-.Classrooms textarea {
+.Classrooms textarea,
+.Day textarea {
   height: 10vh;
 }
 

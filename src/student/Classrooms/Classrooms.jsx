@@ -11,7 +11,8 @@ import AnswerTask from './Tasks/AnswerTask.jsx'
 import EditAnswer from './Tasks/EditAnswer.jsx'
 import TaskResults from './Tasks/TaskResults.jsx'
 import TaskResult from './Tasks/TaskResult.jsx'
-import Calendar from './Calendar.jsx'
+import Calendar from './Calendar/Calendar.jsx'
+import Chatroom from './Chatroom.jsx'
 
 class Classrooms extends React.Component {
   constructor(props) {
@@ -43,6 +44,8 @@ class Classrooms extends React.Component {
       else if (this.props.match.path === "/classrooms/:class/tasks/:task/answer" && this.props.user_type === 'student') {this.setState({'part': 'answerTask'})}
       else if (this.props.match.path === "/classrooms/:class/tasks/:task/edit_answer/:student" && this.props.user_type === 'student') {this.setState({'part': 'editAnswer'})}
       else if (this.props.match.path === "/classrooms/:class/calendar") {this.setState({'part': 'calendar'})}     
+      else if (this.props.match.path === "/classrooms/:class/calendar/:date") {this.setState({'part': 'date'})}     
+      else if (this.props.match.path === "/classrooms/:class/chat") {this.setState({'part': 'chat'})}     
       else if (this.props.match.path === "/classrooms/:class") {this.setState({'part': 'class'})}     
       else {this.setState({'part': ''})}
     }
@@ -127,7 +130,7 @@ class Classrooms extends React.Component {
 
         {this.state.part !== '' ? <div className="coverboard"></div> : null}
         {this.state.part === 'class' ? <Classroom user_type={this.props.user_type} reload={this.loadClassrooms}/> : null}
-        {this.state.part === 'classMembers' ? <ClassroomMembers/> : null}
+        {this.state.part === 'classMembers' ? <ClassroomMembers user_type={this.props.user_type}/> : null}
         {this.state.part === 'createTask' ? <CreateTask/> : null}
         {this.state.part === 'tasks' ? <Tasks user_id={this.props.user_id}/> : null}
         {this.state.part === 'task' ? <Task user_id={this.props.user_id}  user_type={this.props.user_type}/> : null}
@@ -136,7 +139,8 @@ class Classrooms extends React.Component {
         {this.state.part === 'editAnswer' && this.props.user_type === 'student' ? <EditAnswer/> : null}
         {this.state.part === 'results' && this.props.user_type === 'teacher' ? <TaskResults/> : null}
         {this.state.part === 'result' ? <TaskResult/> : null}
-        {this.state.part === 'calendar' ? <Calendar/> : null}
+        {this.state.part === 'calendar' || this.state.part === 'date' ? <Calendar user_type={this.props.user_type}/> : null}
+        {this.state.part === 'chat' ? <Chatroom user_id={this.props.user_id}/> : null}
 
       </div>
     )

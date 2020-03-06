@@ -133,8 +133,10 @@ class Classroom extends React.Component {
               <div>{this.state.create_date}</div>
             </div>
             <ul className="classroom-item">
-              <li onClick={this.editToggle}>Edit Description</li>
-              {this.state.editToggle ? 
+              { this.props.user_type === 'teacher' ?
+                <li onClick={this.editToggle}>Edit Description</li>
+                : null}
+              {this.state.editToggle && this.props.user_type === 'teacher' ? 
                 <li>
                   <form name='form_editClassroom' onSubmit={this.editClassroom}>
                     <input type="text" name="classroom_name" placeholder="Name of the Classroom" value={this.state.newName} onChange={e => this.newNameInputOnChange(e.target.value)} required/>
@@ -149,7 +151,7 @@ class Classroom extends React.Component {
               <Link to={'/classrooms/'+this.state.classroom_id+'/calendar'}><li>Calendar</li></Link>
               <Link to={'/classrooms/'+this.state.classroom_id+'/chat'}><li>Chatroom</li></Link>
               <li></li>
-              <li onClick={this.deleteClassroom}>Delete Classroom</li>
+              {this.props.user_type === 'teacher'? <li onClick={this.deleteClassroom}>Delete Classroom</li> : null}
             </ul>
           </div>
           : <div>Please Wait...</div>}

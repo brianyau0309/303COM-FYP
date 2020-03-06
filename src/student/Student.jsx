@@ -122,6 +122,10 @@ export default class Student extends React.Component {
                 <Header title='Classrooms'/>
                 <Classrooms user_type={this.state.user_data.user_type} user_id={this.state.user_data.user_id}/>
               </Route>
+              <Route path="/classrooms/:class/calendar/:date">
+                <Header title='Classrooms'/>
+                <Classrooms user_type={this.state.user_data.user_type} user_id={this.state.user_data.user_id}/>
+              </Route>
               <Route path="/classrooms/:class/calendar">
                 <Header title='Classrooms'/>
                 <Classrooms user_type={this.state.user_data.user_type} user_id={this.state.user_data.user_id}/>

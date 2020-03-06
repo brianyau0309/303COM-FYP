@@ -371,6 +371,10 @@ SQL = {
     SET title = '{0}', deadline = '{1}'
     WHERE classroom = {2} AND task_num = {3}
     ''',
+    'force_close_task': '''
+    UPDATE tasks SET force_close = TRUE
+    WHERE classroom = {0} AND task_num = {1}
+    ''',
     'reset_task_question': '''
     DELETE FROM task_questions
     WHERE classroom = {0} AND task_num = {1}
@@ -418,7 +422,7 @@ SQL = {
     WHERE classroom = {0} and task_num = {1}
     ''',
     'task_results': '''
-    SELECT a.title, a.create_date, a.deadline,
+    SELECT a.title, a.create_date, a.deadline, a.force_close,
       CASE WHEN b.submitted IS NOT NULL
         then b.submitted
         else 0
@@ -499,5 +503,36 @@ SQL = {
     FROM task_answers a, task_questions b
     WHERE a.classroom = b.classroom AND a.task_num = b.task_num AND a.question_num = b.question_num AND
     a.classroom = {0} AND a.task_num = {1} AND a.student = {2}
-    '''
+    ''',
+    'deadline': '''
+    SELECT deadline
+    FROM tasks
+    WHERE classroom = {0} AND force_close = false
+    ''',
+    'events': '''
+    SELECT event_date
+    FROM calendar
+    WHERE classroom = {0}
+    ''',
+    'deadline_byDate': '''
+    SELECT *
+    FROM tasks
+    WHERE classroom = {0} AND date(deadline) = '{1}' AND force_close = false
+    ''',
+    'events_byDate': '''
+    SELECT *
+    FROM calendar
+    WHERE classroom = {0} AND date(event_date) = '{1}'
+    ''',
+    'event_last_num': '''
+    SELECT MAX(event_num) as last_num FROM calendar WHERE classroom = {0}
+    ''',
+    'create_event': '''
+    INSERT INTO calendar VALUES
+    ({0}, {1}, '{2}', '{3}', '{4}')
+    ''',
+    'delete_event': '''
+    DELETE FROM calendar
+    WHERE classroom = {0} AND event_num = {1}
+    ''',
 }

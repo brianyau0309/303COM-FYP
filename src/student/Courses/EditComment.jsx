@@ -69,7 +69,7 @@ export default class EditComment extends React.Component {
           )
         )}
         <span>{this.state.editedRate}</span>
-        <TextEditor editor='EditerComment'/>
+        <TextEditor editor='EditComment'/>
         <button onClick={this.submitEditedComment}>Submit Edited Comment</button>
       </div>
     )

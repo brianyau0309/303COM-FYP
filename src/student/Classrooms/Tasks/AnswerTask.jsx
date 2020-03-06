@@ -45,7 +45,7 @@ class AnswerTask extends React.Component {
         if (res.ok) {
           res.json().then(result => {
             console.log(result)
-            if (result.task !== 'Error' && !(new Date() > new Date(result.task.deadline))) {
+            if (result.task !== 'Error' && !(new Date() > new Date(result.task.deadline)) && !result.task.force_close) {
               this.setState({
                 'questions': result.task.task_questions
               })

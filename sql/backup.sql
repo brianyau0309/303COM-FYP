@@ -74,31 +74,31 @@ INSERT INTO `answers` VALUES (1,2,'Answer Test<div><ol><li>1\'1</li><li>2\"2<br>
 UNLOCK TABLES;
 
 --
--- Table structure for table `celendar`
+-- Table structure for table `calendar`
 --
 
-DROP TABLE IF EXISTS `celendar`;
+DROP TABLE IF EXISTS `calendar`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `celendar` (
+CREATE TABLE `calendar` (
   `classroom` int(8) unsigned NOT NULL,
   `event_num` int(8) unsigned NOT NULL,
   `event` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL,
   `detail` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `event_date` datetime NOT NULL,
-  `valid` tinyint(1) NOT NULL DEFAULT 1,
   PRIMARY KEY (`classroom`,`event_num`),
-  CONSTRAINT `celendar_ibfk_1` FOREIGN KEY (`classroom`) REFERENCES `classrooms` (`classroom_id`)
+  CONSTRAINT `calendar_ibfk_1` FOREIGN KEY (`classroom`) REFERENCES `classrooms` (`classroom_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `celendar`
+-- Dumping data for table `calendar`
 --
 
-LOCK TABLES `celendar` WRITE;
-/*!40000 ALTER TABLE `celendar` DISABLE KEYS */;
-/*!40000 ALTER TABLE `celendar` ENABLE KEYS */;
+LOCK TABLES `calendar` WRITE;
+/*!40000 ALTER TABLE `calendar` DISABLE KEYS */;
+INSERT INTO `calendar` VALUES (1,1,'Event Test','It is\nan Event!','2020-03-18 00:00:00');
+/*!40000 ALTER TABLE `calendar` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -272,7 +272,7 @@ CREATE TABLE `courses_comments` (
 
 LOCK TABLES `courses_comments` WRITE;
 /*!40000 ALTER TABLE `courses_comments` DISABLE KEYS */;
-INSERT INTO `courses_comments` VALUES (2,2,'I like it',4,1,'2020-02-24 20:54:02');
+INSERT INTO `courses_comments` VALUES (2,2,'I like it!',5,1,'2020-02-24 20:54:02');
 /*!40000 ALTER TABLE `courses_comments` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -442,7 +442,7 @@ CREATE TABLE `task_answers` (
 
 LOCK TABLES `task_answers` WRITE;
 /*!40000 ALTER TABLE `task_answers` DISABLE KEYS */;
-INSERT INTO `task_answers` VALUES (1,7,1,1,'MC2'),(1,7,1,4,'MC1MC'),(1,7,1,5,'MC2'),(1,7,2,1,'answer'),(1,7,2,4,'answer'),(1,7,2,5,'answer1'),(1,7,3,1,'MC23'),(1,7,3,4,'MC2'),(1,7,3,5,'MC34');
+INSERT INTO `task_answers` VALUES (1,7,1,1,'MC1MC'),(1,7,1,4,'MC2'),(1,7,1,5,'MC2'),(1,7,2,1,'answer'),(1,7,2,4,'qwww'),(1,7,2,5,'qwww123'),(1,7,3,1,'MC2'),(1,7,3,4,'MC23'),(1,7,3,5,'MC34');
 /*!40000 ALTER TABLE `task_answers` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -476,7 +476,7 @@ CREATE TABLE `task_questions` (
 
 LOCK TABLES `task_questions` WRITE;
 /*!40000 ALTER TABLE `task_questions` DISABLE KEYS */;
-INSERT INTO `task_questions` VALUES (1,5,1,'tEst','sq','SQ','answer',NULL,NULL,NULL,NULL),(1,5,2,'test','mc','MC Test','answer3','answer1','answer2','answer3','answer4'),(1,6,1,'tEst','sq','SQ','answer1',NULL,NULL,NULL,NULL),(1,6,2,'Test','mc','MC 2','123','123','456',NULL,NULL),(1,6,3,'test','mc','MC Test','answer4','answer1','answer2','answer4',NULL),(1,7,1,'MC','mc','MC','MC2','MC1MC','MC2',NULL,NULL),(1,7,2,NULL,'sq','SQ1','qwwq212',NULL,NULL,NULL,NULL),(1,7,3,'Test','mc','MC2','MC23','MC2','MC23','MC34',NULL);
+INSERT INTO `task_questions` VALUES (1,5,1,'tEst','sq','SQ','answer',NULL,NULL,NULL,NULL),(1,5,2,'test','mc','MC Test','answer3','answer1','answer2','answer3','answer4'),(1,6,1,'tEst','sq','SQ','answer1',NULL,NULL,NULL,NULL),(1,6,2,'Test','mc','MC 2','123','123','456',NULL,NULL),(1,6,3,'test','mc','MC Test','answer4','answer1','answer2','answer4',NULL),(1,7,1,'MC','mc','MC','MC2','MC1MC','MC2',NULL,NULL),(1,7,2,'MC','sq','SQ1','qwwq212',NULL,NULL,NULL,NULL),(1,7,3,'Test','mc','MC2','MC23','MC2','MC23','MC34',NULL);
 /*!40000 ALTER TABLE `task_questions` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -494,7 +494,7 @@ CREATE TABLE `tasks` (
   `create_by` int(8) unsigned NOT NULL,
   `create_date` datetime NOT NULL,
   `deadline` datetime DEFAULT NULL,
-  `publish` tinyint(1) NOT NULL DEFAULT 1,
+  `force_close` tinyint(1) DEFAULT 0,
   PRIMARY KEY (`classroom`,`task_num`),
   KEY `create_by` (`create_by`),
   CONSTRAINT `tasks_ibfk_1` FOREIGN KEY (`classroom`) REFERENCES `classrooms` (`classroom_id`) ON DELETE CASCADE,
@@ -508,7 +508,7 @@ CREATE TABLE `tasks` (
 
 LOCK TABLES `tasks` WRITE;
 /*!40000 ALTER TABLE `tasks` DISABLE KEYS */;
-INSERT INTO `tasks` VALUES (1,5,'Task',2,'2020-03-02 21:12:26','2020-03-24 04:00:00',1),(1,6,'Task',2,'2020-03-02 23:47:05','2020-03-24 04:00:00',1),(1,7,'Task7',2,'2020-03-02 23:48:43','2020-03-18 04:00:00',1);
+INSERT INTO `tasks` VALUES (1,5,'Task',2,'2020-03-02 21:12:26','2020-03-24 04:00:00',0),(1,6,'Task',2,'2020-03-02 23:47:05','2020-03-24 04:00:00',1),(1,7,'Task7',2,'2020-03-02 23:48:43','2020-03-04 04:00:00',0);
 /*!40000 ALTER TABLE `tasks` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -578,4 +578,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2020-03-04  5:13:24
+-- Dump completed on 2020-03-07  5:26:38

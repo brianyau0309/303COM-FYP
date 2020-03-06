@@ -7,12 +7,13 @@ class Task extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      'title': '', 'create_date': '', 'deadline': '', 'task_answers': [],
+      'title': '', 'create_date': '', 'deadline': '', 'task_answers': [], 'forceClose': false,
       'permission': false, 'success_page': false
     }
     this.loadTask = this.loadTask.bind(this)
     this.loadAnswer = this.loadAnswer.bind(this)
     this.checkPermission = this.checkPermission.bind(this)
+    this.forceClose = this.forceClose.bind(this)
     this.deleteTask = this.deleteTask.bind(this)
   }
 
@@ -57,6 +58,7 @@ class Task extends React.Component {
                 'title': result.task.title,
                 'create_date': result.task.create_date,
                 'deadline': result.task.deadline,
+                'forceClose': result.task.force_close
               })
             } else {
               this.props.history.goBack()
@@ -72,6 +74,17 @@ class Task extends React.Component {
       if (res.ok) {
         res.json().then(result => {
           this.setState({'task_answers': result.task_answers})
+        })
+      }
+    })
+  }
+
+  forceClose() {
+    fetch('/api/task?c='+this.props.match.params.class+'&t='+this.props.match.params.task, {method: 'PATCH'}).then(res => {
+      if (res.ok) {
+        res.json().then(result => {
+          console.log(result)
+          this.loadTask()
         })
       }
     })
@@ -112,14 +125,15 @@ class Task extends React.Component {
             <div>{this.state.deadline}</div>
 
             { this.props.user_type === 'teacher' ?
-                new Date() > new Date(this.state.deadline) ?
+                new Date() > new Date(this.state.deadline) || this.state.forceClose ?
                   <Link to={this.props.location.pathname+'/results'}><button>Result</button></Link>
                 :
                   <div>
                     <Link to={this.props.location.pathname+'/edit'}><button>Edit</button></Link>
+                    <br/><button onClick={this.forceClose}>Force Close</button>
                     <br/><button onClick={this.deleteTask}>Delete</button>
                   </div>
-            : new Date() > new Date(this.state.deadline) ?
+            : new Date() > new Date(this.state.deadline) || this.state.forceClose  ?
                 <Link to={this.props.location.pathname+'/results/'+this.props.user_id}><button>Result</button></Link>
               : 
                 this.state.task_answers.length > 0 ? 
