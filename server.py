@@ -44,7 +44,7 @@ def login_process():
 
     data = db.exe_fetch(SQL['login_process'].format(user_id))
     if data != None:
-        if data['password'] == password:
+        if data['password'] == password and data['user_type'] != 'admin':
             print('Success')
             session['user'] = user_id
         else:
@@ -1056,7 +1056,7 @@ def api_calendar():
                 else:
                     return jsonify({'calendar': 'Error'})
 
-        if request.method == 'POST':
+        elif request.method == 'POST':
             if classroom != None and date == None and event == None:
                 user_data = db.exe_fetch(SQL['user_data'].format(user))
                 member = db.exe_fetch(SQL['classroom_member'].format(user, classroom))
@@ -1073,13 +1073,45 @@ def api_calendar():
                     db.exe_commit(SQL['create_event'].format(classroom, event_num, name, description, event_date))
                     return jsonify({ 'cretae_event': 'Success' })
 
-        if request.method == 'DELETE':
+        elif request.method == 'DELETE':
             if classroom != None and event != None and date == None:
                 user_data = db.exe_fetch(SQL['user_data'].format(user))
                 member = db.exe_fetch(SQL['classroom_member'].format(user, classroom))
                 if member and user_data.get('user_type') == 'teacher':
                     db.exe_commit(SQL['delete_event'].format(classroom, event))
                     return jsonify({ 'delete_event': 'Success' })
+
+    return jsonify({'result': 'Error'})
+
+@app.route('/api/chatroom', methods=['GET', 'POST'])
+def api_chatroom():
+    if session.get('user') != None:
+        user = session.get('user')
+        classroom = request.args.get('class')
+
+        if request.method == 'GET':
+            if classroom != None:
+                member = db.exe_fetch(SQL['classroom_member'].format(user, classroom))
+                if member:
+                    messages = db.exe_fetch(SQL['chatroom'].format(classroom), 'all')
+                    return jsonify({ 'chatroom': { 'messages': messages } })
+
+        elif request.method == 'POST':
+            if classroom != None:
+                member = db.exe_fetch(SQL['classroom_member'].format(user, classroom))
+                if member:
+                    data = request.json.get('message')
+                    print(data)
+                    message = replace_string(data)
+                    now = datetime.now().strftime('%Y/%m/%d %H:%M:%S')
+                    message_num = 1
+                    message_last_num = db.exe_fetch(SQL['message_last_num'].format(classroom)).get('last_num')
+                    if message_last_num != None:
+                        message_num = message_last_num + 1
+
+                    db.exe_commit(SQL['send_message'].format(classroom, message_num, user, message, now))
+                    socketio.emit('reloadMessage', { 'room': 'class'+classroom})
+                    return jsonify({ 'send_messags': 'Success' })
 
     return jsonify({'result': 'Error'})
 

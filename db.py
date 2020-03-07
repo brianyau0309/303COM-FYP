@@ -34,7 +34,7 @@ class DBConn():
 
 SQL = {
     'login_process':'''
-    SELECT password
+    SELECT password, user_type
     FROM users
     WHERE valid = true and user_id = {0}
     ''',
@@ -535,4 +535,16 @@ SQL = {
     DELETE FROM calendar
     WHERE classroom = {0} AND event_num = {1}
     ''',
+    'chatroom': '''
+    SELECT a.member, b.nickname, a.message, a.date
+    FROM chatroom a, users b
+    WHERE a.member = b.user_id AND a.classroom = {0}
+    ''',
+    'message_last_num': '''
+    SELECT MAX(message_num) as last_num FROM chatroom WHERE classroom = {0}
+    ''',
+    'send_message': '''
+    INSERT INTO chatroom VALUES
+    ({0}, {1}, {2}, '{3}','{4}')
+    '''
 }
