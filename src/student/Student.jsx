@@ -191,7 +191,7 @@ export default class Student extends React.Component {
               </Route>
               <Route path="/setting">
                 <Header title='Setting'/>
-                <Setting user_data={this.state.user_data}/>
+                <Setting user_data={this.state.user_data} reload={this.loadUser}/>
               </Route>
               <Redirect from="/" to="/courses"/>
             </Switch>

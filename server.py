@@ -9,7 +9,7 @@ from werkzeug.utils import secure_filename
 
 UPLOAD_FILE_FOLDER = os.getcwd()  + '/static/files'
 ALLOWED_FILE_TYPE = ['pdf', 'doc', 'docx', 'ppt', 'pptx']
-UPLOAD_ICON_FOLDER = os.getcwd()  + '/static/image/user_icons'
+UPLOAD_ICON_FOLDER = os.getcwd()  + '/static/images/user_icons'
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'SecretKeyHERE!'
@@ -67,15 +67,68 @@ def logout():
 # API Start
 #
 
-@app.route('/api/user_data')
+#
+# User API
+#
+@app.route('/api/user_data', methods=['GET', 'PUT'])
 def api_user_data():
     if session.get('user') != None:
         user = int(session.get('user'))
         user_data = db.exe_fetch(SQL['user_data'].format(user))
 
-        return jsonify({'user_data': user_data})
+        if request.method == 'GET':
+            return jsonify({'user_data': user_data})
+
+        if request.method == 'PUT':
+            changeNickname = request.json.get('changeNickname')
+            changePassword = request.json.get('changePassword')
+
+            if changeNickname:
+                nickname = changeNickname['nickname']
+                print(nickname)
+                db.exe_commit(SQL['change_nickname'].format(nickname, user))
+                return jsonify({'changeNickname': 'Success'})
+            elif changePassword:
+                password_now = changePassword['password_now']
+                password_new = changePassword['password_new']
+                password = db.exe_fetch(SQL['login_process'].format(user)).get('password')
+                print(password, password_now, password_new)
+                if password_now == password:
+                    db.exe_commit(SQL['change_password'].format(password_new, user))
+                    return jsonify({'changePassword': 'Success'})
+                return jsonify({'changePassword': 'Error'})
 
     return jsonify({'result': 'Error'})
+
+@app.route('/api/user_info', methods=['GET', 'POST', 'DELETE'])
+def api_setting():
+    if session.get('user') != None:
+        user = session.get('user')
+        target = request.args.get('target')
+
+        if request.method == 'GET':
+            if target == None:
+                user_info = db.exe_fetch(SQL['user_info'].format(user))
+                return jsonify({'user_info': user_info})
+            else:
+                user_info = db.exe_fetch(SQL['user_info'].format(target))
+                return jsonify({'user_info': user_info})
+
+        elif request.method == 'POST':
+            file = request.files['icon']
+            print(request.files)
+            if file:
+                filename = secure_filename(file.filename)
+                file.save(os.path.join(app.config['UPLOAD_ICON_FOLDER'], str(user)+'.png'))
+            return jsonify({'changeIcon': 'Success'})
+
+        elif request.method == 'DELETE':
+            if Path(UPLOAD_ICON_FOLDER+'/'+str(user)+'.png').exists():
+                os.remove(UPLOAD_ICON_FOLDER+'/'+str(user)+'.png')
+            return jsonify({'deleteIcon': 'Success'})
+
+    return jsonify({'result': 'Error'})
+
 
 #
 # Questions API
@@ -1118,6 +1171,7 @@ def api_chatroom():
 #
 # Socket.io
 #
+
 @socketio.on('message') # for testing
 def handleMessage(msg):
     print('Message: ', msg)

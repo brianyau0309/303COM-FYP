@@ -39,9 +39,39 @@ SQL = {
     WHERE valid = true and user_id = {0}
     ''',
     'user_data': '''
-    SELECT user_id, nickname, sex, school, user_type
+    SELECT user_id, CONCAT(surname,' ', lastname) name, nickname, sex, school, user_type
     FROM users
     WHERE valid = true AND user_id = {0}
+    ''',
+    'change_nickname': '''
+    UPDATE users
+    SET nickname = '{0}'
+    WHERE user_id = {1}
+    ''',
+    'change_password': '''
+    UPDATE users
+    SET password = '{0}'
+    WHERE user_id = {1}
+    ''',
+    'user_info': '''
+    SELECT a.best_answer, b.answer_likes, c.course_num, d.follower
+    FROM (
+      SELECT COUNT(*) best_answer
+      FROM questions
+      WHERE solved_by = {0}
+    ) a, (
+      SELECT COUNT(*) answer_likes
+      FROM answer_likes
+      WHERE create_by = {0}
+    ) b, (
+      SELECT COUNT(*) course_num
+      FROM courses
+      WHERE author = {0} AND valid = true
+    ) c, (
+      SELECT COUNT(*) follower
+      FROM user_following
+      WHERE user_id = {0}
+    ) d
     ''',
     'questions_new': '''
     SELECT a.question_id, a.title, b.nickname, b.user_type, a.create_date, a.solved_by

@@ -39,7 +39,7 @@ CREATE TABLE `answer_likes` (
 
 LOCK TABLES `answer_likes` WRITE;
 /*!40000 ALTER TABLE `answer_likes` DISABLE KEYS */;
-INSERT INTO `answer_likes` VALUES (1,2,1),(1,2,2),(3,2,1);
+INSERT INTO `answer_likes` VALUES (1,2,1),(1,2,2),(3,2,1),(6,2,1);
 /*!40000 ALTER TABLE `answer_likes` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -127,6 +127,7 @@ CREATE TABLE `chatroom` (
 
 LOCK TABLES `chatroom` WRITE;
 /*!40000 ALTER TABLE `chatroom` DISABLE KEYS */;
+INSERT INTO `chatroom` VALUES (1,1,2,'hello','2020-03-07 18:23:38'),(1,2,2,'I am Mary','2020-03-07 18:28:52'),(1,3,2,'hello?','2020-03-07 18:35:23'),(1,4,2,'hello?','2020-03-07 18:42:03'),(1,5,2,'hello','2020-03-07 18:42:19'),(1,6,1,'hello','2020-03-07 18:44:48'),(1,7,1,'?','2020-03-07 18:48:42'),(1,8,1,'?','2020-03-07 18:50:54'),(1,9,2,'Hello Peter','2020-03-07 18:51:05');
 /*!40000 ALTER TABLE `chatroom` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -387,7 +388,7 @@ CREATE TABLE `questions` (
 
 LOCK TABLES `questions` WRITE;
 /*!40000 ALTER TABLE `questions` DISABLE KEYS */;
-INSERT INTO `questions` VALUES (00000001,1,'Testing','<b>Hello World!</b><div style=\"text-align: left;\">Here is a <i>Test</i> to know is this <u>Text Field</u> is work or not.</div><div style=\"text-align: left;\">Left</div><div style=\"text-align: center;\">Center</div><div style=\"text-align: right;\">Right</div><div style=\"text-align: left;\"><ol><li>Number List</li></ol><ul><li>Bullet List</li></ul><div>Super<sup>script</sup></div><div>Sub<sub>script</sub></div></div>','2020-02-12 22:59:30',NULL,1),(00000002,1,'Student\'s testing','<b>a\'s</b><div style=\"text-align: center;\"><i>b\\s\"</i></div>','2020-02-12 23:18:47',NULL,1),(00000003,1,'Math Question','<img src=\"https://i.insider.com/5a4bdcc6cb9df434008b4577?width=600&amp;format=jpeg&amp;auto=webp\" alt=\"「math question」的圖片\n搜尋結果\"><div>What is the Answer</div>','2020-02-14 22:15:35',NULL,1),(00000004,2,'Mary Question','Past Tenses Question','2020-02-17 21:59:09',NULL,1),(00000005,2,'Mary Question 2','<div style=\"text-align: center;\">Question 2</div><div style=\"text-align: center;\">What is the past tense of run?</div>','2020-02-17 22:02:50',NULL,1),(00000006,1,'Peter Question','<b>Bold</b> means&nbsp;import','2020-02-18 04:49:32',NULL,1),(00000007,2,'Big Question','About Hong Kong.....','2020-02-24 21:13:05',NULL,1);
+INSERT INTO `questions` VALUES (00000001,1,'Testing','<b>Hello World!</b><div style=\"text-align: left;\">Here is a <i>Test</i> to know is this <u>Text Field</u> is work or not.</div><div style=\"text-align: left;\">Left</div><div style=\"text-align: center;\">Center</div><div style=\"text-align: right;\">Right</div><div style=\"text-align: left;\"><ol><li>Number List</li></ol><ul><li>Bullet List</li></ul><div>Super<sup>script</sup></div><div>Sub<sub>script</sub></div></div>','2020-02-12 22:59:30',2,1),(00000002,1,'Student\'s testing','<b>a\'s</b><div style=\"text-align: center;\"><i>b\\s\"</i></div>','2020-02-12 23:18:47',NULL,1),(00000003,1,'Math Question','<img src=\"https://i.insider.com/5a4bdcc6cb9df434008b4577?width=600&amp;format=jpeg&amp;auto=webp\" alt=\"「math question」的圖片\n搜尋結果\"><div>What is the Answer</div>','2020-02-14 22:15:35',2,1),(00000004,2,'Mary Question','Past Tenses Question','2020-02-17 21:59:09',NULL,1),(00000005,2,'Mary Question 2','<div style=\"text-align: center;\">Question 2</div><div style=\"text-align: center;\">What is the past tense of run?</div>','2020-02-17 22:02:50',NULL,1),(00000006,1,'Peter Question','<b>Bold</b> means&nbsp;import','2020-02-18 04:49:32',NULL,1),(00000007,2,'Big Question','About Hong Kong.....','2020-02-24 21:13:05',NULL,1);
 /*!40000 ALTER TABLE `questions` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -565,7 +566,7 @@ CREATE TABLE `users` (
 
 LOCK TABLES `users` WRITE;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
-INSERT INTO `users` VALUES (00000001,'Student01','wong','tai man','peter','m','student','A School',1),(00000002,'Teacher01','chan','man man','mary','f','teacher','B School',1),(00000003,'Admin01','yau','siu fung brian','brian','m','admin','',1),(00000004,'Student02','lee','tai man','ben','m','student','C School',1),(00000005,'Student03','chan','tai man','tommy','m','student','A School',1),(00000006,'Student04','chow','tai man','jimmy','m','student','B School',1),(00000007,'Student05','lee','tai man','tony','m','student','C School',1),(00000008,'Student06','wong','man man','emma','f','student','C School',1),(00000009,'Student07','ng','tai man','john','m','student','D School',1),(00000010,'Student08','cheng','man man','christain','f','student','A School',1),(00000011,'Teacher02','lee','man man','mia','f','teacher','A School',1),(00000012,'Teacher03','ng','tai man','oliver','m','teacher','A School',1),(00000013,'Teacher04','chow','man man','eva','f','teacher','C School',1),(00000014,'Teacher05','wong','tai man','ben','m','teacher','D School',1);
+INSERT INTO `users` VALUES (00000001,'Student01','wong','tai man','peter','m','student','A School',1),(00000002,'teacher1','chan','man man','Mary','f','teacher','B School',1),(00000003,'Admin01','yau','siu fung brian','brian','m','admin','',1),(00000004,'Student02','lee','tai man','ben','m','student','C School',1),(00000005,'Student03','chan','tai man','tommy','m','student','A School',1),(00000006,'Student04','chow','tai man','jimmy','m','student','B School',1),(00000007,'Student05','lee','tai man','tony','m','student','C School',1),(00000008,'Student06','wong','man man','emma','f','student','C School',1),(00000009,'Student07','ng','tai man','john','m','student','D School',1),(00000010,'Student08','cheng','man man','christain','f','student','A School',1),(00000011,'Teacher02','lee','man man','mia','f','teacher','A School',1),(00000012,'Teacher03','ng','tai man','oliver','m','teacher','A School',1),(00000013,'Teacher04','chow','man man','eva','f','teacher','C School',1),(00000014,'Teacher05','wong','tai man','ben','m','teacher','D School',1);
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -578,4 +579,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2020-03-07  5:26:38
+-- Dump completed on 2020-03-08 17:03:00

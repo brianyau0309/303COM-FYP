@@ -2,6 +2,11 @@
 @import "./daypicker.css";
 @import "./calendar.css";
 
+:root {
+  --main-bg-color: repeating-linear-gradient(45deg, #e8f1f957, rgba(255,255,255,.3) 27vh),
+    repeating-linear-gradient(125deg, #e8f1f957, rgba(255,255,255,.3) 27vh);
+}
+
 * {
   margin: 0;
   padding: 0;
@@ -12,7 +17,7 @@ body {
   height: 100vh;
   overflow: hidden;
   font-family: 'Montserrat', sans-serif;
-  background: repeating-linear-gradient(45deg, #e8f1f957, transparent 27vh),repeating-linear-gradient(125deg, #e8f1f957, transparent 27vh);
+  background: var(--main-bg-color)
 }
 
 button {
@@ -284,7 +289,7 @@ pre {
 .TaskResults,
 .TaskResult,
 .Calendar {
-  background: repeating-linear-gradient(45deg, #e8f1f957, transparent 27vh),repeating-linear-gradient(125deg, #e8f1f957, transparent 27vh);
+  background: var(--main-bg-color)
 }
 
 .Question.open,
