@@ -129,18 +129,18 @@ class Classrooms extends React.Component {
         </div>
 
         {this.state.part !== '' ? <div className="coverboard"></div> : null}
-        {this.state.part === 'class' ? <Classroom user_type={this.props.user_type} reload={this.loadClassrooms}/> : null}
-        {this.state.part === 'classMembers' ? <ClassroomMembers user_type={this.props.user_type}/> : null}
+        {this.state.part === 'class' ? <Classroom user_type={this.props.user_type} reload={this.loadClassrooms} userInfoToggle={this.props.userInfoToggle}/> : null}
+        {this.state.part === 'classMembers' ? <ClassroomMembers user_type={this.props.user_type} userInfoToggle={this.props.userInfoToggle}/> : null}
         {this.state.part === 'createTask' ? <CreateTask/> : null}
         {this.state.part === 'tasks' ? <Tasks user_id={this.props.user_id}/> : null}
-        {this.state.part === 'task' ? <Task user_id={this.props.user_id}  user_type={this.props.user_type}/> : null}
+        {this.state.part === 'task' ? <Task user_id={this.props.user_id}  user_type={this.props.user_type} userInfoToggle={this.props.userInfoToggle}/> : null}
         {this.state.part === 'editTask' && this.props.user_type === 'teacher' ? <EditTask/> : null}
         {this.state.part === 'answerTask' && this.props.user_type === 'student' ? <AnswerTask/> : null}
         {this.state.part === 'editAnswer' && this.props.user_type === 'student' ? <EditAnswer/> : null}
         {this.state.part === 'results' && this.props.user_type === 'teacher' ? <TaskResults/> : null}
-        {this.state.part === 'result' ? <TaskResult/> : null}
+        {this.state.part === 'result' ? <TaskResult userInfoToggle={this.props.userInfoToggle}/> : null}
         {this.state.part === 'calendar' || this.state.part === 'date' ? <Calendar user_type={this.props.user_type}/> : null}
-        {this.state.part === 'chat' ? <Chatroom user_id={this.props.user_id}/> : null}
+        {this.state.part === 'chat' ? <Chatroom user_id={this.props.user_id} userInfoToggle={this.props.userInfoToggle}/> : null}
 
       </div>
     )

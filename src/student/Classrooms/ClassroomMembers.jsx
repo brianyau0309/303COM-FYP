@@ -107,8 +107,8 @@ class ClassroomMembers extends React.Component {
             <ul>
               {this.state.ClassroomMembers.map(member => 
                 <li>
-                  <div>ID: {member.user_id}</div>
-                  <div>{member.fullname.toUpperCase()} {member.nickname}</div>
+                  <div onClick={() => this.props.userInfoToggle(member.user_id)}>ID: {member.user_id}</div>
+                  <div onClick={() => this.props.userInfoToggle(member.user_id)}>{member.fullname.toUpperCase()} {member.nickname}</div>
                   <div>Type: {member.user_type}</div>
                   <div>Join Date: {member.join_date}</div>
                   {member.user_type === 'student' && this.props.user_type === 'teacher' ? <button onClick={() => this.kickFromClassroom(member.user_id)}>Kick</button> : null}

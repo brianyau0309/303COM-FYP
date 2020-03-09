@@ -69,7 +69,7 @@ class TaskResult extends React.Component {
             <div>Total Question: {this.state.question_count}</div>
             <ul>
                 {this.state.student_result != null ? 
-                  <li>
+                  <li onClick={() => this.props.userInfoToggle(this.state.student_result.student)}>
                       <div>Student ID: {this.state.student_result.student}</div>
                       <div>Student Name: {this.state.student_result.name}</div>
                       <div>Correct Rate: {Number(this.state.student_result.correct/this.state.question_count*100).toFixed(2)}%({this.state.student_result.correct}/{this.state.question_count})</div>

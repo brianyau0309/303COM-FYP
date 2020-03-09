@@ -156,7 +156,7 @@ export default class Courses extends React.Component {
           </div>
         }
 
-            <Course ref={this.child} user_id={this.props.user_id} loadCourses={this.loadCourses}/>
+            <Course ref={this.child} user_id={this.props.user_id} loadCourses={this.loadCourses} userInfoToggle={this.props.userInfoToggle}/>
       </div>
     )
   }

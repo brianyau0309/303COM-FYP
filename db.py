@@ -70,8 +70,49 @@ SQL = {
     ) c, (
       SELECT COUNT(*) follower
       FROM user_following
-      WHERE user_id = {0}
+      WHERE following = {0}
     ) d
+    ''',
+    'target_info': '''
+    SELECT a.best_answer, b.answer_likes, c.course_num, d.follower, e.following, f.*
+    FROM (
+      SELECT COUNT(*) best_answer
+      FROM questions
+      WHERE solved_by = {0}
+    ) a, (
+      SELECT COUNT(*) answer_likes
+      FROM answer_likes
+      WHERE create_by = {0}
+    ) b, (
+      SELECT COUNT(*) course_num
+      FROM courses
+      WHERE author = {0} AND valid = true
+    ) c, (
+      SELECT COUNT(*) follower
+      FROM user_following
+      WHERE following = {0}
+    ) d, (
+      SELECT COUNT(*) following
+      FROM user_following
+      WHERE user_id = {1} AND following = {0}
+    ) e, (
+        SELECT user_id, nickname, user_type, school
+        FROM users
+        WHERE user_id = {0}
+    ) f
+    ''',
+    'following':'''
+    SELECT *
+    FROM user_following
+    WHERE user_id = {0} AND following = {1}
+    ''',
+    'follow':'''
+    INSERT INTO user_following VALUES
+    ({0}, {1}, '{2}')
+    ''',
+    'unfollow':'''
+    DELETE FROM user_following
+    WHERE user_id = {0} AND following = {1}
     ''',
     'questions_new': '''
     SELECT a.question_id, a.title, b.nickname, b.user_type, a.create_date, a.solved_by
@@ -576,5 +617,19 @@ SQL = {
     'send_message': '''
     INSERT INTO chatroom VALUES
     ({0}, {1}, {2}, '{3}','{4}')
-    '''
+    ''',
+    'notification': '''
+    SELECT b.course_id, b.title, b.author, b.create_date, c.nickname, d.collection
+    FROM user_following a
+      INNER JOIN courses b ON a.following = b.author
+      INNER JOIN users c ON b.author = c.user_id
+      LEFT JOIN (
+        SELECT course, COUNT(*) collection
+        FROM course_collection
+        WHERE user_id = {0}
+        GROUP BY course
+      ) d ON b.course_id = d.course
+    WHERE a.user_id = {0} AND b.create_date > a.follow_date
+    LIMIT 50
+    ''',
 }

@@ -91,7 +91,7 @@ class Chatroom extends React.Component {
         </div>
         <ul>
           {this.state.messages.map(message => 
-            <li>
+            <li onClick={() => this.props.userInfoToggle(message.member)}>
               <div>{message.nickname} Date:{message.date ? new Date(message.date).toISOString().split('T')[0] : null} {message.date ? new Date(message.date).toISOString().split('T')[1].split('.')[0] : null}</div>
               <div>{message.message}</div>
             </li>

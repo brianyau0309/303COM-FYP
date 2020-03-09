@@ -50,7 +50,7 @@ export default class QuestionCollection extends React.Component {
           )}
         </ul>
         <div style={{textAlign: 'center'}}>--- Bottom ---</div>
-        <Question ref={this.child} user_id={this.props.user_id} loadQuestions={this.loadQuestionCollection}/>
+        <Question ref={this.child} user_id={this.props.user_id} loadQuestions={this.loadQuestionCollection} userInfoToggle={this.props.userInfoToggle}/>
       </div>
     )
   }

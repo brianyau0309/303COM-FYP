@@ -52,7 +52,7 @@ export default class CourseCollection extends React.Component {
           )}
         </ul>
 
-        <Course ref={this.child} user_id={this.props.user_id} loadCourses={this.loadCourses}/>
+        <Course ref={this.child} user_id={this.props.user_id} loadCourses={this.loadCourses} userInfoToggle={this.props.userInfoToggle}/>
       </div>
     )
   }

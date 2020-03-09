@@ -70,6 +70,7 @@ def logout():
 #
 # User API
 #
+
 @app.route('/api/user_data', methods=['GET', 'PUT'])
 def api_user_data():
     if session.get('user') != None:
@@ -111,12 +112,11 @@ def api_setting():
                 user_info = db.exe_fetch(SQL['user_info'].format(user))
                 return jsonify({'user_info': user_info})
             else:
-                user_info = db.exe_fetch(SQL['user_info'].format(target))
-                return jsonify({'user_info': user_info})
+                target_info = db.exe_fetch(SQL['target_info'].format(target, user))
+                return jsonify({'target_info': target_info})
 
         elif request.method == 'POST':
             file = request.files['icon']
-            print(request.files)
             if file:
                 filename = secure_filename(file.filename)
                 file.save(os.path.join(app.config['UPLOAD_ICON_FOLDER'], str(user)+'.png'))
@@ -129,6 +129,23 @@ def api_setting():
 
     return jsonify({'result': 'Error'})
 
+@app.route('/api/user_follow', methods=['POST'])
+def api_user_follow():
+    if session.get('user') != None:
+        user = session.get('user')
+        target = request.args.get('target')
+        if request.method == 'POST' and target != None:
+            following = db.exe_fetch(SQL['following'].format(user, target))
+            now = datetime.now().strftime('%Y/%m/%d %H:%M:%S')
+            if following:
+                db.exe_commit(SQL['unfollow'].format(user, target))
+                return jsonify({ 'user_follow': "Success" })
+            else:
+                db.exe_commit(SQL['follow'].format(user, target, now))
+                return jsonify({ 'user_unfollow': "Success" })
+
+
+    return jsonify({'result': 'Error'})
 
 #
 # Questions API
@@ -1165,6 +1182,20 @@ def api_chatroom():
                     db.exe_commit(SQL['send_message'].format(classroom, message_num, user, message, now))
                     socketio.emit('reloadMessage', { 'room': 'class'+classroom})
                     return jsonify({ 'send_messags': 'Success' })
+
+    return jsonify({'result': 'Error'})
+
+#
+# Notification API
+#
+
+@app.route('/api/notification')
+def api_notification():
+    if session.get('user') != None:
+        user = session.get('user')
+        if request.method == 'GET':
+            notification = db.exe_fetch(SQL['notification'].format(user), 'all')
+            return jsonify({ 'notification': notification })
 
     return jsonify({'result': 'Error'})
 

@@ -2,6 +2,7 @@ import React from 'react'
 import { BrowserRouter as Router, Route, Redirect, Switch } from 'react-router-dom'
 
 import Nav from './Nav.jsx'
+import UserInfo from './UserInfo.jsx'
 
 import Courses from './Courses/Courses.jsx'
 import CreateCourse from './Courses/CreateCourse.jsx'
@@ -24,11 +25,13 @@ export default class Student extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      'nav': false,
+      'nav': false, 'userInfo': false,
       'user_data': {},
     }
+    this.child = React.createRef()
     this.navToggle = this.navToggle.bind(this)
     this.loadUser = this.loadUser.bind(this)
+    this.userInfoToggle = this.userInfoToggle.bind(this)
   }
 
   componentDidMount() {
@@ -49,6 +52,16 @@ export default class Student extends React.Component {
     })
   }
 
+  userInfoToggle(target) {
+    if (this.state.userInfo) {
+      this.setState({ 'userInfo': false })
+    } else {
+      this.setState({ 'userInfo': true }, () => {
+        this.child.current.loadUserInfo(target)
+      })
+    }
+  }
+
   render() {
     let imgLink = window.location.origin + "/static/images/"
     let Header = (props) => (<div className="header">
@@ -61,13 +74,14 @@ export default class Student extends React.Component {
         <Router>
           <div id="main">
             <Nav nav={this.state.nav} navToggle={this.navToggle}/>
+            {this.state.userInfo ? <UserInfo ref={this.child} user_id={this.state.user_data.user_id} openToggle={this.userInfoToggle}/> : null}
             <Switch>
               <Route path="/courses/collection">
                 <div className="header">
                   <img className="header-icon" src={imgBack} onClick={() => window.history.back()}/>
                   <span>My Collection</span>
                 </div>
-                <CourseCollection/>
+                <CourseCollection userInfoToggle={this.userInfoToggle}/>
               </Route>
               {this.state.user_data.user_type === 'teacher' ?
                 <Route path="/courses/my">
@@ -75,7 +89,7 @@ export default class Student extends React.Component {
                     <img className="header-icon" src={imgBack} onClick={() => window.history.back()}/>
                     <span>My Courses</span>
                   </div>
-                  <MyCourses/>
+                  <MyCourses userInfoToggle={this.userInfoToggle}/>
                 </Route>
               : null}
               {this.state.user_data.user_type === 'teacher' ?
@@ -89,7 +103,7 @@ export default class Student extends React.Component {
               : null}
               <Route path="/courses">
                 <Header title='Courses'/>
-                <Courses user_type={this.state.user_data.user_type} user_id={this.state.user_data.user_id}/>
+                <Courses user_type={this.state.user_data.user_type} user_id={this.state.user_data.user_id} userInfoToggle={this.userInfoToggle}/>
               </Route>
 
               <Route path="/questions/my">
@@ -97,14 +111,14 @@ export default class Student extends React.Component {
                   <img className="header-icon" src={imgBack} onClick={() => window.history.back()}/>
                   <span>My Questions</span>
                 </div>
-                <MyQuestions/>
+                <MyQuestions userInfoToggle={this.userInfoToggle}/>
               </Route>
               <Route path="/questions/collection">
                 <div className="header">
                   <img className="header-icon" src={imgBack} onClick={() => window.history.back()}/>
                   <span>My Collection</span>
                 </div>
-                <QuestionCollection/>
+                <QuestionCollection userInfoToggle={this.userInfoToggle}/>
               </Route>
               <Route path="/questions/create">
                 <div className="header">
@@ -115,74 +129,74 @@ export default class Student extends React.Component {
               </Route>
               <Route path="/questions">
                 <Header title='Questions'/>
-                <Questions user_id={this.state.user_data.user_id}/>
+                <Questions user_id={this.state.user_data.user_id} userInfoToggle={this.userInfoToggle}/>
               </Route>
 
               <Route path="/classrooms/:class/chat">
                 <Header title='Classrooms'/>
-                <Classrooms user_type={this.state.user_data.user_type} user_id={this.state.user_data.user_id}/>
+                <Classrooms user_type={this.state.user_data.user_type} user_id={this.state.user_data.user_id} userInfoToggle={this.userInfoToggle}/>
               </Route>
               <Route path="/classrooms/:class/calendar/:date">
                 <Header title='Classrooms'/>
-                <Classrooms user_type={this.state.user_data.user_type} user_id={this.state.user_data.user_id}/>
+                <Classrooms user_type={this.state.user_data.user_type} user_id={this.state.user_data.user_id} userInfoToggle={this.userInfoToggle}/>
               </Route>
               <Route path="/classrooms/:class/calendar">
                 <Header title='Classrooms'/>
-                <Classrooms user_type={this.state.user_data.user_type} user_id={this.state.user_data.user_id}/>
+                <Classrooms user_type={this.state.user_data.user_type} user_id={this.state.user_data.user_id} userInfoToggle={this.userInfoToggle}/>
               </Route>
               {this.state.user_data.user_type === 'teacher' ?
                 <Route path="/classrooms/:class/create_task">
                   <Header title='Classrooms'/>
-                  <Classrooms user_type={this.state.user_data.user_type} user_id={this.state.user_data.user_id}/>
+                  <Classrooms user_type={this.state.user_data.user_type} user_id={this.state.user_data.user_id} userInfoToggle={this.userInfoToggle}/>
                 </Route>
               : null}
               {this.state.user_data.user_type === 'teacher' ?
                 <Route path="/classrooms/:class/tasks/:task/edit">
                   <Header title='Classrooms'/>
-                  <Classrooms user_type={this.state.user_data.user_type} user_id={this.state.user_data.user_id}/>
+                  <Classrooms user_type={this.state.user_data.user_type} user_id={this.state.user_data.user_id} userInfoToggle={this.userInfoToggle}/>
                 </Route>
               : null}
               <Route path="/classrooms/:class/tasks/:task/results/:student">
                 <Header title='Classrooms'/>
-                <Classrooms user_type={this.state.user_data.user_type} user_id={this.state.user_data.user_id}/>
+                <Classrooms user_type={this.state.user_data.user_type} user_id={this.state.user_data.user_id} userInfoToggle={this.userInfoToggle}/>
               </Route>
               {this.state.user_data.user_type === 'teacher' ?
                 <Route path="/classrooms/:class/tasks/:task/results">
                   <Header title='Classrooms'/>
-                  <Classrooms user_type={this.state.user_data.user_type} user_id={this.state.user_data.user_id}/>
+                  <Classrooms user_type={this.state.user_data.user_type} user_id={this.state.user_data.user_id} userInfoToggle={this.userInfoToggle}/>
                 </Route>
               : null}
               {this.state.user_data.user_type === 'student' ?
                 <Route path="/classrooms/:class/tasks/:task/edit_answer/:student">
                   <Header title='Classrooms'/>
-                  <Classrooms user_type={this.state.user_data.user_type} user_id={this.state.user_data.user_id}/>
+                  <Classrooms user_type={this.state.user_data.user_type} user_id={this.state.user_data.user_id} userInfoToggle={this.userInfoToggle}/>
                 </Route>
               : null}
               {this.state.user_data.user_type === 'student' ?
                 <Route path="/classrooms/:class/tasks/:task/answer">
                   <Header title='Classrooms'/>
-                  <Classrooms user_type={this.state.user_data.user_type} user_id={this.state.user_data.user_id}/>
+                  <Classrooms user_type={this.state.user_data.user_type} user_id={this.state.user_data.user_id} userInfoToggle={this.userInfoToggle}/>
                 </Route>
               : null}
               <Route path="/classrooms/:class/tasks/:task">
                 <Header title='Classrooms'/>
-                <Classrooms user_type={this.state.user_data.user_type} user_id={this.state.user_data.user_id}/>
+                <Classrooms user_type={this.state.user_data.user_type} user_id={this.state.user_data.user_id} userInfoToggle={this.userInfoToggle}/>
               </Route>
               <Route path="/classrooms/:class/tasks">
                 <Header title='Classrooms'/>
-                <Classrooms user_type={this.state.user_data.user_type} user_id={this.state.user_data.user_id}/>
+                <Classrooms user_type={this.state.user_data.user_type} user_id={this.state.user_data.user_id} userInfoToggle={this.userInfoToggle}/>
               </Route>
               <Route path="/classrooms/:class/members">
                 <Header title='Classrooms'/>
-                <Classrooms user_type={this.state.user_data.user_type} user_id={this.state.user_data.user_id}/>
+                <Classrooms user_type={this.state.user_data.user_type} user_id={this.state.user_data.user_id} userInfoToggle={this.userInfoToggle}/>
               </Route>
               <Route path="/classrooms/:class">
                 <Header title='Classrooms'/>
-                <Classrooms user_type={this.state.user_data.user_type} user_id={this.state.user_data.user_id}/>
+                <Classrooms user_type={this.state.user_data.user_type} user_id={this.state.user_data.user_id} userInfoToggle={this.userInfoToggle}/>
               </Route>
               <Route path="/classrooms">
                 <Header title='Classrooms'/>
-                <Classrooms user_type={this.state.user_data.user_type} user_id={this.state.user_data.user_id}/>
+                <Classrooms user_type={this.state.user_data.user_type} user_id={this.state.user_data.user_id} userInfoToggle={this.userInfoToggle}/>
               </Route>
 
               <Route path="/notification">
@@ -198,6 +212,6 @@ export default class Student extends React.Component {
           </div>
         </Router>
       </div>
-    );
+    )
   }
 }

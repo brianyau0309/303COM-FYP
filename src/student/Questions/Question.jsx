@@ -12,7 +12,7 @@ export default class Question extends React.Component {
     this.state = {
       'open': false, 'answerField': false, 'deleteQuestion': false,
       'canAnswer': false, 'myQuestion': false, 'isCollection': false,
-      'question_id': '', 'title': '', 'create_by': '', 'detail': '', 'solved_by': 0,
+      'question_id': '', 'title': '', 'create_by': '', 'nickname': '', 'detail': '', 'solved_by': 0,
       'answers': []
     }
     this.child = React.createRef()
@@ -76,7 +76,8 @@ export default class Question extends React.Component {
             'deleteQuestion': false,
             'question_id': result.question.question_id,
             'title': result.question.title, 
-            'create_by': result.question.nickname,
+            'create_by': result.question.create_by,
+            'nickname': result.question.nickname,
             'detail': result.question.detail,
             'solved_by': result.question.solved_by
           })
@@ -229,7 +230,7 @@ export default class Question extends React.Component {
         
         <div className="Question-detail">
           <div>{this.state.title}</div>
-          <div>{this.state.create_by}</div>
+          <div onClick={() => this.props.userInfoToggle(this.state.create_by)}>{this.state.nickname}</div>
           <div className="question_detail" dangerouslySetInnerHTML={{__html: this.state.detail}}></div>
 
           {this.state.myQuestion ? 
@@ -253,7 +254,7 @@ export default class Question extends React.Component {
                   <div>
                     <div>Best Answer</div>
                     <div dangerouslySetInnerHTML={{__html: a.answer}}></div>
-                    <div>{a.nickname}</div>
+                    <div onClick={() => this.props.userInfoToggle(a.create_by)}>{a.nickname}</div>
                     <div>{a.create_date}</div>
                     <div>Likes: {a.likes}</div>
                     { a.user_liked ? 
@@ -282,7 +283,7 @@ export default class Question extends React.Component {
                return(
                  <div>
                    <div dangerouslySetInnerHTML={{__html: a.answer}}></div>
-                   <div>{a.nickname}</div>
+                   <div onClick={() => this.props.userInfoToggle(a.create_by)}>{a.nickname}</div>
                    <div>{a.create_date}</div>
                    <div>Likes: {a.likes ? a.likes : 0}</div>
                    { a.user_liked ? 

@@ -16,7 +16,7 @@ export default class Course extends React.Component {
     this.state = {
       'open': false, 'commentField': false, 'deleteCourse': false,
       'canComment': false, 'myCourse': false, 'isCollection': false,
-      'course_id': '', 'title': '', 'author': '', 'description': '',
+      'course_id': '', 'title': '', 'author': '', 'nickname': '', 'description': '',
       'commentRate': 5,
       'lessons': [],'comments': [], 'tags': []
     }
@@ -86,7 +86,8 @@ export default class Course extends React.Component {
             'deleteCourse': false,
             'course_id': result.course.course_id,
             'title': result.course.title, 
-            'author': result.course.nickname,
+            'author': result.course.author,
+            'nickname': result.course.nickname,
             'description': result.course.description,
             'tags': result.course.tags,
             'avg_rate': result.course.avg_rate,
@@ -231,7 +232,7 @@ export default class Course extends React.Component {
         
         <div className="Course-detail">
           <div>{this.state.title}</div>
-          <div>{this.state.author}</div>
+          <div onClick={() => this.props.userInfoToggle(this.state.author)}>{this.state.nickname}</div>
           <div className="course_description" dangerouslySetInnerHTML={{__html: this.state.description}}></div>
           <div>Tags: {this.state.tags.map(t => t+' ')}</div>
         </div>
@@ -282,7 +283,7 @@ export default class Course extends React.Component {
            if (c.create_by !== this.state.solved_by) {
              return(
                <div>
-                 <div>{c.nickname}</div>
+                 <div onClick={() => this.props.userInfoToggle(c.create_by)}>{c.nickname}</div>
                  {[...Array(5).keys()].map(i => 
                    (c.rating < i+1 ? 
                      <img src={imgEmptyStar}/> 

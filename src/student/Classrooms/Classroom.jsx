@@ -128,7 +128,7 @@ class Classroom extends React.Component {
             : null }
             <div>
               <div>{this.state.name}</div>
-              <div>{this.state.nickname}</div>
+              <div onClick={() => this.props.userInfoToggle(this.state.create_by)}>{this.state.nickname}</div>
               <div><pre style={{fontFamily: 'inherit'}}>{this.state.description}</pre></div>
               <div>{this.state.create_date}</div>
             </div>
