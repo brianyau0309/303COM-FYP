@@ -41,13 +41,12 @@ export default class CourseCollection extends React.Component {
   render() {
     return (
       <div className="CourseCollection content">
-        <ul className='courses-list'>
+        <ul className='course-list'>
           {this.state.CourseCollection.map(c => 
             <li onClick={() => this.callCourse(c.course_id)}>
               <h4>{c.title}</h4>
-              <h6>{c.nickname}</h6>
+              <h6>Author: {c.nickname} <span>{new Date(c.create_date).toISOString().split('T')[0]} {new Date(c.create_date).toISOString().split('T')[1].split('.')[0]}</span></h6>
               <div dangerouslySetInnerHTML={{__html: c.description}}></div>
-              <h6>{c.create_date}</h6>
             </li>
           )}
         </ul>

@@ -233,7 +233,7 @@ SQL = {
     SELECT a.course_id, a.title, a.description, b.nickname, a.create_date
     FROM courses a, users b
     WHERE a.author = b.user_id AND a.valid = true AND b.valid = true
-    ORDER BY a.create_date
+    ORDER BY a.create_date DESC
     LIMIT 5
     ''',
     'courses_hot': '''
@@ -268,19 +268,19 @@ SQL = {
     LIMIT 1
     ''',
     'search_courses_by_title': '''
-    SELECT a.course_id, a.author, a.title, a.create_date, b.nickname
+    SELECT a.course_id, a.author, a.title, a.description, a.create_date, b.nickname
     FROM courses a, users b
     WHERE a.author = b.user_id AND a.valid = true AND b.valid = true AND LOWER(a.title) LIKE LOWER('%{0}%')
     ORDER BY a.create_date
     ''',
     'search_courses_by_author': '''
-    SELECT a.course_id, a.author, a.title, a.create_date, b.nickname
+    SELECT a.course_id, a.author, a.title, a.description, a.create_date, b.nickname
     FROM courses a, users b
     WHERE a.author = b.user_id AND a.valid = true AND b.valid = true AND LOWER(b.nickname) LIKE LOWER('%{0}%')
     ORDER BY a.create_date
     ''',
     'search_courses_by_tags': '''
-    SELECT a.course_id, a.author, a.title, a.create_date, b.nickname, c.relevant
+    SELECT a.course_id, a.author, a.title, a.description, a.create_date, b.nickname, c.relevant
     FROM courses a
       INNER JOIN users b ON a.author = b.user_id
       INNER JOIN (
@@ -324,12 +324,12 @@ SQL = {
     WHERE course = {0}
     ''',
     'course_collection': '''
-    SELECT a.course_id, a.author, a.title, a.create_date, b.nickname
+    SELECT a.course_id, a.author, a.title, a.description, a.create_date, b.nickname
     FROM courses a, users b, course_collection c
     WHERE a.author = b.user_id AND a.course_id = c.course AND c.user_id = {0} AND a.valid = true AND b.valid = true
     ''',
     'my_courses': '''
-    SELECT a.course_id, a.author, a.title, a.create_date, b.nickname
+    SELECT a.course_id, a.author, a.title, a.description, a.create_date, b.nickname
     FROM courses a, users b
     WHERE a.author = b.user_id AND a.author = {0} AND a.valid = true AND b.valid = true
     ''',

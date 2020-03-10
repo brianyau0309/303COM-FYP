@@ -3,8 +3,18 @@
 @import "./calendar.css";
 
 :root {
-  --main-bg-color: repeating-linear-gradient(45deg, #e8f1f957, rgba(255,255,255,.3) 27vh),
-    repeating-linear-gradient(125deg, #e8f1f957, rgba(255,255,255,.3) 27vh);
+  --main-bg-color: repeating-linear-gradient(45deg, rgba(232, 241, 249, 0.6), rgba(255,255,255,.3) 27vh),
+    repeating-linear-gradient(125deg, rgba(232, 241, 249, 0.6), rgba(255,255,255,.3) 27vh);
+  --main-color-lightblue: rgba(173, 216, 230, .5);
+  --main-color-lightblack: rgba(44,44,44);
+}
+
+::-webkit-scrollbar {
+width: 2px;
+}
+
+::-webkit-scrollbar-thumb {
+background: var(--main-color-lightblue)
 }
 
 * {
@@ -26,6 +36,12 @@ button {
   border: 0;
   padding: 0;
   background-color: inherit;
+}
+
+hr {
+  border: 0;
+  height: 1px;
+  background-image: linear-gradient(to right, rgba(0,0,0,0), rgba(44,44,44,0.75), rgba(0,0,0,0));
 }
 
 pre {
@@ -79,6 +95,11 @@ pre {
   grid-area: content;
   height: 93vh;
   overflow-y: scroll;
+}
+
+.sticky-top {
+  position: sticky;
+  top: 0;
 }
 
 #nav {
@@ -161,22 +182,128 @@ pre {
   padding: 1vh;
 }
 
-.Courses .course-list li,
-.Questions .question-list li {
-  margin: 3px 0;
-  padding: 0 1vh;
-  border-top: 1px solid lightgray;
-  border-bottom: 1px solid lightgray;
+.search-panel {
+  width: 98%;
+  height: 6vh;
+  margin: 1vh auto;
+  background: var(--main-color-lightblue);
+  color: var(--main-color-lightblack);
+  border-radius: 10px;
+  display: grid;
+  grid-template-columns: 20% 1fr 20%;
 }
 
-.Courses .course-list a,
+.search-panel > * {
+  border: none;
+  font-size: 2.5vh;
+  height: 100%;
+}
+
+.search-panel > select {
+  border-top-left-radius: 10px;
+  border-bottom-left-radius: 10px;
+}
+
+.search-panel > span {
+  height: auto;
+  align-self: center;
+  justify-self: center;
+  cursor: pointer;
+}
+
+.Courses .option {
+  text-decoration: none;
+  color: var(--main-color-lightblack);
+}
+
+.Courses .option div {
+  margin: .5vh auto;
+  width: 98%;
+  height: 4vh;
+  background: var(--main-color-lightblue);
+  border-radius: 10px;
+  font-size: 3vh;
+  text-align: center;
+}
+
+.Courses .option div:hover {
+  opacity: .8;
+}
+
+.Questions h1.title,
+.Courses h1.title {
+  text-align: center;
+  font-size: 4vh;
+  color: var(--main-color-lightblack);
+  margin-top: 2vh;
+}
+
+.Questions h1.title img,
+.Courses h1.title img {
+  width: 5vh;
+  height: 5vh;
+  float: left;
+  padding-left: 5px;
+  vertical-align: middle;
+}
+
+.course-list,
+.Questions .question-list {
+  list-style: none;
+}
+
+.course-list li,
+.Questions .question-list li {
+  margin: 1vh auto;
+  padding: 1vh 2vh;
+  width: 90%;
+  border-radius: 10px;
+  background: var(--main-color-lightblue);
+  color: var(--main-color-lightblack);
+  cursor: pointer;
+}
+
+.course-list li:hover,
+.Questions .question-list li:hover {
+  opacity: .8;
+}
+
+.course-list a,
 .Questions .question-list a {
   text-decoration: none;
   color: inherit;
 }
 
-.Courses .course-list img {
+.course-list img {
   display: none;
+}
+
+.course-list li > h4,
+.Questions .question-list li > h4 {
+  font-size: 2.5vh;
+}
+
+.course-list li > h6,
+.Questions .question-list li > h6 {
+  font-size: 1.8vh;
+}
+
+.course-list li > h6 > span,
+.Questions .question-list li > h6 > span {
+  float: right;
+}
+
+.course-list li > div {
+  padding: 0 1vw;
+  font-size: 2vh;
+}
+
+.Questions .question-list li > h6.solved {
+  color: green;
+}
+
+.Questions .question-list li > h6.not-solved {
+  color: red;
 }
 
 .Question .TextEditor > .EditorPanel {
@@ -213,13 +340,14 @@ pre {
   border: 1px inset lightgray;
 }
 
-.Question .course_description img,
+.course-detail .description img,
 .Question .question_detail img {
   width: 80%;
   height: auto;
   display: block;
 }
 
+.CreateCourses > input,
 .CreateQuestions > input {
   display: block;
   width: 96%;
@@ -228,6 +356,8 @@ pre {
   border: 1px solid gray;
 }
 
+.Course .comments-header .TextEditor .EditorPanel,
+.CreateCourses> .TextEditor > .EditorPanel,
 .CreateQuestions> .TextEditor > .EditorPanel {
   width: 96%;
   margin: 0 auto;
@@ -235,23 +365,34 @@ pre {
   border-bottom: none;
 }
 
+.Course .comments-header .TextEditor .EditorPanel > button,
+.CreateCourses> .TextEditor > .EditorPanel > button,
 .CreateQuestions> .TextEditor > .EditorPanel > button {
-  margin: 1vh .95vh;
+  margin: 1vh .94vh;
   border: 1px solid transparent;
   width: 3vh;
   height: 3vh;
   cursor: pointer;
 }
+.Course .comments-header .TextEditor .EditorPanel > button {
+  margin: 1vh .89vh;
+}
 
+.Course .comments-header .TextEditor .EditorPanel > button:hover,
+.CreateCourses > .TextEditor > .EditorPanel > button:hover,
 .CreateQuestions > .TextEditor > .EditorPanel > button:hover {
   border: 1px solid lightgray;
 }
 
+.Course .comments-header .TextEditor .EditorPanel > button > img,
+.CreateCourses > .TextEditor > .EditorPanel > button > img,
 .CreateQuestions > .TextEditor > .EditorPanel > button > img {
   width: 100%;
   height: 100%;
 }
 
+.Course .comments-header .TextEditor > iframe,
+.CreateCourses > .TextEditor > iframe,
 .CreateQuestions > .TextEditor > iframe {
   display: block;
   font-size: 2vh;
@@ -262,6 +403,30 @@ pre {
   border: 1px inset lightgray;
 }
 
+.CreateCourses > .TextEditor > iframe {
+  height: 35vh;
+}
+.Course .comments-header .TextEditor > iframe {
+  height: 15vh;
+}
+
+.CreateCourses ol {
+  height: 32vh;
+  overflow-y: scroll;
+}
+
+.CreateCourses ol > li {
+  margin: 1vh 5vh;
+}
+
+.CreateCourses img.add,
+.CreateCourses img.minus {
+  width: 5vh;
+  height: 5vh;
+  vertical-align: middle;
+}
+
+.CreateCourses > .submit,
 .CreateQuestions > .submit {
   width: 96%;
   font-size: 3vh;
@@ -273,6 +438,142 @@ pre {
   cursor: pointer;
 }
 
+.Course {
+  overflow-x: hidden;
+  color: var(--main-color-lightblack)
+}
+
+.course-detail,
+.lesson-panel {
+  width: 98%;
+  margin: 1vh auto;
+  border-radius: 10px;
+  padding: 1vh 0;
+  background: var(--main-color-lightblue)
+}
+
+.course-detail > .title {
+  padding: 0 1.5vh;
+  font-weight: bold;
+  font-size: 3.5vh;
+}
+
+.course-detail > .author {
+  font-size: 2.5vh;
+  padding: 0 1.5vh;
+}
+
+.course-detail > .description {
+  font-size: 3vh;
+  padding: 0 2.5vh;
+  margin: 2vh auto;
+}
+
+.course-detail > .tags {
+  font-size: 2.5vh;
+  padding: 0 1.5vh;
+}
+
+.lesson-panel > .lesson {
+  margin: 1vh 0;
+  font-size: 3vh;
+  padding: 0 1.5vh;
+  cursor: pointer;
+}
+
+.lesson-panel > .lesson:hover {
+  opacity: 0.8;
+}
+
+.course-btn-panel {
+  width: 98%;
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: center;
+  text-align: center;
+  font-size: 3vh;
+  margin: auto;
+}
+.course-btn-panel > div {
+  width: 99%;
+}
+.course-btn-panel div {
+  border-radius: 10px;
+  padding: 1vh 2vh;
+  margin: .5vh 0;
+}
+.comment-list .flex,
+.course-btn-panel > .flex {
+  display: flex;
+  flex-flow: row wrap;
+  padding: 0;
+}
+.course-btn-panel > .flex > div {
+  padding: 1vh 0;
+  width: 49%;
+}
+.course-btn-panel .create {
+  background: lightgreen;
+}
+.comment-list .edit,
+.course-btn-panel .edit {
+  margin: 0 .5vh 0 0;
+  background: yellow;
+}
+.comment-list .delete,
+.course-btn-panel .delete {
+  margin: 0 0 0 .5vh;
+  background: red;
+}
+.course-btn-panel .rate {
+  background: var(--main-color-lightblue);
+}
+.course-btn-panel .collection.add {
+  background: lightgreen;
+}
+.course-btn-panel .collection.remove {
+  background: red;
+}
+.comments-header {
+  width: 98%;
+  margin: 1vh auto;
+  border-radius: 10px;
+  text-align: center;
+  padding: 1vh 0;
+  background: var(--main-color-lightblue);
+  font-weight: bold;
+  font-size: 3vh;
+}
+.comment-list {
+  width: 98%;
+  margin: 0 auto;
+  padding: 1vh 0;
+  font-size: 2.5vh;
+}
+.comment-list li {
+  text-align: left;
+  padding: 1vh;
+  background: var(--main-color-lightblue);
+  border-radius: 10px;
+  margin-bottom: 1vh;
+}
+.comments-header img,
+.comment-list img {
+  width: 5vh;
+  height: 5vh;
+  vertical-align: middle;
+}
+.comment-list .flex {
+  width: 90%;
+  margin: 0 auto;
+}
+.comment-list .flex > div {
+  text-align: center;
+  padding: 1vh;
+  border-radius: 10px;
+  padding: 1vh 0;
+  width: 48%;
+}
 .Question,
 .Course,
 .EditCourse,
@@ -303,8 +604,6 @@ pre {
   transition: top .2s;
 }
 
-.Calendar.hide {
-}
 .coverboard {
   background: white;
 }
@@ -375,6 +674,68 @@ pre {
 .task_answer_toggle.yes {
   background-color: green;
 }
+
 .task_answer_toggle.no{
   background-color: lightgray;
 }
+
+.success_page {
+  top: 7vh;
+  left: 0;
+  position: absolute;
+  width: 100%;
+  height: 100vh;
+  background: white;
+  display: flex;
+  text-align: center;
+  flex-flow: column;
+  justify-content: center;
+  background: whitesmoke;
+}
+
+.success_page > div {
+  font-size: 5vh;
+  margin-bottom: 5vh;
+  color: green;
+  font-weight: bold;
+}
+
+.success_page > a {
+  display: block;
+  font-size: 3vh;
+  margin-bottom: 25vh;
+  text-decoration: none;
+  color: var(--main-color-lightblack);
+}
+
+.success_page > a > div {
+  margin: .5vh auto;
+  width: 60%;
+  height: 4vh;
+  background: var(--main-color-lightblue);
+  border-radius: 10px;
+  font-size: 3vh;
+  text-align: center;
+  padding: 2.5vh 1.5vh;
+}
+
+.success_page .btn {
+  display: block;
+  margin: .5vh auto;
+  margin-bottom: 25vh;
+  text-decoration: none;
+  color: var(--main-color-lightblack);
+  width: 60%;
+  height: 4vh;
+  background: var(--main-color-lightblue);
+  border-radius: 10px;
+  font-size: 3vh;
+  text-align: center;
+  padding: 2.5vh 1.5vh;
+}
+
+.success_page .btn:hover,
+.success_page > a > div:hover {
+  opacity: .8;
+}
+

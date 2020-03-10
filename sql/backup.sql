@@ -233,7 +233,7 @@ CREATE TABLE `courses` (
   PRIMARY KEY (`course_id`),
   KEY `author` (`author`),
   CONSTRAINT `courses_ibfk_1` FOREIGN KEY (`author`) REFERENCES `users` (`user_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -242,7 +242,7 @@ CREATE TABLE `courses` (
 
 LOCK TABLES `courses` WRITE;
 /*!40000 ALTER TABLE `courses` DISABLE KEYS */;
-INSERT INTO `courses` VALUES (00000001,2,'DSE Math Prictice.','<b>DSE</b> Math question for F5 and F6 student to practice.<div>with Video.</div>','2020-02-20 23:05:53',1),(00000002,11,'English Course','Tenses Exercise for F1-F3 Student.','2020-02-21 20:43:27',1),(00000003,2,'Course 02','Course about Testing','2020-02-24 20:59:25',1),(00000004,2,'Course 3','<strike>For Testing</strike>','2020-02-24 21:02:39',0),(00000005,2,'Course 3','<strike>For Testing</strike>','2020-02-24 21:04:52',0),(00000006,2,'Course 3','<strike>For Testing</strike>','2020-02-24 21:05:19',0),(00000007,2,'Course 03','<i>For Testing!</i>','2020-02-24 21:10:39',1),(00000008,2,'Course for test Notification','For Testing','2020-03-09 18:19:56',1),(00000009,2,'Testing Notice','Testing','2020-03-09 18:26:34',1);
+INSERT INTO `courses` VALUES (00000001,2,'DSE Math Prictice.','<b>DSE</b> Math question for F5 and F6 student to practice.<div>with Video.</div>','2020-02-20 23:05:53',1),(00000002,11,'English Course','Tenses Exercise for F1-F3 Student.','2020-02-21 20:43:27',1),(00000003,2,'Course 02','Course about Testing','2020-02-24 20:59:25',1),(00000004,2,'Course 3','<strike>For Testing</strike>','2020-02-24 21:02:39',0),(00000005,2,'Course 3','<strike>For Testing</strike>','2020-02-24 21:04:52',0),(00000006,2,'Course 3','<strike>For Testing</strike>','2020-02-24 21:05:19',0),(00000007,2,'Course 03','<i>For Testing!</i>','2020-02-24 21:10:39',1),(00000008,2,'Course for test Notification','For Testing','2020-03-09 18:19:56',1),(00000009,2,'Testing Notice','Testing','2020-03-09 18:26:34',1),(00000010,2,'For Delete','h1','2020-03-10 19:58:34',0),(00000011,12,'Oliver Course','DSE Course','2020-03-10 22:39:36',1);
 /*!40000 ALTER TABLE `courses` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -273,7 +273,7 @@ CREATE TABLE `courses_comments` (
 
 LOCK TABLES `courses_comments` WRITE;
 /*!40000 ALTER TABLE `courses_comments` DISABLE KEYS */;
-INSERT INTO `courses_comments` VALUES (2,2,'I like it!',5,1,'2020-02-24 20:54:02');
+INSERT INTO `courses_comments` VALUES (2,2,'Hello',5,1,'2020-03-10 22:10:54');
 /*!40000 ALTER TABLE `courses_comments` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -298,7 +298,7 @@ CREATE TABLE `courses_tags` (
 
 LOCK TABLES `courses_tags` WRITE;
 /*!40000 ALTER TABLE `courses_tags` DISABLE KEYS */;
-INSERT INTO `courses_tags` VALUES (1,'DSE'),(1,'F5'),(1,'F6'),(1,'Math'),(2,'English'),(2,'F1'),(2,'F2'),(2,'F3'),(2,'Tenses'),(3,'A'),(3,'B'),(7,'A'),(7,'B'),(7,'C'),(8,'testing'),(9,'testing');
+INSERT INTO `courses_tags` VALUES (1,'DSE'),(1,'F5'),(1,'F6'),(1,'Math'),(2,'English'),(2,'F1'),(2,'F2'),(2,'F3'),(2,'Tenses'),(3,'A'),(3,'B'),(7,'A'),(7,'B'),(7,'C'),(8,'testing'),(9,'testing'),(10,'delete'),(11,'DSE'),(11,'F6');
 /*!40000 ALTER TABLE `courses_tags` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -413,7 +413,7 @@ CREATE TABLE `search_history` (
 
 LOCK TABLES `search_history` WRITE;
 /*!40000 ALTER TABLE `search_history` DISABLE KEYS */;
-INSERT INTO `search_history` VALUES (2,'DSE'),(2,'DSE'),(2,'A'),(2,'A'),(2,'C'),(2,'A'),(2,'C'),(2,'A'),(2,'C'),(1,'History'),(1,'DSE'),(1,'English'),(1,'DSE'),(1,'English'),(1,'DSE'),(1,'Math'),(2,'dse'),(2,'english'),(2,'dse'),(2,'Math'),(2,'dse'),(2,'Math'),(2,'English'),(2,'math'),(2,'ahq');
+INSERT INTO `search_history` VALUES (2,'DSE'),(2,'DSE'),(2,'A'),(2,'A'),(2,'C'),(2,'A'),(2,'C'),(2,'A'),(2,'C'),(1,'History'),(1,'DSE'),(1,'English'),(1,'DSE'),(1,'English'),(1,'DSE'),(1,'Math'),(2,'dse'),(2,'english'),(2,'dse'),(2,'Math'),(2,'dse'),(2,'Math'),(2,'English'),(2,'math'),(2,'ahq'),(2,'Dse');
 /*!40000 ALTER TABLE `search_history` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -581,4 +581,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2020-03-09 18:54:23
+-- Dump completed on 2020-03-10 22:40:17

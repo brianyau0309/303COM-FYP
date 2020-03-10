@@ -90,7 +90,7 @@ export default class Courses extends React.Component {
   render() {
     return (
       <div className="Courses content">
-        <div>
+        <div className="search-panel">
           <select onChange={this.methodOnChange} value={this.state.search_method}>
             <option value='title'>Title</option>
             <option value='tags'>Tags</option>
@@ -102,61 +102,59 @@ export default class Courses extends React.Component {
 
         {this.state.search_mode ? 
           <div>
-            <h3><img src={imgBack} onClick={this.back}/>Search Results</h3>
-            <ul className="courses-list">
+            <h1 className="title"><img src={imgBack} onClick={this.back}/>Search Results</h1>
+            <ul className="course-list">
               {this.state.search_result.map(c => 
                 <li onClick={() => this.callCourse(c.course_id)}>
                   <h4>{c.title}</h4>
-                  <h6>{c.nickname}</h6>
+                  <h6>Author: {c.nickname} <span>{new Date(c.create_date).toISOString().split('T')[0]} {new Date(c.create_date).toISOString().split('T')[1].split('.')[0]}</span></h6>
                   <div dangerouslySetInnerHTML={{__html: c.description}}></div>
-                  <h6>{c.create_date}</h6>
                 </li>
               )}
             </ul>
           </div>
         :
           <div>
-            { this.props.user_type === 'teacher' ? <NavLink to='/courses/create'><div>Create Course</div></NavLink> : null }
-            { this.props.user_type === 'teacher' ? <NavLink to='/courses/my'><div>My Courses</div></NavLink> : null }
-            <NavLink to='/courses/collection'><div>My Collection</div></NavLink>
+            { this.props.user_type === 'teacher' ? <NavLink className="option" to='/courses/create'><div>Create Course</div></NavLink> : null }
+            { this.props.user_type === 'teacher' ? <NavLink className="option" to='/courses/my'><div>My Courses</div></NavLink> : null }
+            <NavLink className="option" to='/courses/collection'><div>My Collection</div></NavLink>
 
-            <h1>New</h1>
-            <ul className='courses-list'>
+            <h1 className="title">New</h1>
+            <hr/>
+            <ul className='course-list'>
               {this.state.new.map(c => 
                 <li onClick={() => this.callCourse(c.course_id)}>
                   <h4>{c.title}</h4>
-                  <h6>{c.nickname}</h6>
+                  <h6>Author: {c.nickname} <span>{new Date(c.create_date).toISOString().split('T')[0]} {new Date(c.create_date).toISOString().split('T')[1].split('.')[0]}</span></h6>
                   <div dangerouslySetInnerHTML={{__html: c.description}}></div>
-                  <h6>{c.create_date}</h6>
                 </li>
               )}
             </ul>
-            <h3>Hotest</h3>
-            <ul>
+            <h1 className="title">Hotest</h1>
+            <hr/>
+            <ul className="course-list">
               {this.state.hot.map(c => 
                 <li onClick={() => this.callCourse(c.course_id)}>
                   <h4>{c.title}</h4>
-                  <h6>{c.nickname}</h6>
+                  <h6>Author: {c.nickname} <span>{new Date(c.create_date).toISOString().split('T')[0]} {new Date(c.create_date).toISOString().split('T')[1].split('.')[0]}</span></h6>
                   <div dangerouslySetInnerHTML={{__html: c.description}}></div>
-                  <h6>{c.create_date}</h6>
                 </li>
               )}
             </ul>
-            <h3>Recommand</h3>
-            <ul>
+            <h1 className="title">Recommand</h1>
+            <hr/>
+            <ul className="course-list">
               {this.state.recommand.map(c => 
                 <li onClick={() => this.callCourse(c.course_id)}>
                   <h4>{c.title}</h4>
-                  <h6>{c.nickname}</h6>
+                  <h6>Author: {c.nickname} <span>{new Date(c.create_date).toISOString().split('T')[0]} {new Date(c.create_date).toISOString().split('T')[1].split('.')[0]}</span></h6>
                   <div dangerouslySetInnerHTML={{__html: c.description}}></div>
-                  <h6>{c.create_date}</h6>
                 </li>
               )}
             </ul>
           </div>
         }
-
-            <Course ref={this.child} user_id={this.props.user_id} loadCourses={this.loadCourses} userInfoToggle={this.props.userInfoToggle}/>
+        <Course ref={this.child} user_id={this.props.user_id} loadCourses={this.loadCourses} userInfoToggle={this.props.userInfoToggle}/>
       </div>
     )
   }

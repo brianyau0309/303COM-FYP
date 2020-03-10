@@ -78,44 +78,42 @@ export default class Questions extends React.Component {
   render() {
     return (
       <div className="Questions content">
-        <input type='text' placeholder='Search Questions Here!' value={this.state.search_query} onChange={this.inputOnChange} onKeyDown={this.inputKeyDown}/>
-        <button onClick={this.loadQuestionSearch}>Search</button>
+        <input className="search" type='text' placeholder='Search Questions Here!' value={this.state.search_query} onChange={this.inputOnChange} onKeyDown={this.inputKeyDown}/>
+        <button className="search" onClick={this.loadQuestionSearch}>Search</button>
         {this.state.search_mode ? 
           <div>
-            <h3><img src={imgBack} onClick={this.back}/>Search Results</h3>
+            <h1 className="title"><img src={imgBack} onClick={this.back}/>Search Results</h1>
             <ul className="question-list">
               {this.state.search_result.map(q => 
                 <li onClick={() => this.callQuestion(q.question_id)}>
                   <h4>{q.title}</h4>
-                  <h6>{q.nickname}</h6>
-                  <h6>{q.create_date}</h6>
+                  <h6>Ask By: {q.nickname} <span>{new Date(q.create_date).toISOString().split('T')[0]} {new Date(q.create_date).toISOString().split('T')[1].split('.')[0]}</span></h6>
+                  {q.solved_by ? <h6 className="solved">Solved</h6> : <h6 className="not-solved">Not Solved</h6> }
                 </li>
               )}
             </ul>
           </div>
         : <div>
-            <NavLink to='/questions/create'><div>Ask Questions</div></NavLink>
-            <NavLink to='/questions/my'><div>My Questions</div></NavLink>
-            <NavLink to='/questions/collection'><div>My Collection</div></NavLink>
-            <h3>New</h3>
+            <NavLink to='/questions/create' className="option"><div>Ask Questions</div></NavLink>
+            <NavLink to='/questions/my' className="option"><div>My Questions</div></NavLink>
+            <NavLink to='/questions/collection' className="option"><div>My Collection</div></NavLink>
+            <h1 className="title">New</h1>
             <ul className="question-list">
               {this.state.new.map(q => 
                 <li onClick={() => this.callQuestion(q.question_id)}>
                   <h4>{q.title}</h4>
-                  <h6>{q.nickname}</h6>
-                  <h6>{q.create_date}</h6>
-                  <h6>{q.solve}</h6>
+                  <h6>Ask By: {q.nickname} <span>{new Date(q.create_date).toISOString().split('T')[0]} {new Date(q.create_date).toISOString().split('T')[1].split('.')[0]}</span></h6>
+                  {q.solved_by ? <h6 className="solved">Solved</h6> : <h6 className="not-solved">Not Solved</h6> }
                 </li>
               )}
             </ul>
-            <h3>Hotest</h3>
+            <h1 className="title">Hotest</h1>
             <ul className="question-list">
               {this.state.hot.map(q => 
                 <li onClick={() => this.callQuestion(q.question_id)}>
                   <h4>{q.title}</h4>
-                  <h6>{q.nickname}</h6>
-                  <h6>{q.create_date}</h6>
-                  <h6>{q.solve}</h6>
+                  <h6>Ask By: {q.nickname} <span>{new Date(q.create_date).toISOString().split('T')[0]} {new Date(q.create_date).toISOString().split('T')[1].split('.')[0]}</span></h6>
+                  {q.solved_by ? <h6 className="solved">Solved</h6> : <h6 className="not-solved">Not Solved</h6> }
                 </li>
               )}
             </ul>

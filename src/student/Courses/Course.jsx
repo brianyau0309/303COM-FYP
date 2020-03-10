@@ -90,6 +90,7 @@ export default class Course extends React.Component {
             'nickname': result.course.nickname,
             'description': result.course.description,
             'tags': result.course.tags,
+            'create_date': result.course.create_date,
             'avg_rate': result.course.avg_rate,
             'raters': result.course.raters,
           })
@@ -203,6 +204,7 @@ export default class Course extends React.Component {
   }
 
   reloadComments() {
+    this.loadCourse(this.state.course_id)
     this.checkCanComment(this.state.course_id)
     this.loadComments(this.state.course_id)
   }
@@ -225,51 +227,65 @@ export default class Course extends React.Component {
           </div>
         : null }
 
-        <div className="header">
+        <div className="header sticky-top">
           <img className='header-icon' src={imgBack} onClick={this.openToggle}/>
           <span>Course</span>
         </div>
         
-        <div className="Course-detail">
-          <div>{this.state.title}</div>
-          <div onClick={() => this.props.userInfoToggle(this.state.author)}>{this.state.nickname}</div>
-          <div className="course_description" dangerouslySetInnerHTML={{__html: this.state.description}}></div>
-          <div>Tags: {this.state.tags.map(t => t+' ')}</div>
+        <div className="course-detail">
+          <div className="title">{this.state.title}</div>
+          <div className="author" onClick={() => this.props.userInfoToggle(this.state.author)}>Author: {this.state.nickname}</div>
+          <div className="description" dangerouslySetInnerHTML={{__html: this.state.description}}></div>
+          <div className="tags">Tags: {this.state.tags.map(t => t+' ')}</div>
+          <div style={{textAlign: 'right', padding: '1vh 1vh 0 1vh'}}>
+              {this.state.create_date && new Date(this.state.create_date).toISOString().split('T')[0]}&nbsp;
+              {this.state.create_date && new Date(this.state.create_date).toISOString().split('T')[1].split('.')[0]}
+          </div>
         </div>
 
-        {this.state.lessons.map(lesson => 
-          <div onClick={() => this.openLesson(this.state.course_id, lesson.lesson_num)}>{lesson.title}</div>
-        )}
+        {this.state.lessons.length > 0 ? 
+          <div className="lesson-panel">
+            {this.state.lessons.map(lesson => 
+              <div className="lesson" onClick={() => this.openLesson(this.state.course_id, lesson.lesson_num)}>
+                {lesson.title}  
+                {lesson.video_link ? <span style={{background: 'lightskyblue', margin: '0 0.5vh', fontSize: '2vh', padding: '0.5vh', borderRadius: '5px'}}>Video</span> : null} 
+                {lesson.filename ? <span style={{background: 'lightyellow', margin: '0 0.5vh', fontSize: '2vh', padding: '0.5vh', borderRadius: '5px'}}>File</span> : null}
+              </div>
+            )}
+        </div>
 
-        {this.state.myCourse ? 
-          <div onClick={this.createLesson}>Create Lesson</div>
         : null}
 
-        {this.state.myCourse ? 
-          <div>
-            <div onClick={() => this.editCourse(this.state.title, this.state.tags, this.state.description)}>Edit Course</div>
-            <div onClick={this.deleteCourse}>Delete Course</div>
-          </div>
-        : null}
+        <div className="course-btn-panel">
+          {this.state.myCourse ? 
+            <div className="create" onClick={this.createLesson}>Create Lesson</div>
+          : null}
 
-        <div>Course Rate: {this.state.avg_rate ? this.state.avg_rate.toFixed(2) : '--'}({this.state.raters ? this.state.raters : '--'})</div>
+          {this.state.myCourse ? 
+            <div className="flex">
+              <div className="edit" onClick={() => this.editCourse(this.state.title, this.state.tags, this.state.description)}>Edit Course</div>
+              <div className="delete" onClick={this.deleteCourse}>Delete Course</div>
+            </div>
+          : null}
 
-        {this.state.isCollection ? 
-           <div onClick={() => this.collectionToggle(this.state.course_id, 'DELETE')}>Remove from Collection</div>
-        :  <div onClick={() => this.collectionToggle(this.state.course_id, 'POST')}>Add to Collection</div> }
+          <div className="rate">Course Rate: {this.state.avg_rate ? this.state.avg_rate.toFixed(2) : '--'}({this.state.raters ? this.state.raters : '--'})</div>
 
-        <h3>Comments:</h3>
+          {this.state.isCollection ? 
+             <div className="collection remove" onClick={() => this.collectionToggle(this.state.course_id, 'DELETE')}>Remove from Collection</div>
+          :  <div className="collection add" onClick={() => this.collectionToggle(this.state.course_id, 'POST')}>Add to Collection</div> }
+        </div>
+
+        <div className="comments-header">Comments</div>
 
         {this.state.canComment ? 
-          <div>
-            <div onClick={this.commentFieldToggle}>I want to comment!</div> 
+          <div className="comments-header">
+            <div onClick={this.commentFieldToggle} style={{cursor: 'pointer'}}>I want to comment!</div> 
             {this.state.commentField ? 
               <div>
                 {[...Array(5).keys()].map(i => 
                   (this.state.commentRate < i+1 ? 
                     <img src={imgEmptyStar} onClick={() => this.rating(i+1)}/> 
-                  :  <img src={imgStar} onClick={() => this.rating(i+1)}/> 
-                  )
+                  : <img src={imgStar} onClick={() => this.rating(i+1)}/> )
                 )}
                 <span>{this.state.commentRate}</span>
                 <TextEditor editor='CourseComment'/>
@@ -277,31 +293,39 @@ export default class Course extends React.Component {
               </div> 
             : null}
           </div>
-         : null}
-        
-         {this.state.comments.map(c => {
-           if (c.create_by !== this.state.solved_by) {
-             return(
-               <div>
-                 <div onClick={() => this.props.userInfoToggle(c.create_by)}>{c.nickname}</div>
-                 {[...Array(5).keys()].map(i => 
-                   (c.rating < i+1 ? 
-                     <img src={imgEmptyStar}/> 
-                   : <img src={imgStar}/> 
-                   )
-                 )}
-                 <div dangerouslySetInnerHTML={{__html: c.content}}></div>
-                 <div>{c.create_date}</div>
-                 {this.props.user_id === c.create_by ? 
-                   <div>
-                     <div onClick={() => this.editComment(c.content, c.rating)}>Edit</div>
-                     <div onClick={this.deleteComment}>Delete</div>
-                   </div>
-                 : null}
-               </div>
-             )
-           }
-         })}
+        : null}
+        {this.state.comments.length > 0 ?
+          <ul className="comment-list">
+            {this.state.comments.map(c => {
+              if (c.create_by !== this.state.solved_by) {
+                return(
+                  <li>
+                    <div onClick={() => this.props.userInfoToggle(c.create_by)}>
+                      {c.nickname}&nbsp;
+                      {[...Array(5).keys()].map(i => 
+                        (c.rating < i+1 ? 
+                          <img src={imgEmptyStar}/> 
+                        : <img src={imgStar}/> 
+                        )
+                      )}
+                    </div>
+                    <div style={{padding: '0 1vh'}} dangerouslySetInnerHTML={{__html: c.content}}></div>
+                    <div>
+                        {new Date(c.create_date).toISOString().split('T')[0]}&nbsp;
+                        {new Date(c.create_date).toISOString().split('T')[1].split('.')[0]}
+                    </div>
+                    {this.props.user_id === c.create_by ? 
+                      <div className="flex">
+                        <div className="edit" onClick={() => this.editComment(c.content, c.rating)}>Edit</div>
+                        <div className="delete" onClick={this.deleteComment}>Delete</div>
+                      </div>
+                    : null}
+                  </li>
+                )
+              }
+            })}
+          </ul>
+        : null} 
       
          {this.state.myCourse ?
            <EditCourse ref={this.child2} reload={() => this.loadCourse(this.state.course_id)} course_id={this.state.course_id}/>
