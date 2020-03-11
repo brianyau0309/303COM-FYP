@@ -11,6 +11,7 @@ export default class CreateLesson extends React.Component {
       'open': false,
     }
     this.openToggle = this.openToggle.bind(this)
+    this.openFalse = this.openFalse.bind(this)
     this.createLesson = this.createLesson.bind(this)
   }
 
@@ -23,24 +24,28 @@ export default class CreateLesson extends React.Component {
     let youtube_link = document.querySelector('#youtube_link').value
     let lesson_detail = window.frames['CreateLesson'].document.body.innerHTML
 
-    const form = new FormData()
-    form.append('title', title)
-    if (allowed.includes(filetype)) { form.append('file', file) }
-    form.append('youtube_link', youtube_link)
-    form.append('lesson_detail', lesson_detail)
+    if (title !== '') {
+      const form = new FormData()
+      form.append('title', title)
+      if (allowed.includes(filetype)) { form.append('file', file) }
+      form.append('youtube_link', youtube_link)
+      form.append('lesson_detail', lesson_detail)
 
-    fetch('/api/lesson?c='+this.props.course_id, {
-      method: 'POST',
-      body: form
-    }).then(res => {
-      if (res.ok) {
-        res.json().then(result => {
-          console.log(result)
-          this.props.reload()
-          this.openToggle()
-        })
-      }
-    })  
+      fetch('/api/lesson?c='+this.props.course_id, {
+        method: 'POST',
+        body: form
+      }).then(res => {
+        if (res.ok) {
+          res.json().then(result => {
+            console.log(result)
+            this.props.reload()
+            this.openToggle()
+          })
+        }
+      })  
+    } else {
+      alert("Please at least input the title of lesson")
+    }
   }
 
   openToggle() {
@@ -49,6 +54,10 @@ export default class CreateLesson extends React.Component {
     document.querySelector('#youtube_link').value = ''
     window.frames['CreateLesson'].document.body.innerHTML = ''
     this.setState({'open': !this.state.open})
+  }
+
+  openFalse() {
+    this.setState({'open': false})
   }
 
   render() {
@@ -61,8 +70,12 @@ export default class CreateLesson extends React.Component {
 
         <input id='lesson_title' type='text' placeholder='Lesson Title' required maxLength='40'/>
         <input id='youtube_link' type='url' placeholder='Youtube Embed Link'/>
-        <input id='lesson_file' type='file' placeholder='Lesson File'/>
+        <div style={{fontSize: '2.5vh', width: '95%', margin: 'auto'}}>
+          Lesson File:&nbsp;
+          <input className="lesson_file" style={{display: 'inline'}} id='lesson_file' type='file' placeholder='Lesson File'/>
+        </div>
         
+        <div style={{fontSize: '2.5vh', width: '95%', margin: 'auto'}}>Lesson Detail</div>        
         <TextEditor editor='CreateLesson'/>
 
         <button style={{display: 'block'}} className='submit' onClick={this.createLesson}>Create</button>

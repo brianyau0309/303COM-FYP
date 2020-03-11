@@ -59,7 +59,7 @@ export default class Questions extends React.Component {
     this.child.current.checkCanAnswer(id)
     this.child.current.checkMyQuestion(id)
     this.child.current.checkIsCollection(id)
-    this.child.current.openToggle()
+    this.child.current.openTrue()
   }
 
   inputOnChange(event) {
@@ -78,8 +78,10 @@ export default class Questions extends React.Component {
   render() {
     return (
       <div className="Questions content">
-        <input className="search" type='text' placeholder='Search Questions Here!' value={this.state.search_query} onChange={this.inputOnChange} onKeyDown={this.inputKeyDown}/>
-        <button className="search" onClick={this.loadQuestionSearch}>Search</button>
+        <div className="search-panel">
+          <input type='text' placeholder='Search Questions Here!' value={this.state.search_query} onChange={this.inputOnChange} onKeyDown={this.inputKeyDown}/>
+          <span onClick={this.loadQuestionSearch}>Search</span>
+        </div>
         {this.state.search_mode ? 
           <div>
             <h1 className="title"><img src={imgBack} onClick={this.back}/>Search Results</h1>
@@ -93,7 +95,8 @@ export default class Questions extends React.Component {
               )}
             </ul>
           </div>
-        : <div>
+        : 
+          <div>
             <NavLink to='/questions/create' className="option"><div>Ask Questions</div></NavLink>
             <NavLink to='/questions/my' className="option"><div>My Questions</div></NavLink>
             <NavLink to='/questions/collection' className="option"><div>My Collection</div></NavLink>
@@ -120,7 +123,6 @@ export default class Questions extends React.Component {
           </div>
           }
 
-        <div style={{textAlign: 'center'}}>--- Bottom ---</div>
         <Question ref={this.child} user_id={this.props.user_id} loadQuestions={this.loadQuestions} userInfoToggle={this.props.userInfoToggle}/>
       </div>
     )

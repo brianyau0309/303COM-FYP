@@ -17,6 +17,7 @@ export default class EditComment extends React.Component {
     this.submitEditedComment = this.submitEditedComment.bind(this)
     this.rating = this.rating.bind(this)
     this.openToggle = this.openToggle.bind(this)
+    this.openFalse = this.openFalse.bind(this)
   }
 
   loadComment(c, r) {
@@ -54,6 +55,10 @@ export default class EditComment extends React.Component {
   openToggle() {
     this.setState({'open': !this.state.open})
   }
+
+  openFalse() {
+    this.setState({'open': false})
+  }
   
   render() {
     return (
@@ -64,13 +69,13 @@ export default class EditComment extends React.Component {
         </div>
         {[...Array(5).keys()].map(i => 
           (this.state.editedRate < i+1 ? 
-            <img src={imgEmptyStar} onClick={() => this.rating(i+1)}/> 
-          :  <img src={imgStar} onClick={() => this.rating(i+1)}/> 
+            <img className="rate" src={imgEmptyStar} onClick={() => this.rating(i+1)}/> 
+          :  <img className="rate" src={imgStar} onClick={() => this.rating(i+1)}/> 
           )
         )}
         <span>{this.state.editedRate}</span>
         <TextEditor editor='EditComment'/>
-        <button onClick={this.submitEditedComment}>Submit Edited Comment</button>
+        <button className="submit" onClick={this.submitEditedComment}>Submit Edited Comment</button>
       </div>
     )
   }

@@ -30,6 +30,7 @@ export default class Question extends React.Component {
     this.likeAnswer = this.likeAnswer.bind(this)
     this.reload = this.reload.bind(this)
     this.openToggle = this.openToggle.bind(this)
+    this.openTrue = this.openTrue.bind(this)
     this.answerFieldToggle = this.answerFieldToggle.bind(this)
   }
 
@@ -79,6 +80,7 @@ export default class Question extends React.Component {
             'create_by': result.question.create_by,
             'nickname': result.question.nickname,
             'detail': result.question.detail,
+            'create_date': result.question.create_date,
             'solved_by': result.question.solved_by
           })
         })
@@ -167,6 +169,7 @@ export default class Question extends React.Component {
   editAnswer(a) {
     this.child.current.loadAnswer(a)
     this.child.current.openToggle()
+    document.querySelector('.Question').scrollTo(0,0)
   }
 
   deleteAnswer() {
@@ -208,6 +211,11 @@ export default class Question extends React.Component {
     this.setState({ 'open': !this.state.open })
   }
   
+  openTrue() {
+    this.setState({ 'open': true })
+    if (this.child.current) this.child.current.openFalse()
+  }
+  
   answerFieldToggle() {
     this.setState({ 'answerField': !this.state.answerField })
   }
@@ -217,57 +225,66 @@ export default class Question extends React.Component {
     return (
       <div className={this.state.open ? 'Question open' : 'Question close'}>
         { this.state.deleteQuestion ? 
-          <div style={{top: '0', left: '0', position: 'absolute', width: '100%', height: '100vh', background: 'white'}}>
+          <div className="success_page">
             <div>Delete Question Success!</div>
-              <div onClick={this.openToggle}>Back to Questions Page</div>
+            <div className="btn" onClick={this.openToggle}>Back to Questions Page</div>
           </div>
         : null }
         
-        <div className="header">
+        <div className="header sticky-top hidden">
           <img className='header-icon' src={imgBack} onClick={this.openToggle}/>
           <span>Question</span>
         </div>
         
         <div className="Question-detail">
-          <div>{this.state.title}</div>
-          <div onClick={() => this.props.userInfoToggle(this.state.create_by)}>{this.state.nickname}</div>
-          <div className="question_detail" dangerouslySetInnerHTML={{__html: this.state.detail}}></div>
+          <div className="question-basic">
+            <div className="question-title">{this.state.title}</div>
+            <div className="create_by" onClick={() => this.props.userInfoToggle(this.state.create_by)}>
+              {this.state.nickname} {this.state.create_date ? 
+                <span>{new Date(this.state.create_date).toISOString().split('T')[0]} {new Date(this.state.create_date).toISOString().split('T')[1].split('.')[0]}</span>
+              : null}
+            </div>
+          </div>
+          <div className="question-detail" dangerouslySetInnerHTML={{__html: this.state.detail}}></div>
 
           {this.state.myQuestion ? 
-            <div onClick={this.deleteQuestion}>Delete Question</div>
-          : null}
-          
-          {this.state.solved_by !== null && this.state.myQuestion ? 
-            <div onClick={() => this.solveQuestion(0)}>Cancel Solved</div>
+            <div className="delete" onClick={this.deleteQuestion}>Delete Question</div>
           : null}
 
           {this.state.isCollection ? 
-             <div onClick={() => this.collectionToggle(this.state.question_id, 'DELETE')}>Remove from Collection</div>
-          :  <div onClick={() => this.collectionToggle(this.state.question_id, 'POST')}>Add to Collection</div> }
+             <div className="collection remove" onClick={() => this.collectionToggle(this.state.question_id, 'DELETE')}>Remove from Collection</div>
+          :  <div className="collection add" onClick={() => this.collectionToggle(this.state.question_id, 'POST')}>Add to Collection</div> }
 
-          <h3>Answer</h3>
+          <h3 className="question-header">Answer</h3>
 
           {this.state.solved_by !== null ?
             this.state.answers.map(a => {
               if (a.create_by === this.state.solved_by) {
                 return(
                   <div>
-                    <div>Best Answer</div>
-                    <div dangerouslySetInnerHTML={{__html: a.answer}}></div>
-                    <div onClick={() => this.props.userInfoToggle(a.create_by)}>{a.nickname}</div>
-                    <div>{a.create_date}</div>
-                    <div>Likes: {a.likes}</div>
+                    <div className="best-answer-header">Best Answer</div>
+
+                    <div className="answer-basic create_by" onClick={() => this.props.userInfoToggle(a.create_by)}>
+                      {a.nickname} {a.create_date ? 
+                        <span>{new Date(this.state.create_date).toISOString().split('T')[0]} {new Date(this.state.create_date).toISOString().split('T')[1].split('.')[0]}</span>
+                      : null}
+                    </div>
+                    <div className="answer-detail"dangerouslySetInnerHTML={{__html: a.answer}}></div>
                     { a.user_liked ? 
-                      <button onClick={() => this.likeAnswer(a.create_by, 'DELETE')}>Unlike</button>
-                    : <button onClick={() => this.likeAnswer(a.create_by, 'POST')}>Like</button>}
+                      <div className="collection remove" onClick={() => this.likeAnswer(a.create_by, 'DELETE')}>Unlike (Like: {a.likes ? a.likes : 0})</div>
+                    : <div className="collection add" onClick={() => this.likeAnswer(a.create_by, 'POST')}>Like (Like: {a.likes ? a.likes : 0})</div>}
                   </div>
                 )
               }
             })
           : null}
+          
+          {this.state.solved_by !== null && this.state.myQuestion ? 
+            <div className="delete cancel" onClick={() => this.solveQuestion(0)}>Cancel Solved</div>
+          : null}
 
           {this.state.canAnswer ? 
-            <div>
+            <div className="question-header">
               <div onClick={this.answerFieldToggle}>I want to answer!</div> 
               {this.state.answerField ? 
                 <div>
@@ -282,31 +299,31 @@ export default class Question extends React.Component {
              if (a.create_by !== this.state.solved_by) {
                return(
                  <div>
-                   <div dangerouslySetInnerHTML={{__html: a.answer}}></div>
-                   <div onClick={() => this.props.userInfoToggle(a.create_by)}>{a.nickname}</div>
-                   <div>{a.create_date}</div>
-                   <div>Likes: {a.likes ? a.likes : 0}</div>
-                   { a.user_liked ? 
-                     <button onClick={() => this.likeAnswer(a.create_by, 'DELETE')}>Unlike</button>
-                   : <button onClick={() => this.likeAnswer(a.create_by, 'POST')}>Like</button>}
+                    <div className="answer-basic create_by" onClick={() => this.props.userInfoToggle(a.create_by)}>
+                      {a.nickname} {a.create_date ? 
+                        <span>{new Date(this.state.create_date).toISOString().split('T')[0]} {new Date(this.state.create_date).toISOString().split('T')[1].split('.')[0]}</span>
+                      : null}
+                    </div>
+                    <div className="answer-detail"dangerouslySetInnerHTML={{__html: a.answer}}></div>
+                    { a.user_liked ? 
+                      <div className="collection remove" onClick={() => this.likeAnswer(a.create_by, 'DELETE')}>Unlike (Like: {a.likes ? a.likes : 0})</div>
+                    : <div className="collection add" onClick={() => this.likeAnswer(a.create_by, 'POST')}>Like (Like: {a.likes ? a.likes : 0})</div>}
                    {this.props.user_id === a.create_by ? 
                      <div>
-                       <div onClick={() => this.editAnswer(a.answer)}>Edit</div>
-                       <div onClick={this.deleteAnswer}>Delete</div>
+                       <div className="delete cancel" onClick={() => this.editAnswer(a.answer)}>Edit</div>
+                       <div className="delete" onClick={this.deleteAnswer}>Delete</div>
                      </div>
                    : null}
                    {(this.state.solved_by === 0 || this.state.solved_by === null) && this.state.myQuestion ? 
-                     <div onClick={() => this.solveQuestion(a.create_by)}>This Answer Solve My Question!</div>
+                     <div className="collection add" onClick={() => this.solveQuestion(a.create_by)}>This Answer Solve My Question!</div>
                    : null}
                  </div>
                )
              }
            })}
-
         </div>
 
         <EditAnswer ref={this.child} question_id={this.state.question_id} reload={this.reload}/>
-
       </div>
     )
   }

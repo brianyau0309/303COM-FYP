@@ -44,8 +44,8 @@ export default class MyQuestions extends React.Component {
           {this.state.my_questions.map(q => 
             <li onClick={() => this.callQuestion(q.question_id)}>
               <h4>{q.title}</h4>
-              <h6>{q.nickname}</h6>
-              <h6>{q.create_date}</h6>
+              <h6>Ask By: {q.nickname} <span>{new Date(q.create_date).toISOString().split('T')[0]} {new Date(q.create_date).toISOString().split('T')[1].split('.')[0]}</span></h6>
+              {q.solved_by ? <h6 className="solved">Solved</h6> : <h6 className="not-solved">Not Solved</h6> }
             </li>
           )}
         </ul>

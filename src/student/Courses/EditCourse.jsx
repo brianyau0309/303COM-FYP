@@ -19,6 +19,7 @@ export default class EditCourse extends React.Component {
     this.tagInputOnChange = this.tagInputOnChange.bind(this)
     this.titleOnChange = this.titleOnChange.bind(this)
     this.openToggle = this.openToggle.bind(this)
+    this.openFalse = this.openFalse.bind(this)
   }
 
   loadCourse(title, tags, d) {
@@ -73,12 +74,15 @@ export default class EditCourse extends React.Component {
   }
 
   titleOnChange(e) {
-    console.log(e.target.value)
     this.setState({ 'editedTitle': e.target.value })
   }
   
   openToggle() {
     this.setState({'open': !this.state.open})
+  }
+
+  openFalse() {
+    this.setState({'open': false})
   }
   
   render() {
@@ -90,20 +94,20 @@ export default class EditCourse extends React.Component {
         </div>
         
         <input type="text" value={this.state.editedTitle} onChange={this.titleOnChange}/>
-        
+        <div style={{fontSize: '2.5vh', width: '95%', margin: 'auto'}}>Course Description:</div>        
         <TextEditor editor='EditCourse'/>
 
-        <div>Courses Tags <img onClick={this.newTag} src="https://img.icons8.com/flat_round/64/000000/plus.png"/></div>
-        <ul>
+        <div>Courses Tags <img className="add" onClick={this.newTag} src="https://img.icons8.com/flat_round/64/000000/plus.png"/></div>
+        <ol>
           { this.state.tags.map((t, index) => 
             <li>
               <input type='text' className='tag-input' value={t} maxLength='15' onChange={e => this.tagInputOnChange(e.target.value, index)}/>
 
-              { index !== 0 ? <img src="https://img.icons8.com/flat_round/64/000000/minus.png" onClick={() => this.popTag(index)}/> : null }
+              { index !== 0 ? <img className="minus" src="https://img.icons8.com/flat_round/64/000000/minus.png" onClick={() => this.popTag(index)}/> : null }
             </li>
           ) }
-        </ul>
-        <button onClick={this.submitEditedCourse}>Submit Edited Course</button>
+        </ol>
+        <button style={{display: 'block'}} className='submit' onClick={this.submitEditedCourse}>Submit Edited Course</button>
       </div>
     )
   }

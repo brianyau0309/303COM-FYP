@@ -66,7 +66,7 @@ export default class Courses extends React.Component {
     this.child.current.checkCanComment(id)
     this.child.current.checkMyCourse(id)
     this.child.current.checkIsCollection(id)
-    this.child.current.openToggle()
+    this.child.current.openTrue()
   }
 
   inputOnChange(event) {

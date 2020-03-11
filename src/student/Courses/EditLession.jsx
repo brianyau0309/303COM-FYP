@@ -13,6 +13,7 @@ export default class EditLesson extends React.Component {
     }
     this.openToggle = this.openToggle.bind(this)
     this.editLesson = this.editLesson.bind(this)
+    this.openFalse = this.openFalse.bind(this)
   }
 
   loadLesson(t,f,v,d) {
@@ -36,29 +37,37 @@ export default class EditLesson extends React.Component {
     if (document.querySelector('#delete_file_check').checked === true) { delete_file = true }
     console.log(delete_file)
 
-    const form = new FormData()
-    form.append('title', title)
-    if (allowed.includes(filetype)) { form.append('file', file) }
-    form.append('delete_file', delete_file)
-    form.append('youtube_link', youtube_link)
-    form.append('lesson_detail', lesson_detail)
+    if (title !== '') {
+      const form = new FormData()
+      form.append('title', title)
+      if (allowed.includes(filetype)) { form.append('file', file) }
+      form.append('delete_file', delete_file)
+      form.append('youtube_link', youtube_link)
+      form.append('lesson_detail', lesson_detail)
 
-    fetch('/api/lesson?c='+this.props.course_id+'&l='+this.props.lesson_num, {
-      method: 'PUT',
-      body: form
-    }).then(res => {
-      if (res.ok) {
-        res.json().then(result => {
-          console.log(result)
-          this.openToggle()
-          this.props.reload()
-        })
-      }
-    })
+      fetch('/api/lesson?c='+this.props.course_id+'&l='+this.props.lesson_num, {
+        method: 'PUT',
+        body: form
+      }).then(res => {
+        if (res.ok) {
+          res.json().then(result => {
+            console.log(result)
+            this.openToggle()
+            this.props.reload()
+          })
+        }
+      })
+    } else {
+      alert("Please at least input the title of lesson")
+    }
   }
 
   openToggle() {
     this.setState({'open': !this.state.open})
+  }
+
+  openFalse() {
+    this.setState({'open': false})
   }
 
   render() {
@@ -71,14 +80,16 @@ export default class EditLesson extends React.Component {
 
         <input id='edited_lesson_title' type='text' placeholder='Lesson Title' required maxLength='40'/>
         <input id='edited_youtube_link' type='url' placeholder='Youtube Embed Link'/>
-        <div>{this.state.filename}</div>
-        <input id='edited_lesson_file' type='file' placeholder='Lesson File'/>
+        <div style={{fontSize: '2.5vh', width: '95%', margin: 'auto'}}>
+          Lesson File: {this.state.filename} <input className="lesson_file" style={{display: 'inline'}} id='edited_lesson_file' type='file' placeholder='Lesson File'/>
+          <label style={{float: 'right'}}>
+            Delete File
+            <input id='delete_file_check' type="checkbox"/>
+          </label>
+        </div>
 
-        <label>
-          Delete File
-          <input id='delete_file_check' type="checkbox"/>
-        </label>
         
+        <div style={{fontSize: '2.5vh', width: '95%', margin: 'auto'}}>Lesson Detail</div>        
         <TextEditor editor='EditLesson'/>
 
         <button style={{display: 'block'}} className='submit' onClick={this.editLesson}>Edit</button>

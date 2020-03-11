@@ -40,6 +40,7 @@ export default class Course extends React.Component {
     this.rating = this.rating.bind(this)
     this.reloadComments = this.reloadComments.bind(this)
     this.openToggle = this.openToggle.bind(this)
+    this.openTrue = this.openTrue.bind(this)
     this.commentFieldToggle = this.commentFieldToggle.bind(this)
   }
 
@@ -125,6 +126,7 @@ export default class Course extends React.Component {
   editCourse(title, tags, d) {
     this.child2.current.loadCourse(title, tags, d)
     this.child2.current.openToggle()
+    document.querySelector('.Course').scrollTo(0,0)
   }
 
   deleteCourse() {
@@ -142,10 +144,12 @@ export default class Course extends React.Component {
   openLesson(c, l) {
     this.child4.current.loadLesson(c,l)
     this.child4.current.openToggle()
+    document.querySelector('.Course').scrollTo(0,0)
   }
 
   createLesson() {
     this.child3.current.openToggle()
+    document.querySelector('.Course').scrollTo(0,0)
   }
 
   collectionToggle(id, m) {
@@ -186,6 +190,7 @@ export default class Course extends React.Component {
   editComment(c, r) {
     this.child.current.loadComment(c, r)
     this.child.current.openToggle()
+    document.querySelector('.Course').scrollTop = 0
   }
 
   deleteComment() {
@@ -213,6 +218,14 @@ export default class Course extends React.Component {
     this.setState({ 'open': !this.state.open })
   }
 
+  openTrue() {
+    this.setState({ 'open': true })
+    if (this.child.current) this.child.current.openFalse()
+    if (this.child2.current) this.child2.current.openFalse()
+    if (this.child3.current) this.child3.current.openFalse()
+    if (this.child4.current) this.child4.current.openFalse()
+  }
+
   commentFieldToggle() {
     this.setState({ 'commentField': !this.state.commentField, 'commentRate': 5})
   }
@@ -221,13 +234,13 @@ export default class Course extends React.Component {
     return(
       <div className={this.state.open ? 'Course open' : 'Course close'}>
         { this.state.deleteCourse ? 
-          <div style={{top: '0', left: '0', position: 'absolute', width: '100%', height: '100vh', background: 'white'}}>
+          <div className="success_page">
             <div>Delete Course Success!</div>
               <div onClick={this.openToggle}>Back to Course Page</div>
           </div>
         : null }
 
-        <div className="header sticky-top">
+        <div className="header sticky-top hidden">
           <img className='header-icon' src={imgBack} onClick={this.openToggle}/>
           <span>Course</span>
         </div>
@@ -308,12 +321,12 @@ export default class Course extends React.Component {
                         : <img src={imgStar}/> 
                         )
                       )}
+                      <span style={{float: 'right'}}>
+                          {new Date(c.create_date).toISOString().split('T')[0]}&nbsp;
+                          {new Date(c.create_date).toISOString().split('T')[1].split('.')[0]}
+                      </span>
                     </div>
-                    <div style={{padding: '0 1vh'}} dangerouslySetInnerHTML={{__html: c.content}}></div>
-                    <div>
-                        {new Date(c.create_date).toISOString().split('T')[0]}&nbsp;
-                        {new Date(c.create_date).toISOString().split('T')[1].split('.')[0]}
-                    </div>
+                    <div className="comment-content" dangerouslySetInnerHTML={{__html: c.content}}></div>
                     {this.props.user_id === c.create_by ? 
                       <div className="flex">
                         <div className="edit" onClick={() => this.editComment(c.content, c.rating)}>Edit</div>

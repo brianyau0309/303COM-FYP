@@ -13,6 +13,7 @@ export default class EditAnswer extends React.Component {
     this.openToggle = this.openToggle.bind(this)
     this.loadAnswer = this.loadAnswer.bind(this)
     this.submitEditedAnswer = this.submitEditedAnswer.bind(this)
+    this.openFalse = this.openFalse.bind(this)
   }
 
   loadAnswer(a) {
@@ -44,6 +45,10 @@ export default class EditAnswer extends React.Component {
   openToggle() {
     this.setState({'open': !this.state.open})
   }
+
+  openFalse() {
+    this.setState({'open': false})
+  }
   
   render() {
     return (
@@ -53,7 +58,7 @@ export default class EditAnswer extends React.Component {
           <span>Edit Answer</span>
         </div>
         <TextEditor editor='EditAnswer'/>
-        <button onClick={this.submitEditedAnswer}>Submit Edited Answer</button>
+        <button className="submit" onClick={this.submitEditedAnswer}>Submit Edited Answer</button>
       </div>
     )
   }

@@ -15,6 +15,7 @@ export default class Lesson extends React.Component {
     this.editLesson = this.editLesson.bind(this)
     this.deleteLesson = this.deleteLesson.bind(this)
     this.openToggle = this.openToggle.bind(this)
+    this.openFalse = this.openFalse.bind(this)
   }
   
   loadLesson(course, num) {
@@ -58,41 +59,45 @@ export default class Lesson extends React.Component {
     this.setState({ 'open': !this.state.open })
   }
 
+  openFalse() {
+    this.setState({'open': false})
+    if (this.child.current) this.child.current.openFalse()
+  }
+
   render() {
     return(
       <div className={this.state.open ? 'Lesson open' : 'Lesson close'}>
         { this.state.deleteLesson ? 
-          <div style={{top: '0', left: '0', position: 'absolute', width: '100%', height: '100vh', background: 'white'}}>
+          <div className="success_page">
             <div>Delete Lesson Success!</div>
-              <div onClick={this.openToggle}>Back to Course Page</div>
+            <div className="btn" onClick={this.openToggle}>Back to Course Page</div>
           </div>
         : null }
 
-        <div className="header">
+        <div className="header sticky-top">
           <img className='header-icon' src={imgBack} onClick={this.openToggle}/>
           <span>Lession</span>
         </div>
         
         <div className="Lesson-detail">
-          <div>{this.state.title}</div>
-          {this.state.video_link != null ? 
-            <iframe width="560" height="315" src={this.state.video_link} frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+          <div className="lesson_title">{this.state.title}</div>
+          {this.props.myCourse ? 
+            <div className="flex">
+              <div className="edit" onClick={() => this.editLesson(this.state.title, this.state.filename, this.state.video_link, this.state.detail)}>Edit Lesson</div>
+              <div className="delete" onClick={this.deleteLesson}>Delete Lesson</div>
+            </div>
+          : null}
+          {this.state.video_link != '' && this.state.video_link ? 
+            <iframe className="video" src={this.state.video_link} frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
           : null}
           {this.state.filename != null ? 
-            <div>
+            <div className="download">
               <span>{this.state.filename}</span>
               <a href={window.location.origin+'/static/files/'+this.state.course_id+'_'+this.state.lesson_num+'.'+this.state.filename.split('.').pop()} Download={this.state.filename}>Download</a>
             </div>
           : null}
           <div className="lesson_detail" dangerouslySetInnerHTML={{__html: this.state.detail}}></div>
         </div>
-
-        {this.props.myCourse ? 
-          <div>
-            <div onClick={() => this.editLesson(this.state.title, this.state.filename, this.state.video_link, this.state.detail)}>Edit Lesson</div>
-            <div onClick={this.deleteLesson}>Delete Lesson</div>
-          </div>
-        : null}
 
       
          {this.props.myCourse ?

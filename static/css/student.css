@@ -150,6 +150,7 @@ pre {
   font-size: 2vh;
   width: 12vh;
   margin: 0 auto;
+  font-weight: bold;
 }
 
 .UserInfo {
@@ -188,9 +189,13 @@ pre {
   margin: 1vh auto;
   background: var(--main-color-lightblue);
   color: var(--main-color-lightblack);
-  border-radius: 10px;
+  border-radius: 25px;
   display: grid;
-  grid-template-columns: 20% 1fr 20%;
+  grid-template-columns: 1fr 20%;
+}
+
+.Courses .search-panel {
+  grid-template-columns: 18% 1fr 20%;
 }
 
 .search-panel > * {
@@ -199,11 +204,17 @@ pre {
   height: 100%;
 }
 
+.Questions .search-panel input,
 .search-panel > select {
-  border-top-left-radius: 10px;
-  border-bottom-left-radius: 10px;
+  border-top-left-radius: 25px;
+  border-bottom-left-radius: 25px;
+  padding-left: 1vh;
+}
+.Questions .search-panel input {
+  padding-left: 1vh;
 }
 
+.search-panel > button,
 .search-panel > span {
   height: auto;
   align-self: center;
@@ -211,21 +222,23 @@ pre {
   cursor: pointer;
 }
 
+.Questions .option,
 .Courses .option {
   text-decoration: none;
   color: var(--main-color-lightblack);
 }
 
+.Questions .option div,
 .Courses .option div {
   margin: .5vh auto;
   width: 98%;
   height: 4vh;
   background: var(--main-color-lightblue);
-  border-radius: 10px;
-  font-size: 3vh;
+  font-size: 3.2vh;
   text-align: center;
 }
 
+.Questions .option div:hover,
 .Courses .option div:hover {
   opacity: .8;
 }
@@ -248,28 +261,27 @@ pre {
 }
 
 .course-list,
-.Questions .question-list {
+.question-list {
   list-style: none;
 }
 
 .course-list li,
-.Questions .question-list li {
+.question-list li {
   margin: 1vh auto;
   padding: 1vh 2vh;
   width: 90%;
-  border-radius: 10px;
   background: var(--main-color-lightblue);
   color: var(--main-color-lightblack);
   cursor: pointer;
 }
 
 .course-list li:hover,
-.Questions .question-list li:hover {
+.question-list li:hover {
   opacity: .8;
 }
 
 .course-list a,
-.Questions .question-list a {
+.question-list a {
   text-decoration: none;
   color: inherit;
 }
@@ -279,17 +291,17 @@ pre {
 }
 
 .course-list li > h4,
-.Questions .question-list li > h4 {
+.question-list li > h4 {
   font-size: 2.5vh;
 }
 
 .course-list li > h6,
-.Questions .question-list li > h6 {
+.question-list li > h6 {
   font-size: 1.8vh;
 }
 
 .course-list li > h6 > span,
-.Questions .question-list li > h6 > span {
+.question-list li > h6 > span {
   float: right;
 }
 
@@ -298,11 +310,11 @@ pre {
   font-size: 2vh;
 }
 
-.Questions .question-list li > h6.solved {
+.question-list li > h6.solved {
   color: green;
 }
 
-.Questions .question-list li > h6.not-solved {
+.question-list li > h6.not-solved {
   color: red;
 }
 
@@ -339,6 +351,9 @@ pre {
   background-color: rgba(255,255,255,.5);
   border: 1px inset lightgray;
 }
+.Question .TextEditor > iframe > * {
+  font-size: 2vh;
+}
 
 .course-detail .description img,
 .Question .question_detail img {
@@ -348,6 +363,9 @@ pre {
 }
 
 .CreateCourses > input,
+.EditCourse > input,
+.CreateLesson > input,
+.EditLesson > input,
 .CreateQuestions > input {
   display: block;
   width: 96%;
@@ -357,8 +375,12 @@ pre {
 }
 
 .Course .comments-header .TextEditor .EditorPanel,
-.CreateCourses> .TextEditor > .EditorPanel,
-.CreateQuestions> .TextEditor > .EditorPanel {
+.CreateCourses > .TextEditor > .EditorPanel,
+.EditCourse > .TextEditor > .EditorPanel,
+.EditComment > .TextEditor > .EditorPanel,
+.CreateLesson > .TextEditor > .EditorPanel,
+.EditLesson > .TextEditor > .EditorPanel,
+.CreateQuestions > .TextEditor > .EditorPanel {
   width: 96%;
   margin: 0 auto;
   border: 1px solid gray;
@@ -366,8 +388,12 @@ pre {
 }
 
 .Course .comments-header .TextEditor .EditorPanel > button,
-.CreateCourses> .TextEditor > .EditorPanel > button,
-.CreateQuestions> .TextEditor > .EditorPanel > button {
+.CreateCourses > .TextEditor > .EditorPanel > button,
+.EditCourse > .TextEditor > .EditorPanel > button,
+.EditComment > .TextEditor > .EditorPanel > button,
+.CreateLesson > .TextEditor > .EditorPanel > button,
+.EditLesson > .TextEditor > .EditorPanel > button,
+.CreateQuestions > .TextEditor > .EditorPanel > button {
   margin: 1vh .94vh;
   border: 1px solid transparent;
   width: 3vh;
@@ -380,12 +406,20 @@ pre {
 
 .Course .comments-header .TextEditor .EditorPanel > button:hover,
 .CreateCourses > .TextEditor > .EditorPanel > button:hover,
+.EditCourse > .TextEditor > .EditorPanel > button:hover,
+.EditComment > .TextEditor > .EditorPanel > button:hover,
+.CreateLesson > .TextEditor > .EditorPanel > button:hover,
+.EditLesson > .TextEditor > .EditorPanel > button:hover,
 .CreateQuestions > .TextEditor > .EditorPanel > button:hover {
   border: 1px solid lightgray;
 }
 
 .Course .comments-header .TextEditor .EditorPanel > button > img,
 .CreateCourses > .TextEditor > .EditorPanel > button > img,
+.EditCourse > .TextEditor > .EditorPanel > button > img,
+.EditComment > .TextEditor > .EditorPanel > button > img,
+.CreateLesson > .TextEditor > .EditorPanel > button > img,
+.EditLesson > .TextEditor > .EditorPanel > button > img,
 .CreateQuestions > .TextEditor > .EditorPanel > button > img {
   width: 100%;
   height: 100%;
@@ -393,6 +427,10 @@ pre {
 
 .Course .comments-header .TextEditor > iframe,
 .CreateCourses > .TextEditor > iframe,
+.EditCourse > .TextEditor > iframe,
+.EditComment > .TextEditor > iframe,
+.CreateLesson > .TextEditor > iframe,
+.EditLesson > .TextEditor > iframe,
 .CreateQuestions > .TextEditor > iframe {
   display: block;
   font-size: 2vh;
@@ -403,23 +441,45 @@ pre {
   border: 1px inset lightgray;
 }
 
-.CreateCourses > .TextEditor > iframe {
+.CreateCourses > .TextEditor > iframe,
+.EditCourse > .TextEditor > iframe {
   height: 35vh;
+}
+.CreateLesson > .TextEditor > iframe,
+.EditLesson > .TextEditor > iframe {
+  height: 64vh;
 }
 .Course .comments-header .TextEditor > iframe {
   height: 15vh;
 }
 
-.CreateCourses ol {
-  height: 32vh;
-  overflow-y: scroll;
+.CreateCourses .TextEditor + div,
+.EditCourse .TextEditor + div {
+  padding: 0 2vh;
+  font-size: 3vh;
 }
 
-.CreateCourses ol > li {
+.CreateCourses ol,
+.EditCourse ol {
+  height: 32vh;
+  overflow-y: scroll;
+  font-size: 3vh;
+}
+
+.CreateCourses ol > li,
+.EditCourse ol > li {
   margin: 1vh 5vh;
+  font-size: 3vh;
+}
+
+.CreateCourses ol > li > input,
+.EditCourse ol > li > input {
+  font-size: 3vh;
 }
 
 .CreateCourses img.add,
+.EditCourse img.add,
+.EditCourse img.minus,
 .CreateCourses img.minus {
   width: 5vh;
   height: 5vh;
@@ -427,7 +487,12 @@ pre {
 }
 
 .CreateCourses > .submit,
-.CreateQuestions > .submit {
+.EditCourse > .submit,
+.EditComment > .submit,
+.CreateLesson > .submit,
+.EditLesson > .submit,
+.CreateQuestions > .submit,
+.Question .EditAnswer > .submit {
   width: 96%;
   font-size: 3vh;
   background: lightblue;
@@ -437,17 +502,66 @@ pre {
   padding: .5vh 0;
   cursor: pointer;
 }
+.EditComment .rate {
+  width: 5vh;
+  height: 5vh;
+}
 
 .Course {
   overflow-x: hidden;
   color: var(--main-color-lightblack)
 }
 
+.Question {
+  overflow-x: hidden;
+  overflow-y: scroll;
+}
+
+.Lesson .lesson_title {
+  width: 96%;
+  margin: auto;
+  font-weight: bold;
+  font-size: 3vh;
+  height: 3.5vh;
+  overflow-y: scroll;
+}
+
+.Lesson .flex {
+  margin: auto;
+  width: 96%;
+}
+
+.Lesson .video {
+  display: block;
+  margin: 1vh auto;
+  width: 95vw;
+  height: 53vw;
+}
+
+.Lesson .download {
+  margin: 1vh auto;
+  margin-top: 0;
+  width: 98%;
+  font-size: 2.5vh;
+}
+.Lesson .download > * {
+  margin: 0 1vh;
+}
+
+.Lesson .lesson_detail {
+  width: 93%;
+  height: 80vh;
+  margin: 1vh auto;
+  overflow: scroll;
+  padding: 1vh 2vh;
+  font-size: 2.5vh;
+  background: rgba(173, 216, 230);
+}
+
 .course-detail,
 .lesson-panel {
   width: 98%;
   margin: 1vh auto;
-  border-radius: 10px;
   padding: 1vh 0;
   background: var(--main-color-lightblue)
 }
@@ -485,6 +599,14 @@ pre {
   opacity: 0.8;
 }
 
+.lesson_file {
+  font-size: 2vh;
+}
+
+.Lesson .edit,
+.Lesson .delete,
+.Question .delete,
+.Question .collection,
 .course-btn-panel {
   width: 98%;
   display: flex;
@@ -497,17 +619,23 @@ pre {
 .course-btn-panel > div {
   width: 99%;
 }
+.Lesson .edit,
+.Lesson .delete,
+.Question .delete,
+.Question .collection,
 .course-btn-panel div {
-  border-radius: 10px;
   padding: 1vh 2vh;
   margin: .5vh 0;
 }
+.Lesson .flex,
 .comment-list .flex,
 .course-btn-panel > .flex {
   display: flex;
   flex-flow: row wrap;
   padding: 0;
 }
+.Lesson .edit,
+.Lesson .delete,
 .course-btn-panel > .flex > div {
   padding: 1vh 0;
   width: 49%;
@@ -515,34 +643,78 @@ pre {
 .course-btn-panel .create {
   background: lightgreen;
 }
+.Lesson .edit,
 .comment-list .edit,
 .course-btn-panel .edit {
-  margin: 0 .5vh 0 0;
+  margin: 0 1% 0 0;
   background: yellow;
 }
+.Lesson .delete,
 .comment-list .delete,
 .course-btn-panel .delete {
-  margin: 0 0 0 .5vh;
+  margin: 0 0 0 1%;
   background: red;
 }
 .course-btn-panel .rate {
   background: var(--main-color-lightblue);
 }
+.Question .collection.add,
 .course-btn-panel .collection.add {
   background: lightgreen;
 }
+.Question .delete,
+.Question .collection.remove,
 .course-btn-panel .collection.remove {
   background: red;
+}
+.Question .delete,
+.Question .collection {
+  width: 96%;
+  padding: 1vh 2%;
+}
+.Question .collection.add {
+  border: 1px solid lightgreen;
+}
+.Question .delete,
+.Question .collection.remove {
+  border: 1px solid red;
+}
+.Question .delete.cancel {
+  background: yellow;
+  border: 1px solid yellow;
 }
 .comments-header {
   width: 98%;
   margin: 1vh auto;
-  border-radius: 10px;
   text-align: center;
   padding: 1vh 0;
   background: var(--main-color-lightblue);
   font-weight: bold;
   font-size: 3vh;
+}
+.comment-content {
+  padding: 2vh;
+  padding-bottom: 3vh;
+}
+.comment-content ul,
+.comment-content ol {
+    margin-top: 1em;
+    margin-bottom: 1em;
+    margin-left: 0;
+    margin-right: 0;
+    padding-left: 40px;
+}
+.question-header,
+.best-answer-header {
+  width: 96%;
+  text-align: center;
+  padding: 1vh 0;
+  padding: 1vh 2%;
+  background: var(--main-color-lightblue);
+  font-weight: bold;
+  font-size: 3vh;
+  border: 1px solid var(--main-color-lightblue);
+  margin: 2px 0;
 }
 .comment-list {
   width: 98%;
@@ -554,8 +726,10 @@ pre {
   text-align: left;
   padding: 1vh;
   background: var(--main-color-lightblue);
-  border-radius: 10px;
   margin-bottom: 1vh;
+}
+.comment-content li {
+  background: transparent;
 }
 .comments-header img,
 .comment-list img {
@@ -570,9 +744,37 @@ pre {
 .comment-list .flex > div {
   text-align: center;
   padding: 1vh;
-  border-radius: 10px;
   padding: 1vh 0;
   width: 48%;
+}
+
+.Question-detail {
+  margin: 2vh;
+}
+
+.question-basic,
+.answer-basic {
+  background: var(--main-color-lightblue);
+  border: 1px solid var(--main-color-lightblue);
+  width: 96%;
+  padding: 2vh 2%;
+}
+.question-title {
+  font-size: 3.5vh;
+}
+.create_by {
+  font-size: 2.5vh;
+}
+.create_by span {
+  float: right;
+}
+.question-detail,
+.answer-detail {
+  width: 96%;
+  padding: 2vh 2%;
+  border: 1px solid var(--main-color-lightblue);
+  font-size: 2.5vh;
+  min-height: 10vh;
 }
 .Question,
 .Course,
@@ -739,3 +941,78 @@ pre {
   opacity: .8;
 }
 
+@media only screen and (min-width: 780px) {
+  .nav-items {
+    margin: 8vh 6vw;
+  }
+  .nav-items > img {
+    width: 22vh;
+    height: 22vh;
+  }
+  .nav-items > div {
+    width: 22vh;
+    font-size: 3vh;
+  }
+  .header.hidden {
+    display: none;
+  }
+  .Courses,
+  .MyCourses,
+  .CourseCollection,
+  .Questions,
+  .MyQuestions,
+  .QuestionCollection {
+    width: 38%
+  }
+  .Course,
+  .Lesson,
+  .EditLesson,
+  .Question  {
+    transition: 0s;
+  }
+  .Courses .search-panel {
+    grid-template-columns: 23% 57% 20%;
+  }
+  .Course.open,
+  .Question.open {
+    width: 62%;
+    top: 7vh;
+    left: 38%;
+    height: 93vh;
+    background: transparent;
+  }
+  .Lesson .video {
+    width: 60vw;
+    height: 33.75vw;
+  }
+  .CreateCourses,
+  .CreateQuestions {
+    margin: 0 auto;
+    width: 75%
+  }
+  .Course .comments-header .TextEditor > iframe,
+  .EditCourse > .TextEditor > iframe,
+  .EditComment > .TextEditor > iframe,
+  .CreateLesson > .TextEditor > iframe,
+  .EditLesson > .TextEditor > iframe,
+  .CreateQuestions > .TextEditor > iframe,
+  .EditAnswer > .TextEditor > iframe {
+    height: 67vh;
+  }
+  .CreateLesson > .TextEditor > iframe,
+  .EditLesson > .TextEditor > iframe {
+    height: 54vh;
+  }
+  .EditCourse > .TextEditor > iframe {
+    height: 25vh;
+  }
+  .CreateQuestions > .TextEditor > iframe {
+    height: 75vh;  
+  }
+  .success_page {
+    top: 0vh;
+  }
+  .success_page.create {
+    top: 7vh;
+  }
+}

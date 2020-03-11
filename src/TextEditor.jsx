@@ -20,6 +20,7 @@ export default class TextEditor extends React.Component {
   componentDidMount() {
     window.frames[this.props.editor].document.designMode = 'on'
     window.frames[this.props.editor].document.execCommand("enableObjectResizing", false, false)
+    window.frames[this.props.editor].document.body.style.fontSize = '2rem'
   }
   btnClick(event) {
     let n = null

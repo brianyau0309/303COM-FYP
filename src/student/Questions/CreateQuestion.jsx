@@ -42,10 +42,10 @@ export default class CreateQuestion extends React.Component {
     return (
       <div className="CreateQuestions content">
         { this.state.success_page ? 
-          <div style={{top: '0', left: '0', position: 'absolute', width: '100%', height: '100vh', background: 'white'}}>
+          <div className="success_page create">
             <div>Success!</div>
             <Link to='/questions'>
-              <div>Back to Questions Page</div>
+              <div className="btn">Back to Questions Page</div>
             </Link>
           </div>
         : null }

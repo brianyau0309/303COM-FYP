@@ -69,7 +69,7 @@ export default class CreateCourse extends React.Component {
     return (
       <div className="CreateCourses content">
         { this.state.success_page ? 
-          <div className="success_page">
+          <div className="success_page create">
             <div>Success!</div>
             <Link to='/courses'>
               <div>Back to Courses Page</div>
