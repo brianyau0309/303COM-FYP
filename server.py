@@ -1016,6 +1016,7 @@ def api_task_answers():
                 else:
                     return jsonify({'task_answers': 'Error'})
             elif classroom != None and task != None and student != None:
+                member = db.exe_fetch(SQL['classroom_member'].format(user, classroom))
                 if member:
                     answers = db.exe_fetch(SQL['task_answers'].format(classroom, task, student))
                     if answers != None and int(user) == int(student):

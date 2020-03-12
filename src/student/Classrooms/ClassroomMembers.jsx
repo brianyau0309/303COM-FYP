@@ -8,12 +8,13 @@ class ClassroomMembers extends React.Component {
     super(props)
     this.state = {
       'ClassroomMembers': [],
-      'permission': false
+      'permission': false, 'inviteToggle': false
     }
     this.loadClassroomMembers = this.loadClassroomMembers.bind(this)
     this.checkPermission = this.checkPermission.bind(this)
     this.inviteMember = this.inviteMember.bind(this)
     this.kickFromClassroom = this.kickFromClassroom.bind(this)
+    this.inviteToggle = this.inviteToggle.bind(this)
   }
 
   componentDidMount() {
@@ -73,7 +74,12 @@ class ClassroomMembers extends React.Component {
         if (res.ok) {
           res.json().then(result => {
             console.log(result)
-            this.loadClassroomMembers()
+            if (result.invite_member !== "Error") {
+              this.loadClassroomMembers()
+              form.user.value = ''
+            } else {
+              alert('Please fill in a valid ID.')
+            }
           })
         }
       })
@@ -93,25 +99,47 @@ class ClassroomMembers extends React.Component {
     })
   }
 
+  imgOnError(e) {
+    e.target.src = "https://briyana.ddns.net/static/images/icons/icon-128x128.png"
+  }
+
+  inviteToggle() {
+    this.setState({"inviteToggle": !this.state.inviteToggle})
+  }
+
   render() {
     return (
       <div className="ClassroomMembers content">
-        <div className="header">
+        <div className="header sticky-top">
           <img className='header-icon' src={imgBack} onClick={this.props.history.goBack}/>
           <span>Classroom Members</span>
         </div>
         {this.state.permission ? 
           <div>
-            <div>{this.state.classroom ? this.state.classroom.name : null}: Member List</div>
-            <form onSubmit={this.inviteMember} name="form_inviteMember">Invite Member: <input type="number" name="user" required/> <input type="submit"/> </form>
-            <ul>
+            <div className="block form">{this.state.classroom ? this.state.classroom.name : null}</div>
+            {this.props.user_type === 'teacher' ? 
+              <div>
+                <div className="block" style={{background: 'lightgreen', marginBottom: '0'}} onClick={this.inviteToggle}>Invite Member</div>
+                {this.state.inviteToggle &&
+                  <form className="block form" style={{background: 'lightgreen', margin: '0 auto'}} onSubmit={this.inviteMember} name="form_inviteMember">
+                    <input type="number" name="user" placeholde="Student ID" required/>
+                    <input type="submit"/>
+                  </form>
+                }
+              </div>
+            : null}
+            <ul className="member-list">
               {this.state.ClassroomMembers.map(member => 
                 <li>
-                  <div onClick={() => this.props.userInfoToggle(member.user_id)}>ID: {member.user_id}</div>
-                  <div onClick={() => this.props.userInfoToggle(member.user_id)}>{member.fullname.toUpperCase()} {member.nickname}</div>
+                  <img src={window.location.origin+'/static/images/user_icons/'+Number(member.user_id)+'.png'} onError={this.imgOnError}/>
+                  <div onClick={() => this.props.userInfoToggle(Number(member.user_id))}>ID: {member.user_id}</div>
+                  <div onClick={() => this.props.userInfoToggle(Number(member.user_id))}>{member.fullname.toUpperCase()} {member.nickname}</div>
                   <div>Type: {member.user_type}</div>
-                  <div>Join Date: {member.join_date}</div>
-                  {member.user_type === 'student' && this.props.user_type === 'teacher' ? <button onClick={() => this.kickFromClassroom(member.user_id)}>Kick</button> : null}
+                  <div>Join: {new Date(member.join_date).toISOString().split('T')[0]} {new Date(member.join_date).toISOString().split('T')[1].split('.')[0]}</div>
+                  <div className="kick">
+                    &nbsp;
+                    {member.user_type === 'student' && this.props.user_type === 'teacher' ? <span onClick={() => this.kickFromClassroom(member.user_id)}>Kick</span> : null}
+                  </div>
                 </li>
               )}
             </ul>

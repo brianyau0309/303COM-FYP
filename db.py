@@ -607,7 +607,7 @@ SQL = {
     WHERE classroom = {0} AND event_num = {1}
     ''',
     'chatroom': '''
-    SELECT a.member, b.nickname, a.message, a.date
+    SELECT a.member, b.nickname, a.message, a.date, b.user_type
     FROM chatroom a, users b
     WHERE a.member = b.user_id AND a.classroom = {0}
     ''',

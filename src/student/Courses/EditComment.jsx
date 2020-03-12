@@ -67,13 +67,15 @@ export default class EditComment extends React.Component {
           <img className='header-icon' src={imgBack} onClick={this.openToggle}/>
           <span>Edit Comment</span>
         </div>
-        {[...Array(5).keys()].map(i => 
-          (this.state.editedRate < i+1 ? 
-            <img className="rate" src={imgEmptyStar} onClick={() => this.rating(i+1)}/> 
-          :  <img className="rate" src={imgStar} onClick={() => this.rating(i+1)}/> 
-          )
-        )}
+        <div className="block">
+          {[...Array(5).keys()].map(i => 
+            (this.state.editedRate < i+1 ? 
+              <img className="rate" src={imgEmptyStar} onClick={() => this.rating(i+1)}/> 
+            :  <img className="rate" src={imgStar} onClick={() => this.rating(i+1)}/> 
+            )
+          )}
         <span>{this.state.editedRate}</span>
+        </div>
         <TextEditor editor='EditComment'/>
         <button className="submit" onClick={this.submitEditedComment}>Submit Edited Comment</button>
       </div>

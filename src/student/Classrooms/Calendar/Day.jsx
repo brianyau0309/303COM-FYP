@@ -71,8 +71,8 @@ export default class Day extends React.Component {
     this.setState({'createEventToggle': !this.state.createEventToggle})
   }
 
-  openToggle() {
-    this.setState({'open': !this.state.open})
+  openToggle(opt) {
+    this.setState({'open': opt})
   }
 
   render() {
@@ -100,20 +100,19 @@ export default class Day extends React.Component {
           </div>
         : null}
         <ul>
-          <li style={{textAlign: 'center'}}>Deadline Today</li>
-          {this.state.deadline.map((task, i) => 
+          {this.state.deadline.length === 0 && this.state.events.length === 0 ? <li style={{textAlign: 'center', marginTop: '3vh', fontSize: '2.5vh'}}>Nothing  Today</li> : null}
+          {this.state.deadline.length > 0 && <li className="deadline-item" style={{textAlign: 'center'}}>Today's Deadline</li>}
+          {this.state.deadline.map(task => 
             <Link to={`/classrooms/${task.classroom}/tasks/${task.task_num}`}>
-              <li className="deadline-item">
-                <span>{i+1}</span>
-                <span>{task.title} (Task number: {task.task_num})</span>
+              <li className="deadline-item btn">
+                <span>{task.title} (Task No. {task.task_num})</span>
               </li>
             </Link>
           )}
-          <li style={{textAlign: 'center'}}>Events Today</li>
-          {this.state.events.map((event, i) => 
-            <li className="event-item">
+          {this.state.events.length > 0 && <li className="event-item" style={{textAlign: 'center'}}>Today's Events</li>}
+          {this.state.events.map(event => 
+            <li className="event-item btn">
               <div>
-                <span>{i+1}</span>
                 <span>{event.event}</span>
                 {this.props.user_type === 'teacher' ? 
                   <img src={imgMinus} onClick={() => this.deleteEvent(event.event_num)}/>

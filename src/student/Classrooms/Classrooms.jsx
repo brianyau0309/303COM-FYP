@@ -102,9 +102,9 @@ class Classrooms extends React.Component {
         <div className="Classrooms">
           {this.props.user_type === 'teacher' ? 
             <div>
-              <button onClick={this.createToggle}>Create Classrooms</button>
+              <div className="block btn" style={{background: 'lightgreen'}} onClick={this.createToggle}>Create Classrooms</div>
               {this.state.createToggle ? 
-                <form name='form_createClassroom'>
+                <form className="block form" style={{background: 'lightgreen'}} name='form_createClassroom'>
                   <input type="text" name="classroom_name" placeholder="Name of the Classroom" required/>
                   <textarea name="classroom_description" placeholder="Desceibe the Classroom here..." required/>
                   <input type="submit" onClick={this.createClassroom}/>
@@ -113,23 +113,22 @@ class Classrooms extends React.Component {
             </div>
           : null}
 
-          <h3>My Classrooms</h3>
+          <div className="block">My Classrooms</div>
           <ul>
             {this.state.classrooms.map(c => 
               <Link to={'/classrooms/'+c.classroom_id}>
-                <li>
-                  <div>{c.name}</div>
-                  <div>{c.description}</div>
-                  <div>{c.create_date}</div>
+                <li className="block btn classroom">
+                  <div className="name">{c.name}</div>
+                  <div className="description">{c.description}</div>
+                  <div className="date">&nbsp;<span>{new Date(c.create_date).toISOString().split('T')[0]} {new Date(c.create_date).toISOString().split('T')[1].split('.')[0]}</span></div>
                 </li>
               </Link>
             )}
           </ul>
-          <div style={{textAlign: 'center'}}>--- Bottom ---</div>
         </div>
 
         {this.state.part !== '' ? <div className="coverboard"></div> : null}
-        {this.state.part === 'class' ? <Classroom user_type={this.props.user_type} reload={this.loadClassrooms} userInfoToggle={this.props.userInfoToggle}/> : null}
+        {this.state.part === 'class' ? <Classroom user_id={this.props.user_id} user_type={this.props.user_type} reload={this.loadClassrooms} userInfoToggle={this.props.userInfoToggle}/> : null}
         {this.state.part === 'classMembers' ? <ClassroomMembers user_type={this.props.user_type} userInfoToggle={this.props.userInfoToggle}/> : null}
         {this.state.part === 'createTask' ? <CreateTask/> : null}
         {this.state.part === 'tasks' ? <Tasks user_id={this.props.user_id}/> : null}

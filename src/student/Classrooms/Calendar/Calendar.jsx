@@ -18,7 +18,6 @@ class Calendar extends React.Component {
     this.loadDate = this.loadDate.bind(this)
     this.createMonthList = this.createMonthList.bind(this)
     this.changeMonth = this.changeMonth.bind(this)
-    this.openChild = this.openChild.bind(this)
   }
 
   componentDidMount() {
@@ -32,7 +31,7 @@ class Calendar extends React.Component {
       this.loadDate()
       if (prevProps.match.path === "/classrooms/:class/calendar/:date" && this.props.match.path === "/classrooms/:class/calendar") {
         if (this.child.current) {
-          this.child.current.openToggle()
+          this.child.current.openToggle(false)
         }
       }  
     }
@@ -53,7 +52,7 @@ class Calendar extends React.Component {
     if (this.props.match.path === "/classrooms/:class/calendar/:date") {
       if (this.child.current) {
         this.child.current.loadCalendar()
-        this.child.current.openToggle()
+        this.child.current.openToggle(true)
       }  
     }
   }
@@ -73,19 +72,15 @@ class Calendar extends React.Component {
     else { date = {'year': date.year, 'month': date.month + num} }
     this.setState({ 'date': date })
   }
-
-  openChild() {
-    this.child.current.openToggle()
-  }
     
   render() {
     return (
       <div className={this.props.match.path === "/classrooms/:class/calendar" ? "Calendar conetent" : "Calendar conetent hide"}>
-        <div className="header" style={{gridArea: 'header'}}>
+        <div className="header">
           <Link className="header-icon" to={'/classrooms/'+this.props.match.params.class}>
             <img className='header-icon' src={imgBack}/>
           </Link>
-          <span onClick={this.openChild}>Calendar</span>
+          <span>Calendar</span>
         </div>
         <div className="month">
           <img src={imgBack} className="left" onClick={() => this.changeMonth(-1)}/>

@@ -113,32 +113,36 @@ class Task extends React.Component {
         {this.state.permission ? 
           <div>
             { this.state.success_page ? 
-              <div style={{top: '0', left: '0', position: 'absolute', width: '100%', height: '100vh', background: 'white'}}>
+              <div className="success_page">
                 <div>Delete Success!</div>
                 <Link to={'/classrooms/'+this.props.match.params.class+'/tasks'}>
-                  <div>Back to Tasks Page</div>
+                  <div className="btn">Back to Tasks Page</div>
                 </Link>
               </div>
             : null }
-            <div>Task Title: {this.state.title}</div>
-            <div>{this.state.create_date}</div>
-            <div>{this.state.deadline}</div>
 
-            { this.props.user_type === 'teacher' ?
-                new Date() > new Date(this.state.deadline) || this.state.forceClose ?
-                  <Link to={this.props.location.pathname+'/results'}><button>Result</button></Link>
-                :
-                  <div>
-                    <Link to={this.props.location.pathname+'/edit'}><button>Edit</button></Link>
-                    <br/><button onClick={this.forceClose}>Force Close</button>
-                    <br/><button onClick={this.deleteTask}>Delete</button>
-                  </div>
-            : new Date() > new Date(this.state.deadline) || this.state.forceClose  ?
-                <Link to={this.props.location.pathname+'/results/'+this.props.user_id}><button>Result</button></Link>
+            <div className="task-basic block">
+              <div>Title: {this.state.title}</div>
+              <div className="date">Created: {this.state.create_date !== '' && new Date(this.state.create_date).toISOString().split('T')[0]}</div>
+              <div className="date">Deadline: {this.state.deadline !== '' && new Date(this.state.deadline).toISOString().split('T')[0]}</div>
+            </div>
+
+            {this.props.user_type === 'teacher' ?
+              new Date() > new Date(this.state.deadline) || this.state.forceClose ?
+                <Link to={this.props.location.pathname+'/results'}><div className="block btn">Result</div></Link>
+              :
+                <div>
+                  <Link to={this.props.location.pathname+'/edit'}><div className="block edit btn">Edit</div></Link>
+                  <div onClick={this.forceClose} className="block close btn">Force Close</div>
+                  <div onClick={this.deleteTask} className="block delete btn">Delete</div>
+                </div>
+            : 
+              new Date() > new Date(this.state.deadline) || this.state.forceClose  ?
+                <Link to={this.props.location.pathname+'/results/'+this.props.user_id}><div className="block btn">Result</div></Link>
               : 
                 this.state.task_answers.length > 0 ? 
-                  <Link to={this.props.location.pathname+'/edit_answer/'+this.props.user_id}><button>Edit Answer</button></Link>
-                : <Link to={this.props.location.pathname+'/answer'}><button>Answer</button></Link>}
+                  <Link to={this.props.location.pathname+'/edit_answer/'+this.props.user_id}><div className="block edit btn">Edit Answer</div></Link>
+                : <Link to={this.props.location.pathname+'/answer'}><div className="block btn">Answer</div></Link>}
 
           </div>
         : <div>Please Wait...</div>}

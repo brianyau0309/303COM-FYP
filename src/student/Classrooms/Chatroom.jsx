@@ -12,6 +12,7 @@ class Chatroom extends React.Component {
     this.inputKeyDown = this.inputKeyDown.bind(this)
     this.sendMessage = this.sendMessage.bind(this)
     this.leaveRoom = this.leaveRoom.bind(this)
+    this.scrollToBottom = this.scrollToBottom.bind(this)
   }
 
   componentDidMount() {
@@ -42,7 +43,7 @@ class Chatroom extends React.Component {
       if (res.ok) {
         res.json().then(result => {
           console.log(result)
-          this.setState({ 'messages': result.chatroom.messages })
+          this.setState({ 'messages': result.chatroom.messages }, () => this.scrollToBottom())
         })
       }
     })
@@ -57,7 +58,6 @@ class Chatroom extends React.Component {
   }
 
   sendMessage() {
-    console.log(this.state.input)
     if (this.state.input != "") {
       fetch(`/api/chatroom?class=${this.props.match.params.class}`, {
         method: 'POST',
@@ -67,6 +67,7 @@ class Chatroom extends React.Component {
         if (res.ok) {
           res.json().then(result => {
             console.log(result)
+            this.setState({'input': ''})
           })
         }
       })
@@ -80,6 +81,11 @@ class Chatroom extends React.Component {
     socket.emit('leaveRoom', {'room': `class${this.props.match.params.class}`})
   }
 
+  scrollToBottom() {
+    let chatList = document.querySelector('.Chatroom ul.chat-list') 
+    chatList.scrollTop = chatList.scrollHeight
+  }
+
   render() {
     return (
       <div className="Chatroom content">
@@ -89,16 +95,19 @@ class Chatroom extends React.Component {
           </Link>
           <span>Chatroom</span>
         </div>
-        <ul>
+        <ul className="chat-list">
           {this.state.messages.map(message => 
             <li onClick={() => this.props.userInfoToggle(message.member)}>
-              <div>{message.nickname} Date:{message.date ? new Date(message.date).toISOString().split('T')[0] : null} {message.date ? new Date(message.date).toISOString().split('T')[1].split('.')[0] : null}</div>
-              <div>{message.message}</div>
+              <div className="name">
+                {message.user_type === 'teacher' ? "Teacher" : "Student"} {message.nickname}
+                <span>{message.date ? new Date(message.date).toISOString().split('T')[0] : null} {message.date ? new Date(message.date).toISOString().split('T')[1].split('.')[0] : null}</span>
+              </div>
+              <div className="message">{message.message}</div>
             </li>
           )}
         </ul>
-        <div>
-          <input type="text" value={this.state.input} onKeyDown={this.inputKeyDown} onChange={this.inputOnChange}/><button onClick={this.sendMessage}>Send</button>
+        <div className="input-field">
+          <input type="text" placeholder="Input What You Want!" value={this.state.input} onKeyDown={this.inputKeyDown} onChange={this.inputOnChange}/><button onClick={this.sendMessage}>Send</button>
         </div>
       </div>
     )

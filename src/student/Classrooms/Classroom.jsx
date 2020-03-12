@@ -83,6 +83,7 @@ class Classroom extends React.Component {
             form.classroom_description.value = ''
             this.editToggle()
             this.loadClassroom()
+            this.props.reload()
           })
         }
       })
@@ -110,7 +111,7 @@ class Classroom extends React.Component {
   render() {
     return (
       <div className="Classroom content">
-        <div className="header">
+        <div className="header hidden">
           <Link className="header-icon" to={'/classrooms'}>
             <img className='header-icon' src={imgBack}/>
           </Link>
@@ -119,25 +120,25 @@ class Classroom extends React.Component {
         {this.state.permission ? 
           <div>
             { this.state.success_page ? 
-              <div style={{top: '0', left: '0', position: 'absolute', width: '100%', height: '100vh', background: 'white'}}>
+              <div className="success_page">
                 <div>Delete Success!</div>
                 <Link to='/classrooms'>
-                  <div>Back to Classrooms Page</div>
+                  <div className="btn">Back to Classrooms</div>
                 </Link>
               </div>
             : null }
-            <div>
-              <div>{this.state.name}</div>
-              <div onClick={() => this.props.userInfoToggle(this.state.create_by)}>{this.state.nickname}</div>
-              <div><pre style={{fontFamily: 'inherit'}}>{this.state.description}</pre></div>
-              <div>{this.state.create_date}</div>
+            <div className="block classroom">
+              <div className="name">{this.state.name}</div>
+              <div className="nickname" onClick={() => this.props.userInfoToggle(this.state.create_by)}>Teacher: {this.state.nickname}</div>
+              <div className="description"><pre style={{fontFamily: 'inherit'}}>{this.state.description}</pre></div>
+              <div className="date">&nbsp;<span>{new Date(this.state.create_date).toISOString().split('T')[0]} {new Date(this.state.create_date).toISOString().split('T')[1].split('.')[0]}</span></div>
             </div>
             <ul className="classroom-item">
               { this.props.user_type === 'teacher' ?
-                <li onClick={this.editToggle}>Edit Description</li>
+                <li onClick={this.editToggle} className="edit">Edit Classroom</li>
                 : null}
               {this.state.editToggle && this.props.user_type === 'teacher' ? 
-                <li>
+                <li className="edit">
                   <form name='form_editClassroom' onSubmit={this.editClassroom}>
                     <input type="text" name="classroom_name" placeholder="Name of the Classroom" value={this.state.newName} onChange={e => this.newNameInputOnChange(e.target.value)} required/>
                     <textarea name="classroom_description" placeholder="Desceibe the Classroom here..." value={this.state.newDescription} onChange={e => this.newDescriptionOnChange(e.target.value)} required/>
@@ -150,8 +151,8 @@ class Classroom extends React.Component {
               {this.props.user_type === 'teacher' ? <Link to={'/classrooms/'+this.state.classroom_id+'/create_task'}><li>Create Task</li></Link> : null}
               <Link to={'/classrooms/'+this.state.classroom_id+'/calendar'}><li>Calendar</li></Link>
               <Link to={'/classrooms/'+this.state.classroom_id+'/chat'}><li>Chatroom</li></Link>
-              <li></li>
-              {this.props.user_type === 'teacher'? <li onClick={this.deleteClassroom}>Delete Classroom</li> : null}
+
+              {this.props.user_id === this.state.create_by ? <li className="delete" onClick={this.deleteClassroom}>Delete Classroom</li> : null}
             </ul>
           </div>
           : <div>Please Wait...</div>}

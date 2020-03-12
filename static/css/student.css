@@ -5,7 +5,7 @@
 :root {
   --main-bg-color: repeating-linear-gradient(45deg, rgba(232, 241, 249, 0.6), rgba(255,255,255,.3) 27vh),
     repeating-linear-gradient(125deg, rgba(232, 241, 249, 0.6), rgba(255,255,255,.3) 27vh);
-  --main-color-lightblue: rgba(173, 216, 230, .5);
+  --main-color-lightblue: rgba(173, 216, 230, .4);
   --main-color-lightblack: rgba(44,44,44);
 }
 
@@ -35,7 +35,7 @@ button {
   font-family: inherit;
   border: 0;
   padding: 0;
-  background-color: inherit;
+  background: inherit;
 }
 
 hr {
@@ -178,7 +178,7 @@ pre {
   width: 80%;
   height: 50vh;
   margin: auto;
-  background-color: lightblue;
+  background: lightblue;
   border-radius: 10px;
   padding: 1vh;
 }
@@ -348,7 +348,7 @@ pre {
   margin: auto;
   width: 96%;
   height: 15vh;
-  background-color: rgba(255,255,255,.5);
+  background: rgba(255,255,255,.5);
   border: 1px inset lightgray;
 }
 .Question .TextEditor > iframe > * {
@@ -437,7 +437,7 @@ pre {
   margin: auto;
   width: 96%;
   height: 75vh;
-  background-color: rgba(255,255,255,.5);
+  background: rgba(255,255,255,.5);
   border: 1px inset lightgray;
 }
 
@@ -550,12 +550,11 @@ pre {
 
 .Lesson .lesson_detail {
   width: 93%;
-  height: 80vh;
   margin: 1vh auto;
   overflow: scroll;
   padding: 1vh 2vh;
   font-size: 2.5vh;
-  background: rgba(173, 216, 230);
+  background: var(--main-color-lightblue);
 }
 
 .course-detail,
@@ -563,7 +562,7 @@ pre {
   width: 98%;
   margin: 1vh auto;
   padding: 1vh 0;
-  background: var(--main-color-lightblue)
+  background: rgb(215, 235, 244);
 }
 
 .course-detail > .title {
@@ -642,18 +641,22 @@ pre {
 }
 .course-btn-panel .create {
   background: lightgreen;
+  cursor: pointer;
 }
 .Lesson .edit,
 .comment-list .edit,
 .course-btn-panel .edit {
   margin: 0 1% 0 0;
   background: yellow;
+  cursor: pointer;
 }
 .Lesson .delete,
 .comment-list .delete,
 .course-btn-panel .delete {
   margin: 0 0 0 1%;
-  background: red;
+  background: orangered;
+  color: white;
+  cursor: pointer;
 }
 .course-btn-panel .rate {
   background: var(--main-color-lightblue);
@@ -661,11 +664,14 @@ pre {
 .Question .collection.add,
 .course-btn-panel .collection.add {
   background: lightgreen;
+  cursor: pointer;
 }
 .Question .delete,
 .Question .collection.remove,
 .course-btn-panel .collection.remove {
-  background: red;
+  background: orangered;
+  color: white;
+  cursor: pointer;
 }
 .Question .delete,
 .Question .collection {
@@ -682,6 +688,7 @@ pre {
 .Question .delete.cancel {
   background: yellow;
   border: 1px solid yellow;
+  cursor: pointer;
 }
 .comments-header {
   width: 98%;
@@ -859,26 +866,282 @@ pre {
 
 .Classrooms input,
 .Classrooms textarea,
+.Classroom input,
+.Classroom textarea,
+.ClassroomMembers input,
 .Day input,
 .Day textarea {
-  font-size: 2vh;
+  font-size: 2.5vh;
   display: block;
   margin: 0 auto;
   margin-bottom: 1.5vh;
-  width: 80%
+  width: 80%;
+  border: none;
+}
+.Classrooms input[type="submit"],
+.Classroom input[type="submit"],
+.ClassroomMembers input[type="submit"],
+.Day input[type="submit"] {
+  margin-bottom: 0;
+  border: 1px solid lightgray;
+  background: whitesmoke;
 }
 
 .Classrooms textarea,
+.Classroom textarea,
 .Day textarea {
   height: 10vh;
+  font-size: 2.5vh;
+}
+
+.Classrooms,
+.Classroom {
+  color: var(--main-color-lightblack);
+}
+
+.Classrooms a,
+.Classroom a {
+  text-decoration: none;
+  color: inherit;
+}
+.Course .block,
+.Classrooms .block,
+.Classroom .block,
+.ClassroomMembers .block,
+.Tasks .block,
+.Task .block {
+  display: block;
+  width: 98%;
+  margin: .5vh auto;
+  font-size: 3.2vh;
+  background: var(--main-color-lightblue);
+  text-align: center;
+}
+.Course .block {
+  text-align: left;
+  padding: 1vh 2%;
+  width: 94%;
+}
+.Classrooms .block.btn,
+.Task .block.btn {
+  cursor: pointer;
+}
+.Classrooms .block.btn:hover,
+.Task .block.btn:hover {
+  opacity: .8;
+}
+.Classrooms .block.form,
+.ClassroomMembers .block.form,
+.Tasks .block.form {
+  padding: 1.5vh 0;
+}
+.Classrooms .block.classroom,
+.Classroom .block.classroom {
+  width: 94%;
+  padding: 1vh 2%;
+  text-align: left;
+  font-size: 2.5vh;
+}
+.Classrooms .block.classroom .name,
+.Classroom .block.classroom .name {
+  font-weight: bold;
+  font-size: 3vh;
+}
+.Classrooms .block.classroom .description,
+.Classroom .block.classroom .description {
+  padding: 1vh 2vh;
+}
+.Classrooms .block.classroom .date,
+.Classroom .block.classroom .date {
+  font-size: 2vh;
+}
+.Classrooms .block.classroom .date span,
+.Classroom .block.classroom .date span {
+  float: right;
+}
+.Classroom .classroom-item {
+  list-style: none
+}
+.Classroom .classroom-item li {
+  width: 98%;
+  margin: .5vh auto;
+  padding: .5vh 0;
+  font-size: 3.2vh;
+  background: var(--main-color-lightblue);
+  text-align: center;
+}
+.ClassroomMembers .member-list li {
+  width: 94%;
+  margin: .5vh auto;
+  background: var(--main-color-lightblue);
+  font-size: 2.5vh;
+  text-align: left;
+  padding: 1vh 2%;
+}
+.ClassroomMembers .member-list li img {
+  width: 15vh;
+  height: 15vh;
+  float: left;
+}
+.ClassroomMembers .member-list li .kick > span {
+  padding: .2vh .5vh;
+  float: right;
+  background: orangered;
+  color: white;
+  border-radius: 5px;
+  cursor: pointer;
+}
+.classroom-item li.edit {
+  background: yellow;
+}
+.classroom-item li.delete {
+  margin-top: 5vh;
+  background: red;
+  color: white;
+  font-weight: bold;
+}
+.classroom-item li form {
+  padding: 1.5vh 0;
+  display: block;
+  width: 98%;
+  margin: .5vh auto;
+  background: yellow;
+  text-align: center;
+}
+
+.Tasks .task-list {
+  list-style: none;
+  grid-area: chat;
+  overflow-y: scroll;
+  padding-bottom: 3vh;
+}
+.Tasks .task-list a {
+  text-decoration: none;
+  color: inherit;
+}
+.Tasks .task-list li,
+.Day .deadline-item,
+.Day .event-item {
+  width: 94%;
+  margin: .5vh auto;
+  font-size: 2.5vh;
+  background: var(--main-color-lightblue);
+  padding: 1vh 2%;
+}
+
+.Task {
+  overflow: hidden;
+}
+.Task a {
+  text-decoration: none;
+  color: inherit;
+}
+
+.Task .task-basic {
+  width: 94%;
+  padding: 1vh 2%;
+  text-align: left;
+}
+.Task .task-basic .date {
+  font-size: 2.5vh;
+}
+.Task .block.edit {
+  background: yellow;
+}
+.Task .block.close {
+  margin-top: 3vh;
+}
+.Task .block.close,
+.Task .block.delete {
+  color: white;
+  background: orangered;
 }
 
 .task_answer_toggle.yes {
-  background-color: green;
+  background: green;
 }
 
 .task_answer_toggle.no{
-  background-color: lightgray;
+  background: lightgray;
+}
+
+.Day a {
+  text-decoration: none;
+  color: inherit;
+}
+.Day .deadline-item {
+  color: white;
+  background: orangered;
+}
+.Day .deadline-item.btn {
+  cursor: pointer;
+}
+
+.Day .event-item {
+  background: yellow;
+  cursor: pointer;
+}
+.Day .event-item.btn {
+  cursor: pointer;
+}
+
+.Day .event-item img {
+  float: right;
+  width: 3.5vh;
+  height: 3.5vh;
+  vertical-align: middle;
+}
+.Day .event-item div + div {
+  height: 0;
+  overflow: hidden;
+  transition: height 1s linear;
+}
+.Day .event-item div + div:hover,
+.Day .event-item div:hover + div {
+  height: auto;
+  padding: 1vh 2vh;
+}
+.Chatroom {
+  display: grid;
+  grid-template-rows: 7vh 1fr 7vh;
+  grid-template-areas:
+    'header'
+    'chat'
+    'input';
+}
+.Chatroom .chat-list {
+  list-style: none;
+  grid-area: chat;
+  overflow-y: scroll;
+  padding-bottom: 2vh;
+}
+.Chatroom .input-field {
+  grid-area: input;
+  display: grid;
+  grid-template-columns: 80% 20%;
+  background: var(--main-color-lightblue);
+  font-size: 3vh;
+}
+.Chatroom .input-field input {
+  font-size: 3vh;
+  background: whitesmoke;
+}
+.Chatroom .chat-list li {
+  width: 94%;
+  margin: .5vh auto;
+  font-size: 2.5vh;
+  background: var(--main-color-lightblue);
+  padding: 1vh 2%;
+}
+.Chatroom .chat-list li .name {
+  font-size: 1.5vh;
+  border-bottom: 1px solid darkgray;
+}
+.Chatroom .chat-list li .name span {
+  float: right;
+}
+.Chatroom .chat-list li .message {
+  padding: 2vh 2vh 0 2vh;
 }
 
 .success_page {
@@ -941,17 +1204,23 @@ pre {
   opacity: .8;
 }
 
+@media only screen and (max-width: 480px) {
+  .dayDetail {
+    font-size: 1.5vh;
+  }
+}
+
 @media only screen and (min-width: 780px) {
   .nav-items {
-    margin: 8vh 6vw;
+    margin: 8vh 12vw;
   }
   .nav-items > img {
-    width: 22vh;
-    height: 22vh;
+    width: 14vh;
+    height: 14vh;
   }
   .nav-items > div {
-    width: 22vh;
-    font-size: 3vh;
+    width: 14vh;
+    font-size: 2.5vh;
   }
   .header.hidden {
     display: none;

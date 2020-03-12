@@ -73,13 +73,13 @@ class Tasks extends React.Component {
         </div>
         {this.state.permission ? 
           <div>
-            <div>{this.state.classroom ? this.state.classroom.name : null}: Tasks List</div>
-            <ul>
+            <div className="block form"> Tasks for {this.state.classroom ? this.state.classroom.name : null}</div>
+            <ul className="task-list">
               {this.state.tasks.map(task => 
                 <Link to={this.props.location.pathname+'/'+task.task_num}>
                   <li>
-                    <div>Title: {task.title}{task.force_close ? "(Closed)" : null}</div>
-                    <div>Deadline: {task.deadline}</div>
+                    <div>Title: {task.title} {task.force_close ? <span style={{color: 'red'}}>(Closed)</span> : new Date() > new Date(task.deadline) ? <span style={{color: 'red'}}>(End)</span> : null }</div>
+                    <div>Deadline: {new Date(task.deadline).toISOString().split('T')[0]}</div>
                   </li>
                 </Link>
               )}

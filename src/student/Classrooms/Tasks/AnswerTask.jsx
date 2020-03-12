@@ -107,10 +107,10 @@ class AnswerTask extends React.Component {
         {this.state.permission ? 
           <div>
             { this.state.success_page ? 
-              <div style={{top: '0', left: '0', position: 'absolute', width: '100%', height: '100vh', background: 'white'}}>
+              <div className="success_page">
                 <div>Success!</div>
                 <Link to={this.props.match.url.replace('/answer', '')}>
-                  <div>Back to Task Page</div>
+                  <div className="btn">Back to Task Page</div>
                 </Link>
               </div>
             : null }

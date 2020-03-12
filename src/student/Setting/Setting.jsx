@@ -77,7 +77,7 @@ export default class Setting extends React.Component {
       if (res.ok) {
         res.json().then(result => {
           console.log(result)
-          form.icon.value = ''
+          document.forms.form_changeIcon.icon.value = ''
           this.iconToggle()
           this.loadIcon()
         })

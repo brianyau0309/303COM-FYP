@@ -80,7 +80,7 @@ export default class Lesson extends React.Component {
         </div>
         
         <div className="Lesson-detail">
-          <div className="lesson_title">{this.state.title}</div>
+          <div className="lesson_title block">{this.state.title}</div>
           {this.props.myCourse ? 
             <div className="flex">
               <div className="edit" onClick={() => this.editLesson(this.state.title, this.state.filename, this.state.video_link, this.state.detail)}>Edit Lesson</div>
@@ -91,7 +91,7 @@ export default class Lesson extends React.Component {
             <iframe className="video" src={this.state.video_link} frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
           : null}
           {this.state.filename != null ? 
-            <div className="download">
+            <div className="block download">
               <span>{this.state.filename}</span>
               <a href={window.location.origin+'/static/files/'+this.state.course_id+'_'+this.state.lesson_num+'.'+this.state.filename.split('.').pop()} Download={this.state.filename}>Download</a>
             </div>

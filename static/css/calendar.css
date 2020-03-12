@@ -49,7 +49,7 @@
   text-align: center;
 }
 .day-list {
-  overflow: scroll;
+  overflow: hidden;
   height: 100%;
 }
 .days {
@@ -75,19 +75,17 @@
   background: lightblue;
 }
 .dayHead.today {
-  background: lightgreen;
-  color: darkmagenta;
+  color: darkgreen;
 }
 .dayDetail {
   height: 80%;
-  border-bottom: 1px solid lightgray;
   font-size: 1.8vh;
 }
 .dayDetail .deadline {
-  background: red;
+  background: orangered;
   border-bottom: none;
   text-align: center;
-  color: black;
+  color: white;
 }
 .dayDetail .event {
   background: yellow;

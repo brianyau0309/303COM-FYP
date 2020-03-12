@@ -258,6 +258,7 @@ export default class Course extends React.Component {
 
         {this.state.lessons.length > 0 ? 
           <div className="lesson-panel">
+            <div className="lesson" style={{cursor: 'default', borderBottom: '1px solid darkgray'}}>Lessons</div>
             {this.state.lessons.map(lesson => 
               <div className="lesson" onClick={() => this.openLesson(this.state.course_id, lesson.lesson_num)}>
                 {lesson.title}  

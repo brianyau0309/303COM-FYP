@@ -56,8 +56,8 @@ export default class UserInfo extends React.Component {
           <div className="UserInfo-main">
             <img src={this.state.icon} alt="target icon" onError={this.imgOnError}/>
             <div>{targetInfo.nickname}</div>
-            <div>User Id: {targetInfo.user_id}</div>
-            <div>{targetInfo.user_type} from {targetInfo.school}</div>
+            <div>User Id: {String(targetInfo.user_id).padStart(8,'0')}</div>
+            <div>{targetInfo.user_type === 'teacher' ? 'Teacher' : 'Student'} from {targetInfo.school}</div>
             <div>
               <div>
                 <div>Best Answer</div>
