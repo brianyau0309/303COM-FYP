@@ -83,22 +83,27 @@ class EditTask extends React.Component {
       }
     })
     if (this.state.title !== '' && this.state.deadline !== undefined &&questions.length > 0 && !fail) {
-      fetch('/api/task?c='+this.props.match.params.class+'&t='+this.props.match.params.task, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ 'task': {
-          'title': this.state.title,
-          'deadline': this.state.deadline,
-          'questions': this.state.questions
-        }})
-      }).then(res => {
-        if (res.ok) {
-          res.json().then(result => {
-            console.log(result)
-            this.setState({'success_page': true})
-          })
-        }
+      if (new Date(this.state.deadline.toDateString()) > new Date()) {
+        fetch('/api/task?c='+this.props.match.params.class+'&t='+this.props.match.params.task, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ 'task': {
+            'title': this.state.title,
+            'deadline': this.state.deadline,
+            'questions': this.state.questions
+          }})
+        }).then(res => {
+          if (res.ok) {
+            res.json().then(result => {
+              console.log(result)
+              this.setState({'success_page': true})
+              document.querySelector('.EditTask').scrollTop = 0
+            })
+          }
       })
+      } else {
+        alert('Invaild Date of Deadline')
+      }
     } else {
       alert('Please create at least 1 question fill in all the blanks')
     }
@@ -175,10 +180,9 @@ class EditTask extends React.Component {
   }
 
   render() {
-    console.log(this.props.match)
     const { deadline } = this.state
     return (
-      <div className="EditTask content">
+      <div className="EditTask content part">
         <div className="header">
           <img className='header-icon' src={imgBack} onClick={this.props.history.goBack}/>
           <span>Edit Task</span>
@@ -186,42 +190,60 @@ class EditTask extends React.Component {
         {this.state.permission ? 
           <div>
             { this.state.success_page ? 
-              <div style={{top: '0', left: '0', position: 'absolute', width: '100%', height: '100vh', background: 'white'}}>
+              <div className='success_page'>
                 <div>Success!</div>
                 <Link to={this.props.match.url.replace('/edit', '')}>
-                  <div>Back to Task Page</div>
+                  <div className="btn">Back to Task Page</div>
                 </Link>
               </div>
-            : null }
-              <input type="text" value={this.state.title} onChange={this.titleOnChange} placeholder='Task Title'/><br/>
-              <DayPickerInput onDayChange={this.deadlineOnChange} value={new Date(this.state.deadline).toISOString().split('T')[0]} Format='YYYY-MM-DD'/>
+            :
 
-              <div>Questions:</div>
+            <div>
+              <div className="block">
+                <input maxLength='50' type="text" value={this.state.title} onChange={this.titleOnChange} placeholder='Task Title'/>
+                <DayPickerInput onDayChange={this.deadlineOnChange} placeholder="Deadline" inputProps={{readOnly: true}} value={new Date(this.state.deadline).toISOString().split('T')[0]} Format='YYYY-MM-DD'/>
+              </div>
+
+              <div className="block title">Questions</div>
               { this.state.questions.map((q, qi) => 
-                <div>
+              <div className="block question">
+                <div className="type">
+                  {q.type.toUpperCase() === 'MC' ? 'MC Question' : 'Short Question'}
+                  <span className="delete" onClick={() => this.popQuestion(qi)}>Delete</span>
+                </div>
+
                   <textarea placeholder="Type in your Task Question Here..." value={q.question} onChange={e => this.textareaOnChange(e.target.value, qi)}/>
-                  <div onClick={() => this.popQuestion(qi)}>Delete Question</div>
-                    <ul>
-                      <input type="text" value={q.category} onChange={e => this.categoryInputOnChange(e.target.value, qi)} placeholder='Question Cateory (Optional)'/>
-                      { q.type.toUpperCase() === 'MC' && q.choice.length < 4 ? 
-                        <div>New Choice<img onClick={() => this.addChoice(qi)} src="https://img.icons8.com/flat_round/64/000000/plus.png"/></div>
-                      : null }
-                      { q.type.toUpperCase() == 'MC' ? 
-                        q.choice.map((c, ci) =>
-                          <li>A{ci+1}: 
-                            <input type="text" value={c} onChange={e => this.choiceInputOnChange(e.target.value, qi, ci)} placeholder="Multiple Choice"/>
-                            <span className={ci+1 === q.answer ? 'task_answer_toggle yes' : 'task_answer_toggle no'} onClick={() => this.mcAnswerToggle(qi, ci+1)}>Answer</span>
-                            { q.choice.length > 2 ? <img src="https://img.icons8.com/flat_round/64/000000/minus.png" onClick={() => this.popChoice(qi, ci)}/> : null }
-                          </li>
-                        ) 
-                      : <li>Answer: <input type="text" value={q.answer} onChange={e => this.answerInputOnChange(e.target.value, qi)} /></li>}
-                    </ul>
+                  <input maxLength="30" className="category" type="text" value={q.category} onChange={e => this.categoryInputOnChange(e.target.value, qi)} placeholder='Question Cateory (Optional)'/>
+
+                  <ul>
+                    { q.type.toUpperCase() === 'MC' && q.choice.length < 4 ? 
+                      <div>New Choice<img onClick={() => this.addChoice(qi)} src="https://img.icons8.com/flat_round/64/000000/plus.png"/></div>
+                    : null }
+              
+                    { q.type.toUpperCase() == 'MC' ? 
+                      q.choice.map((c, ci) =>
+                        <li>{ci+1}.&nbsp; 
+                          <input maxLength='30' type="text" value={c} onChange={e => this.choiceInputOnChange(e.target.value, qi, ci)} placeholder="Multiple Choice"/>
+                          <span className={ci+1 === q.answer ? 'task_answer_toggle yes' : 'task_answer_toggle no'} onClick={() => this.mcAnswerToggle(qi, ci+1)}>Ans.</span>
+                          { q.choice.length > 2 ? <img src="https://img.icons8.com/flat_round/64/000000/minus.png" onClick={() => this.popChoice(qi, ci)}/> : null }
+                        </li>
+                      ) 
+                    :
+                      <li>Answer: <input maxLength='30' type="text" value={q.answer} onChange={e => this.answerInputOnChange(e.target.value, qi)} /></li>}
+                  </ul>
+
                 </div>
               ) }
-            <div onClick={ this.newMCQ }>New MC Question</div>
-            <div onClick={ this.newSQ }>New Short Question</div>
 
-            <button onClick={this.edit_task}>Edit Task</button>
+              <div className="block flex">
+                <div onClick={this.newMCQ}>New MC Question</div>
+                <div onClick={this.newSQ}>New Short Question</div>
+              </div>
+
+              <div className="sticky-bottom">
+                <button className="submit" onClick={this.edit_task}>Edit Task</button>
+              </div>
+            </div>}
           </div>
         : <div>Please Wait...</div>}
       </div>

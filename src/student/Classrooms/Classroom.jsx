@@ -110,8 +110,8 @@ class Classroom extends React.Component {
 
   render() {
     return (
-      <div className="Classroom content">
-        <div className="header hidden">
+      <div className="Classroom content part">
+        <div className="header sticky-top hidden">
           <Link className="header-icon" to={'/classrooms'}>
             <img className='header-icon' src={imgBack}/>
           </Link>

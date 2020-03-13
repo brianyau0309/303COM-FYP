@@ -54,7 +54,7 @@ SQL = {
     WHERE user_id = {1}
     ''',
     'user_info': '''
-    SELECT a.best_answer, b.answer_likes, c.course_num, d.follower
+    SELECT a.best_answer, b.answer_likes, c.course_avg, d.follower
     FROM (
       SELECT COUNT(*) best_answer
       FROM questions
@@ -64,9 +64,9 @@ SQL = {
       FROM answer_likes
       WHERE create_by = {0}
     ) b, (
-      SELECT COUNT(*) course_num
-      FROM courses
-      WHERE author = {0} AND valid = true
+      SELECT AVG(b.rating) course_avg
+      FROM courses a, courses_comments b
+      WHERE a.course_id = b.course AND a.author = {0} AND a.valid = true
     ) c, (
       SELECT COUNT(*) follower
       FROM user_following
@@ -74,7 +74,7 @@ SQL = {
     ) d
     ''',
     'target_info': '''
-    SELECT a.best_answer, b.answer_likes, c.course_num, d.follower, e.following, f.*
+    SELECT a.best_answer, b.answer_likes, c.course_avg, d.follower, e.following, f.*
     FROM (
       SELECT COUNT(*) best_answer
       FROM questions
@@ -84,9 +84,9 @@ SQL = {
       FROM answer_likes
       WHERE create_by = {0}
     ) b, (
-      SELECT COUNT(*) course_num
-      FROM courses
-      WHERE author = {0} AND valid = true
+      SELECT AVG(b.rating) course_avg
+      FROM courses a, courses_comments b
+      WHERE a.course_id = b.course AND a.author = {0} AND a.valid = true
     ) c, (
       SELECT COUNT(*) follower
       FROM user_following
@@ -570,7 +570,7 @@ SQL = {
     GROUP BY b.category
     ''',
     'student_answers': '''
-    SELECT a.question_num, b.question, a.answer student_answer, b.answer
+    SELECT a.question_num, b.question, a.answer student_answer, b.answer, b.category
     FROM task_answers a, task_questions b
     WHERE a.classroom = b.classroom AND a.task_num = b.task_num AND a.question_num = b.question_num AND
     a.classroom = {0} AND a.task_num = {1} AND a.student = {2}
@@ -629,7 +629,7 @@ SQL = {
         WHERE user_id = {0}
         GROUP BY course
       ) d ON b.course_id = d.course
-    WHERE a.user_id = {0} AND b.create_date > a.follow_date
+    WHERE a.user_id = {0} AND b.create_date > a.follow_date AND b.valid = true
     LIMIT 50
     ''',
 }

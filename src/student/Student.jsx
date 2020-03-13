@@ -203,6 +203,7 @@ export default class Student extends React.Component {
                 <Header title='Notification'/>
                 <Notification/>
               </Route>
+
               <Route path="/setting">
                 <Header title='Setting'/>
                 <Setting user_data={this.state.user_data} reload={this.loadUser}/>

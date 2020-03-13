@@ -63,8 +63,8 @@ class TaskResults extends React.Component {
 
   render() {
     return (
-      <div className="TaskResults content">
-        <div className="header">
+      <div className="TaskResults content part">
+        <div className="header sticky-top" style={{zIndex: '1'}}>
           <Link className="header-icon" to={'/classrooms/'+this.props.match.params.class+'/tasks/'+this.props.match.params.task}>
             <img className='header-icon' src={imgBack}/>
           </Link>
@@ -72,42 +72,48 @@ class TaskResults extends React.Component {
         </div>
         {this.state.permission ? 
           <div>
-            <div>Task Title: {this.state.title}</div>
-            <div>Create Date: {this.state.create_date}</div>
-            <div>Deadline: {this.state.deadline}</div>
-            <div>Submitted: {this.state.submitted}</div>
-            <div>Total Question: {this.state.question_count}</div>
-            <ul>
-              <li>
-                <span onClick={this.questionToggle}>Correct Rate (By question)</span>
-                {this.state.questionToggle ? 
-                  <div>
-                    <BarChart title='Correct Rate by Question' title_X='Questions' title_Y='Correct Rate (%)' data={this.state.questionGraph}/>
-                    {this.state.performance_question.map(p => 
-                      <div>{p.question_num}: {Number(p.correct/this.state.question_count*100).toFixed(2)}%({p.correct}/{this.state.question_count})</div>
-                    )}
-                  </div>
-                : null}
-              </li>
-              <li>
-                <span onClick={this.categoryToggle}>Correct Rate (By category)</span>
-                {this.state.categoryToggle ?  
-                  <div>
-                    <BarChart title='Correct Rate by Category' title_X='Categories' title_Y='Correct Rate (%)' data={this.state.categoryGraph}/>
-                    {this.state.performance_category.map(p => 
-                      <div>{p.category ? p.category : 'Others'}: {Number(p.correct/p.category_count*100).toFixed(2)}%({p.correct}/{p.category_count})</div>
-                    )}
-                  </div>
-                : null}
-              </li>
-            </ul>
-            <div>Student Answers:</div>
+            <div className="task-basic block">
+              <div>Title: {this.state.title}</div>
+              <div className="date">Created: {this.state.create_date !== '' && new Date(this.state.create_date).toISOString().split('T')[0]}</div>
+              <div className="date">Deadline: {this.state.deadline !== '' && new Date(this.state.deadline).toISOString().split('T')[0]}</div>
+            </div>
+            
+            <div className="task-basic block sub">
+              <div>Submitted: {this.state.submitted}</div>
+              <div>Total Questions: {this.state.question_count}</div>
+            </div>
+
+            <div className="task-basic block btn">
+              <span onClick={this.questionToggle}>Correct Rate (By question)</span>
+              {this.state.questionToggle ? 
+                <div style={{padding: '2vh 0'}}>
+                  <BarChart title='Correct Rate by Question' title_X='Questions' title_Y='Correct Rate (%)' data={this.state.questionGraph}/>
+                  {this.state.performance_question.map(p => 
+                    <div>Q{p.question_num}. {Number(p.correct/this.state.question_count*100).toFixed(2)}%({p.correct}/{this.state.question_count})</div>
+                  )}
+                </div>
+              : null}
+            </div>
+            <div className="task-basic block btn">
+              <span onClick={this.categoryToggle}>Correct Rate (By category)</span>
+              {this.state.categoryToggle ?  
+                <div style={{padding: '2vh 0'}}>
+                  <BarChart title='Correct Rate by Category' title_X='Categories' title_Y='Correct Rate (%)' data={this.state.categoryGraph}/>
+                  {this.state.performance_category.map(p => 
+                    <div>{p.category ? p.category : 'Others'}: {Number(p.correct/p.category_count*100).toFixed(2)}%({p.correct}/{p.category_count})</div>
+                  )}
+                </div>
+              : null}
+            </div>
+
+            <div className="task-basic block" style={{textAlign: 'center'}}>Student Answers</div>
+
             <ul>
               {this.state.student_answers.map(s => 
                 <Link to={this.props.match.url+'/'+parseInt(s.student)}>
-                  <li>
-                    <div>ID: {s.student}</div>
+                  <li className="task-basic block answer btn">
                     <div>Name: {s.name}</div>
+                    <div>ID: {s.student}</div>
                     <div>Correct Rate: {Number(s.correct/this.state.question_count*100).toFixed(2)}%({s.correct}/{this.state.question_count})</div>
                   </li>
                 </Link>

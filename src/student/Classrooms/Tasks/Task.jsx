@@ -103,7 +103,7 @@ class Task extends React.Component {
 
   render() {
     return (
-      <div className="Task content">
+      <div className="Task content part">
         <div className="header">
           <Link className="header-icon" to={'/classrooms/'+this.props.match.params.class+'/tasks'}>
             <img className='header-icon' src={imgBack}/>

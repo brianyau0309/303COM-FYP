@@ -56,43 +56,49 @@ class TaskResult extends React.Component {
 
   render() {
     return (
-      <div className="TaskResult content">
-        <div className="header">
+      <div className="TaskResult content part">
+        <div className="header sticky-top">
           <img className='header-icon' src={imgBack} onClick={this.props.history.goBack}/>
           <span>Task Result</span>
         </div>
         {this.state.permission ? 
           <div>
-            <div>Task Title: {this.state.title}</div>
-            <div>Create Date: {this.state.create_date}</div>
-            <div>Deadline: {this.state.deadline}</div>
-            <div>Total Question: {this.state.question_count}</div>
-            <ul>
-                {this.state.student_result != null ? 
-                  <li onClick={() => this.props.userInfoToggle(this.state.student_result.student)}>
-                      <div>Student ID: {this.state.student_result.student}</div>
-                      <div>Student Name: {this.state.student_result.name}</div>
-                      <div>Correct Rate: {Number(this.state.student_result.correct/this.state.question_count*100).toFixed(2)}%({this.state.student_result.correct}/{this.state.question_count})</div>
-                  </li>
-                :null}
-              <li>
-                <span onClick={this.categoryToggle}>Correct Rate (By category)</span>
-                {this.state.categoryToggle ?  
-                  <div>
-                    <BarChart title='Correct Rate by Category' title_X='Categories' title_Y='Correct Rate (%)' data={this.state.categoryGraph}/>
-                    {this.state.performance_category.map(p => 
-                      <div>{p.category ? p.category : 'Others'}: {Number(p.correct/p.category_count*100).toFixed(2)}%({p.correct}/{p.category_count})</div>
-                    )}
-                  </div>
-                : null}
-              </li>
-            </ul>
-            <br/>
-            <div>Question Result:</div>
+            <div className="task-basic block">
+              <div>Title: {this.state.title}</div>
+              <div className="date">Created: {this.state.create_date !== '' && new Date(this.state.create_date).toISOString().split('T')[0]}</div>
+              <div className="date">Deadline: {this.state.deadline !== '' && new Date(this.state.deadline).toISOString().split('T')[0]}</div>
+            </div>
+
+            <div className="task-basic block sub">
+              <div>Total Question: {this.state.question_count}</div>
+              {this.state.student_result != null ? 
+                <div onClick={() => this.props.userInfoToggle(this.state.student_result.student)}>
+                    <div>Student ID: {this.state.student_result.student}</div>
+                    <div>Student Name: {this.state.student_result.name}</div>
+                    <div>Correct Rate: {Number(this.state.student_result.correct/this.state.question_count*100).toFixed(2)}%({this.state.student_result.correct}/{this.state.question_count})</div>
+                </div>
+              :null}
+            </div>
+
+            <div className="task-basic block btn">
+              <span onClick={this.categoryToggle}>Correct Rate (By category)</span>
+              {this.state.categoryToggle ?  
+                <div style={{padding: '2vh 0'}}>
+                  <BarChart title='Correct Rate by Category' title_X='Categories' title_Y='Correct Rate (%)' data={this.state.categoryGraph}/>
+                  {this.state.performance_category.map(p => 
+                    <div>{p.category ? p.category : 'Others'}: {Number(p.correct/p.category_count*100).toFixed(2)}%({p.correct}/{p.category_count})</div>
+                  )}
+                </div>
+              : null}
+            </div>
+
+            <div className="task-basic block" style={{textAlign: 'center'}}>Qusetion Results</div>
+
             {this.state.student_answers.map(a => 
-              <div>
-                <div>Question {a.question_num}.</div>
+              <div className="task-basic block answer">
+                <div>Q{a.question_num}.</div>
                 <div><pre>{a.question}</pre></div>
+                <div>Category: {a.category}</div>
                 <div>Your answer: <span style={a.student_answer === a.answer ? {color: 'green'} : {color: 'red'}}>{a.student_answer}</span></div>
                 {a.student_answer !== a.answer ? <div>Correct answer: <span style={{color: 'green'}}>{a.answer}</span></div>: null}
               </div>

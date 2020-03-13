@@ -88,7 +88,7 @@ class Chatroom extends React.Component {
 
   render() {
     return (
-      <div className="Chatroom content">
+      <div className="Chatroom content part">
         <div className="header">
           <Link className="header-icon" to={`/classrooms/${this.props.match.params.class}`} onClick={this.leaveRoom}>
             <img className='header-icon' src={imgBack}/>

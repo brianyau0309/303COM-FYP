@@ -1,5 +1,3 @@
-/* DayPicker styles */
-
 .DayPicker {
   display: inline-block;
   font-size: 1rem;
@@ -204,10 +202,8 @@
   background-color: #F0F8FF;
 }
 
-/* DayPickerInput */
-
 .DayPickerInput {
-  display: inline-block;
+  display: block;
 }
 
 .DayPickerInput-OverlayWrapper {

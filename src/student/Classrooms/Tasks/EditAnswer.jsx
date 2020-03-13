@@ -115,7 +115,7 @@ class EditAnswer extends React.Component {
 
   render() {
     return (
-      <div className="EditAnswer content">
+      <div className="EditAnswer content part">
         <div className="header">
           <img className='header-icon' src={imgBack} onClick={this.props.history.goBack}/>
           <span>Edit Answer</span>
@@ -129,28 +129,30 @@ class EditAnswer extends React.Component {
                   <div className="btn">Back to Task Page</div>
                 </Link>
               </div>
-            : null }
-              <div>Questions:</div>
-              { this.state.questions.map((q, qi) => 
-                <div>
-                  <div>Question: {q.question_num}</div>
-                  <div><pre style={{fontFamily: 'inherit'}}>{q.question}</pre></div>
-                    <ul>
-                      { q.type.toUpperCase() == 'MC' ? 
-                        q.choice.map((c, ci) =>
-                          <li> 
-                            <div className={c === q.answer ? 'task_answer_toggle yes' : 'task_answer_toggle no'} 
-                                 onClick={() => this.mcAnswerToggle(qi, ci)}>
-                                 A{ci+1}: {c}
-                            </div>
-                          </li>
-                        ) 
-                      : <li>Answer: <input type="text" value={q.answer} onChange={e => this.answerInputOnChange(e.target.value, qi)} /></li>}
-                    </ul>
-                </div>
-              ) }
+            :
+              <div>
+                <div className="block title">Questions</div>
+                { this.state.questions.map((q, qi) => 
+                  <div className="block answer">
+                    <div className="type">Q. {q.question_num}</div>
+                    <div><pre style={{fontFamily: 'inherit'}}>{q.question}</pre></div>
+                      <ul>
+                        { q.type.toUpperCase() == 'MC' ? 
+                          q.choice.map((c, ci) =>
+                            <li> 
+                              <div className={c === q.answer ? 'task_answer_toggle yes' : 'task_answer_toggle no'} 
+                                   onClick={() => this.mcAnswerToggle(qi, ci)}>
+                                   {ci+1}. {c}
+                              </div>
+                            </li>
+                          ) 
+                        : <li>Answer: <input type="text" value={q.answer} onChange={e => this.answerInputOnChange(e.target.value, qi)} /></li>}
+                      </ul>
+                  </div>
+                ) }
 
-            <button onClick={this.editAnswer}>Edit Answer</button>
+              <button className="submit" onClick={this.editAnswer}>Edit Answer</button>
+            </div>}
           </div>
         : <div>Please Wait...</div>}
       </div>

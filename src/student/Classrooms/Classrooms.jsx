@@ -98,7 +98,7 @@ class Classrooms extends React.Component {
 
   render() {
     return (
-      <div className="content">
+      <div className="ClassroomsMain content">
         <div className="Classrooms">
           {this.props.user_type === 'teacher' ? 
             <div>

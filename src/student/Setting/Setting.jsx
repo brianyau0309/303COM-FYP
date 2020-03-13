@@ -159,61 +159,72 @@ export default class Setting extends React.Component {
     let user = this.props.user_data
     return (
       <div className="Setting content">
-        <img src={this.state.icon} alt="user icon" onError={this.imgOnError}/>
-        <div>{user.nickname}</div>
-        {user.sex === 'f' ? <div style={{color: 'deeppink'}}>Female</div> : <div style={{color: 'lightblue'}}>Male</div>}
-        <div>{user.user_id}</div>
-        <div>{user.name}</div>
-        <div>{user.user_type} from {user.school}</div>
-        <div>
+        <div className="block img">
+          <img src={this.state.icon} alt="user icon" onError={this.imgOnError}/>
+        </div>
+
+        <div className="block basic">
           <div>
+            {user.nickname}&nbsp;
+            {user.sex === 'f' ?
+              <span style={{color: 'deeppink'}}>Female</span>
+            : <span style={{color: 'lightblue'}}>Male</span>}
+          </div>
+          <div>ID: {String(user.user_id).padStart(8,'0')}</div>
+          <div>Name: {user.name}</div>
+          <div>{user.user_type === 'teacher' ? 'Teacher' : 'Student'} from {user.school}</div>
+        </div>
+
+        <div className="flex">
+          <div className="block">
             <div>Best Answer</div>
             <div>{ this.state.info ? this.state.info.best_answer ? this.state.info.best_answer : 0 : null }</div>
           </div>
-          <div>
+          <div className="block">
             <div>Answer Likes</div>
             <div>{ this.state.info ? this.state.info.answer_likes ? this.state.info.answer_likes : 0 : null }</div>
           </div>
           { user.user_type === 'teacher' && 
-            <div>
-              <div>Course Average Rate</div>
-              <div>{ this.state.info ? this.state.info.course_num ? this.state.info.course_num : 0 : null }</div>
+            <div className="block">
+              <div>Courses Avg. Rate</div>
+              <div>{ this.state.info ? this.state.info.course_avg ? this.state.info.course_avg : 0 : null }</div>
             </div>
           }
           { user.user_type === 'teacher' &&
-            <div>
+            <div className="block">
               <div>Followers</div>
               <div>{ this.state.info ? this.state.info.follower ? this.state.info.follower : 0 : null }</div>
             </div>
           }
         </div>
+
         <ul>
-          <li onClick={this.iconToggle}>Change Icon</li>
+          <li className="block btn" onClick={this.iconToggle}>Change Icon</li>
           { this.state.iconChange &&
-            <li>
+            <li className="block input">
               <form name="form_changeIcon" onSubmit={this.changeIcon}>
                 <input name="icon" type="file" />
                 <input type="submit" />
               </form>
-              <div onClick={this.deleteIcon}>Just delete my icon!</div>
+              <div className="delete" onClick={this.deleteIcon}>Just delete my icon!</div>
             </li>
           }
-          <li onClick={this.nicknameToggle}>Change Nickname</li>
+          <li className="block btn" onClick={this.nicknameToggle}>Change Nickname</li>
           { this.state.nicknameChange &&
-            <li>
+            <li className="block input">
               <form name="form_changeNickname" onSubmit={this.changeNickname}>
-                <input name="nickname" type="text" />
+                <input placeholder='New Nickname' name="nickname" type="text" />
                 <input type="submit" />
               </form>
             </li>
           }
-          <li onClick={this.passwordToggle}>Change Password</li>
+          <li className="block btn" onClick={this.passwordToggle}>Change Password</li>
           { this.state.passwordChange &&
-            <li>
+            <li className="block input">
               <form name="form_changePassword" onSubmit={this.changePassword}>
-                <input name="password_now" type="password" />
-                <input name="password_new" type="password" />
-                <input name="password_repeat" type="password" />
+                <input placeholder='Password Now' name="password_now" type="password" />
+                <input placeholder='New Password' name="password_new" type="password" />
+                <input placeholder='Confirm New Password' name="password_repeat" type="password" />
                 <input type="submit" />
               </form>
             </li>

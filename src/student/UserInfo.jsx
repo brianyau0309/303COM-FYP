@@ -58,7 +58,7 @@ export default class UserInfo extends React.Component {
             <div>{targetInfo.nickname}</div>
             <div>User Id: {String(targetInfo.user_id).padStart(8,'0')}</div>
             <div>{targetInfo.user_type === 'teacher' ? 'Teacher' : 'Student'} from {targetInfo.school}</div>
-            <div>
+            <div className="flex">
               <div>
                 <div>Best Answer</div>
                 <div>{ targetInfo.best_answer ? targetInfo.best_answer : 0 }</div>
@@ -69,8 +69,8 @@ export default class UserInfo extends React.Component {
               </div>
               { targetInfo.user_type === 'teacher' && 
                 <div>
-                  <div>Course Average Rate</div>
-                  <div>{ targetInfo.course_num ? targetInfo.course_num : 0 }</div>
+                  <div>Courses Avg. Rate</div>
+                  <div>{ targetInfo.course_avg ? targetInfo.course_avg : 0 }</div>
                 </div>
               }
               { targetInfo.user_type === 'teacher' &&
@@ -79,12 +79,12 @@ export default class UserInfo extends React.Component {
                   <div>{ targetInfo.follower ? targetInfo.follower : 0 }</div>
                 </div>
               }
-              { targetInfo.user_id !== this.props.user_id && targetInfo.user_type === 'teacher' ? 
-                  targetInfo.following ?
-                    <div onClick={this.followToggle}>Unfollow</div>
-                  : <div onClick={this.followToggle}>Follow</div>
-              : null }
             </div>
+            { targetInfo.user_id !== this.props.user_id && targetInfo.user_type === 'teacher' ? 
+                targetInfo.following ?
+                  <div className="unfollow" onClick={this.followToggle}>Unfollow</div>
+                : <div className="follow" onClick={this.followToggle}>Follow</div>
+            : null }
           </div>
         }
       </div>

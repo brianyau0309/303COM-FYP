@@ -10,11 +10,7 @@
 }
 
 ::-webkit-scrollbar {
-width: 2px;
-}
-
-::-webkit-scrollbar-thumb {
-background: var(--main-color-lightblue)
+  width: 0;
 }
 
 * {
@@ -67,7 +63,10 @@ pre {
   height: 7vh;
 }
 
-.header-icon {
+a.header-icon {
+  display: grid;
+}
+img.header-icon {
   height: 6vh;
   width: 6vh;
   align-self: center;
@@ -100,6 +99,12 @@ pre {
 .sticky-top {
   position: sticky;
   top: 0;
+}
+.sticky-bottom {
+  position: sticky;
+  bottom: 0;
+  background: white;
+  padding: .5vh;
 }
 
 #nav {
@@ -178,11 +183,43 @@ pre {
   width: 80%;
   height: 50vh;
   margin: auto;
-  background: lightblue;
-  border-radius: 10px;
+  background: rgb(215, 235, 244);
   padding: 1vh;
+  border-radius: 10px;
+  font-size: 2.3vh;
 }
-
+.UserInfo-main img {
+  width: 15vh;
+  height: 15vh;
+}
+.UserInfo .flex {
+  margin-top: 2vh;
+  display: flex;
+  flex-flow: row wrap;
+}
+.UserInfo .flex > div {
+  width: 48%;
+  margin: .3vh auto;
+  font-size: 2.2vh;
+  background: lightblue;
+  padding: .5vh 0;
+  border-radius: 10px;
+}
+.UserInfo .follow,
+.UserInfo .unfollow {
+  margin: auto;
+  margin-top: 3vh;
+  cursor: pointer;
+  padding: 1vh 0;
+  border-radius: 10px;
+}
+.UserInfo .follow {
+  background: lightgreen;
+}
+.UserInfo .unfollow {
+  background: orangered;
+  color: white;
+}
 .search-panel {
   width: 98%;
   height: 6vh;
@@ -230,6 +267,7 @@ pre {
 
 .Questions .option div,
 .Courses .option div {
+  padding: .8vh 0;
   margin: .5vh auto;
   width: 98%;
   height: 4vh;
@@ -492,15 +530,25 @@ pre {
 .CreateLesson > .submit,
 .EditLesson > .submit,
 .CreateQuestions > .submit,
-.Question .EditAnswer > .submit {
+.Question .EditAnswer > .submit,
+.CreateTask .submit,
+.EditTask .submit,
+.AnswerTask .submit,
+.Classrooms ~ .EditAnswer .submit {
   width: 96%;
   font-size: 3vh;
-  background: lightblue;
+  background: var(--main-color-lightblue);
   border-radius: 10px;
   margin: 1vh auto;
   display: block;
   padding: .5vh 0;
   cursor: pointer;
+}
+.CreateTask .submit,
+.EditTask .submit,
+.AnswerTask .submit,
+.Classrooms ~ .EditAnswer .submit {
+  width: 98%;
 }
 .EditComment .rate {
   width: 5vh;
@@ -783,6 +831,11 @@ pre {
   font-size: 2.5vh;
   min-height: 10vh;
 }
+.question-detail img,
+.answer-detail img {
+  width: 60%;
+  height: auto;
+}
 .Question,
 .Course,
 .EditCourse,
@@ -909,7 +962,16 @@ pre {
 .Classroom .block,
 .ClassroomMembers .block,
 .Tasks .block,
-.Task .block {
+.Task .block,
+.TaskResults .block,
+.TaskResult .block,
+.CreateTask .block,
+.EditTask .block,
+.AnswerTask .block,
+.Classrooms ~ .EditAnswer .block,
+.CreateTask .block,
+.Notification .block,
+.Setting .block {
   display: block;
   width: 98%;
   margin: .5vh auto;
@@ -959,16 +1021,123 @@ pre {
 .Classroom .block.classroom .date span {
   float: right;
 }
+.CreateTask .block input,
+.EditTask .block input {
+  font-size: 3.2vh;
+  width: 80%;
+  margin: 1vh auto;
+}
+.CreateTask .block.title,
+.EditTask .block.title,
+.AnswerTask .block.title,
+.Classrooms ~ .EditAnswer .block.title {
+  padding: 1vh 0;,
+}
+.CreateTask .block.question,
+.EditTask .block.question,
+.AnswerTask .block.answer,
+.Classrooms ~ .EditAnswer .block.answer {
+  font-size: 2.5vh;
+  margin: 1vh auto;
+  padding: 1.5vh 0;
+}
+.CreateTask .block.question .type,
+.EditTask .block.question .type,
+.AnswerTask .block.answer .type,
+.Classrooms ~ .EditAnswer .block.answer .type {
+  margin-bottom: 1vh;
+  text-align: left;
+  padding: 0 1vh;
+}
+.AnswerTask .block.answer pre,
+.Classrooms ~ .EditAnswer .block.answer pre,
+.TaskResult pre {
+  margin: 1vh;
+  text-align: left;
+  padding: 1vh;
+  background: white;
+}
+.CreateTask .block.question textarea,
+.EditTask .block.question textarea {
+  width: 80%;
+  min-height: 20vh;
+  font-size: 2.3vh;
+}
+.CreateTask .block.question input,
+.EditTask .block.question input {
+  width: 40%;
+  font-size: 2.3vh;
+  margin: 1vh;
+}
+.CreateTask .block.question .category,
+.EditTask .block.question .category {
+  width: 80%;
+  font-size: 2.3vh;
+}
+.CreateTask .block.question img,
+.EditTask .block.question img {
+  width: 5vh;
+  height: 5vh;
+  margin: 1vh;
+  vertical-align: middle;
+}
+.CreateTask .block.question .delete,
+.EditTask .block.question .delete {
+  float: right;
+  background: orangered;
+  color: white;
+  border-radius: 10px;
+  padding: .3vh .8vh;
+}
+.task_answer_toggle.yes {
+  background: lightgreen;
+}
+.task_answer_toggle.no{
+  background: lightgray;
+}
+.task_answer_toggle {
+  padding: .5vh 1vh;
+  border-radius: 10px;
+  cursor: pointer;
+}
+.AnswerTask .task_answer_toggle,
+.Classrooms ~ .EditAnswer .task_answer_toggle {
+  width: 60%;
+  font-size: 2.2vh;
+  padding: 1vh;
+  margin: 1vh auto;
+}
+.CreateTask .block.flex,
+.EditTask .block.flex {
+  display: flex;
+  flex-flow: row;
+  background: transparent;
+}
+.CreateTask .block.flex > div,
+.EditTask .block.flex > div {
+  width: 49%;
+  padding: 1.5vh 0;
+  margin: 0 1% 0 0;
+  cursor: pointer;
+  background: lightgreen;
+  font-size: 2.5vh;
+}
+.CreateTask .block.flex > div + div,
+.EditTask .block.flex > div + div {
+  margin: 0 0 0 1%;
+}
+
 .Classroom .classroom-item {
   list-style: none
 }
 .Classroom .classroom-item li {
   width: 98%;
   margin: .5vh auto;
-  padding: .5vh 0;
+  padding: 1vh 0;
   font-size: 3.2vh;
   background: var(--main-color-lightblue);
   text-align: center;
+  cursor: pointer;
 }
 .ClassroomMembers .member-list li {
   width: 94%;
@@ -995,7 +1164,7 @@ pre {
   background: yellow;
 }
 .classroom-item li.delete {
-  margin-top: 5vh;
+  margin: 5vh auto;
   background: red;
   color: white;
   font-weight: bold;
@@ -1032,18 +1201,54 @@ pre {
 .Task {
   overflow: hidden;
 }
-.Task a {
+.TaskResults,
+.TaskResult {
+  color: var(--main-color-lightblack);
+  overflow-x: hidden;
+}
+.TaskResults ul,
+.TaskResult ul {
+  list-style: none;
+}
+.Task a,
+.TaskResults a{
   text-decoration: none;
   color: inherit;
 }
 
-.Task .task-basic {
+.Task .task-basic,
+.TaskResults .task-basic,
+.TaskResult .task-basic {
   width: 94%;
   padding: 1vh 2%;
   text-align: left;
 }
-.Task .task-basic .date {
+.Task .task-basic .date,
+.TaskResults .task-basic.sub,
+.TaskResults .task-basic .date,
+.TaskResult .task-basic.sub,
+.TaskResult .task-basic .date {
   font-size: 2.5vh;
+}
+.TaskResults .task-basic.btn,
+.TaskResult .task-basic.btn {
+  font-size: 2.8vh;
+  padding: 1vh 2%;
+  text-align: center;
+  background: lightgreen;
+  cursor: pointer;
+}
+.TaskResults .task-basic.answer,
+.TaskResult .task-basic.answer {
+  font-size: 2.5vh;
+}
+.TaskResults .task-basic.answer.btn,
+.TaskResult .task-basic.answer.btn {
+  background: var(--main-color-lightblue);
+}
+.TaskResults .task-basic.btn > *,
+.TaskResult .task-basic.btn > * {
+  text-align: left;
 }
 .Task .block.edit {
   background: yellow;
@@ -1056,13 +1261,8 @@ pre {
   color: white;
   background: orangered;
 }
-
-.task_answer_toggle.yes {
-  background: green;
-}
-
-.task_answer_toggle.no{
-  background: lightgray;
+.Task .block.btn {
+  padding: 1vh 0;
 }
 
 .Day a {
@@ -1144,6 +1344,71 @@ pre {
   padding: 2vh 2vh 0 2vh;
 }
 
+.Notification .block {
+  width: 94%;
+  padding: 1vh 2%;
+  font-size: 2.8vh;
+  text-align: center;
+}
+.Notification .block .date {
+  font-size: 2.5vh;
+  text-align: right;
+}
+.Notification .block .add,
+.Notification .block .remove {
+  text-align: center;
+  cursor: pointer;
+}
+.Notification .block .add {
+  background: lightgreen;
+}
+.Notification .block .remove {
+  background: orangered;
+}
+
+.Setting img {
+  width: 25vh;
+  height: 25vh;
+}
+.Setting .block {
+  font-size: 2.6vh;
+}
+.Setting .block.basic {
+  padding: .5vh 0;
+}
+.Setting .flex {
+  display: flex;
+  flex-flow: row wrap;
+}
+.Setting .flex > div {
+  width: 48%;
+  font-size: 2.5vh;
+  padding: .5vh 0;
+}
+.Setting .btn {
+  padding: 1vh 0;
+  cursor: pointer;
+  background: lightgreen;
+}
+.Setting .input {
+  padding: 1vh 0;
+}
+.Setting .input input {
+  font-size: 2.3vh;
+  display: block;
+  width: 80%;
+  margin: .5vh auto;
+}
+.Setting .delete {
+  background: orangered;
+  width: 76%;
+  padding: .3vh 2%;
+  margin: auto;
+  margin-top: 3vh;
+  color: white;
+  cursor: pointer;
+}
+
 .success_page {
   top: 7vh;
   left: 0;
@@ -1210,7 +1475,7 @@ pre {
   }
 }
 
-@media only screen and (min-width: 780px) {
+@media only screen and (min-width: 1000px) {
   .nav-items {
     margin: 8vh 12vw;
   }
@@ -1222,8 +1487,14 @@ pre {
     width: 14vh;
     font-size: 2.5vh;
   }
+  .UserInfo-main {
+    width: 50%;
+  }
   .header.hidden {
     display: none;
+  }
+  .header {
+    border: 1px solid lightblue;
   }
   .Courses,
   .MyCourses,
@@ -1268,6 +1539,36 @@ pre {
   .EditAnswer > .TextEditor > iframe {
     height: 67vh;
   }
+  .ClassroomsMain {
+    display: grid;
+    grid-template-columns: 38% 62%;
+    grid-template-areas: 
+      'classrooms part';
+  }
+  .Classrooms {
+    grid-area: classrooms;
+  }
+  .part {
+    grid-area: part;
+    background: transparent;
+    top: auto;
+    left: auto;
+    position: relative;
+    height: 93vh;
+  }
+  .coverboard {
+    display: none;
+  }
+  .CreateTask .block.question textarea,
+  .EditTask .block.question textarea,
+  .CreateTask .block.question input,
+  .EditTask .block.question input,
+  .CreateTask .block.question .category,
+  .EditTask .block.question .category,
+  .AnswerTask .block.answer input,
+  .Classrooms ~ .EditAnswer .block.answer input {
+    font-size: 2.8vh;
+  }
   .CreateLesson > .TextEditor > iframe,
   .EditLesson > .TextEditor > iframe {
     height: 54vh;
@@ -1279,7 +1580,7 @@ pre {
     height: 75vh;  
   }
   .success_page {
-    top: 0vh;
+    top: 0.4vh;
   }
   .success_page.create {
     top: 7vh;

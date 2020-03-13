@@ -110,9 +110,13 @@ def api_setting():
         if request.method == 'GET':
             if target == None:
                 user_info = db.exe_fetch(SQL['user_info'].format(user))
+                if user_info['course_avg']:
+                    user_info['course_avg'] = str(user_info['course_avg'])
                 return jsonify({'user_info': user_info})
             else:
                 target_info = db.exe_fetch(SQL['target_info'].format(target, user))
+                if target_info['course_avg']:
+                    target_info['course_avg'] = str(target_info['course_avg'])
                 return jsonify({'target_info': target_info})
 
         elif request.method == 'POST':

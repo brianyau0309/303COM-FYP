@@ -38,12 +38,13 @@ export default class Notification extends React.Component {
     return (
       <ul className="Notification content">
           {this.state.notice.map(n => 
-            <li>
-              <div>{n.nickname} create a new Course:</div>
-              <div>{n.title}</div>
+            <li className="block">
+              <div>{n.nickname} created a new Course:</div>
+              <div className="title">{n.title}</div>
+              <div className="date">{new Date(n.create_date).toISOString().split('T')[0]} {new Date(n.create_date).toISOString().split('T')[1].split('.')[0]}</div>
               { n.collection ? 
-                 <div onClick={() => this.collectionToggle(n.course_id, 'DELETE')}>Remove from Collection</div>
-              :  <div onClick={() => this.collectionToggle(n.course_id, 'POST')}>Add to Collection</div> }
+                 <div className="remove" onClick={() => this.collectionToggle(n.course_id, 'DELETE')}>Remove from Collection</div>
+              :  <div className="add" onClick={() => this.collectionToggle(n.course_id, 'POST')}>Add to Collection</div> }
             </li>
           )}
       </ul>

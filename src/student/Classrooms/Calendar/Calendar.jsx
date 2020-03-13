@@ -75,29 +75,31 @@ class Calendar extends React.Component {
     
   render() {
     return (
-      <div className={this.props.match.path === "/classrooms/:class/calendar" ? "Calendar conetent" : "Calendar conetent hide"}>
-        <div className="header">
+      <div className={this.props.match.path === "/classrooms/:class/calendar" ? "Calendar content part" : "Calendar content part hide"}>
+        <div className="header" style={{overflowY: 'hidden'}}>
           <Link className="header-icon" to={'/classrooms/'+this.props.match.params.class}>
             <img className='header-icon' src={imgBack}/>
           </Link>
           <span>Calendar</span>
         </div>
+
         <div className="month">
           <img src={imgBack} className="left" onClick={() => this.changeMonth(-1)}/>
           <span className="middle">{this.state.date.year}-{this.state.date.month}</span>
           <img src={imgBack} className="right" onClick={() => this.changeMonth(1)}/>
         </div>
-          <ul className="weeks">
-              <li className="week sunday">Sun</li>
-              <li className="week">Mon</li>
-              <li className="week">Tue</li>
-              <li className="week">Wed</li>
-              <li className="week">Thu</li>
-              <li className="week">Fri</li>
-              <li className="week">Sat</li>
-          </ul>
-          <Days deadline={this.state.deadline} events={this.state.events} date={this.state.date} class={this.props.match.params.class}/>
-          <Day reload={this.loadCalendar} ref={this.child} date={this.props.match.params.date ? this.props.match.params.date : ''  } user_type={this.props.user_type} class={this.props.match.params.class}/>
+        <ul className="weeks">
+            <li className="week sunday">Sun</li>
+            <li className="week">Mon</li>
+            <li className="week">Tue</li>
+            <li className="week">Wed</li>
+            <li className="week">Thu</li>
+            <li className="week">Fri</li>
+            <li className="week">Sat</li>
+        </ul>
+        <Days deadline={this.state.deadline} events={this.state.events} date={this.state.date} class={this.props.match.params.class}/>
+
+        <Day reload={this.loadCalendar} ref={this.child} date={this.props.match.params.date ? this.props.match.params.date : ''  } user_type={this.props.user_type} class={this.props.match.params.class}/>
       </div>
     )
   }

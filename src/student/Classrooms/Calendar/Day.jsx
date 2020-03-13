@@ -78,7 +78,7 @@ export default class Day extends React.Component {
   render() {
     return (
       <div className={this.state.open ? 'Day content open' : 'Day content close'}>
-        <div className="header">
+        <div className="header" style={{overflowY: 'hidden'}}>
           <Link className="header-icon" to={`/classrooms/${this.props.class}/calendar`}>
             <img className='header-icon' src={imgBack}/>
           </Link>

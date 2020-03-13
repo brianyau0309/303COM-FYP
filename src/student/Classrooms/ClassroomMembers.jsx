@@ -109,7 +109,7 @@ class ClassroomMembers extends React.Component {
 
   render() {
     return (
-      <div className="ClassroomMembers content">
+      <div className="ClassroomMembers content part">
         <div className="header sticky-top">
           <img className='header-icon' src={imgBack} onClick={this.props.history.goBack}/>
           <span>Classroom Members</span>
@@ -122,7 +122,7 @@ class ClassroomMembers extends React.Component {
                 <div className="block" style={{background: 'lightgreen', marginBottom: '0'}} onClick={this.inviteToggle}>Invite Member</div>
                 {this.state.inviteToggle &&
                   <form className="block form" style={{background: 'lightgreen', margin: '0 auto'}} onSubmit={this.inviteMember} name="form_inviteMember">
-                    <input type="number" name="user" placeholde="Student ID" required/>
+                    <input type="number" name="user" placeholder="Student ID" required/>
                     <input type="submit"/>
                   </form>
                 }
