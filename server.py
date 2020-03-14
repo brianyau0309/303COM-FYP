@@ -6,6 +6,7 @@ from datetime import datetime
 from db import DBConn, SQL
 from pathlib import Path
 from werkzeug.utils import secure_filename
+from pywebpush import webpush, WebPushException
 
 UPLOAD_FILE_FOLDER = os.getcwd()  + '/static/files'
 ALLOWED_FILE_TYPE = ['pdf', 'doc', 'docx', 'ppt', 'pptx']
@@ -17,6 +18,22 @@ app.config['UPLOAD_ICON_FOLDER'] = UPLOAD_ICON_FOLDER
 app.config['UPLOAD_FILE_FOLDER'] = UPLOAD_FILE_FOLDER
 socketio = SocketIO(app)
 db = DBConn()
+
+subs = []
+pushKeys = {
+    'privateKey': 'DlIBEvQ7n1k53wxgdhoRDFYT1V3Q0Jx_IQaoqizh088'
+}
+claim = {
+    'sub': 'mailto:brianyauu@gmail.com',
+}
+
+def send_web_push(subscription_information, message_body):
+    return webpush(
+        subscription_info = subscription_information,
+        data = message_body,
+        vapid_private_key = pushKeys['privateKey'],
+        vapid_claims = claim
+    )
 
 def replace_string(string):
     return string.replace('\\','\\\\').replace('\'','\\\'').replace('\"','\\\"')
@@ -431,6 +448,14 @@ def api_course():
                         db.exe_commit(SQL['create_course_tags'].format(last_id, replace_string(tag)))
                     except:
                         pass
+                    for i in subs:
+                        following = db.exe_fetch("SELECT * FROM user_following WHERE user_id = {0} AND following = {1}".format(i['user'], user))
+                        print(following)
+                        if following:
+                            try:
+                                send_web_push(i['key'], 'Have a new course!')
+                            except:
+                                print('webpush error')
 
             return jsonify({'create_course': 'Success'})
 
@@ -1194,13 +1219,24 @@ def api_chatroom():
 # Notification API
 #
 
-@app.route('/api/notification')
+@app.route('/api/notification', methods=['GET', 'POST'])
 def api_notification():
     if session.get('user') != None:
         user = session.get('user')
         if request.method == 'GET':
             notification = db.exe_fetch(SQL['notification'].format(user), 'all')
             return jsonify({ 'notification': notification })
+
+        if request.method == 'POST':
+            key = request.json
+            add = True
+            for i in subs:
+                if i['user'] == user:
+                    i['key'] = key
+                    add = False
+            if add:
+                subs.append({'user': user, 'key': key})
+            print(subs)
 
     return jsonify({'result': 'Error'})
 

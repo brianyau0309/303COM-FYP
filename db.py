@@ -630,6 +630,7 @@ SQL = {
         GROUP BY course
       ) d ON b.course_id = d.course
     WHERE a.user_id = {0} AND b.create_date > a.follow_date AND b.valid = true
+    ORDER BY b.create_date DESC
     LIMIT 50
     ''',
 }

@@ -136,6 +136,8 @@ export default class Course extends React.Component {
           console.log(result)
           this.setState({ 'deleteCourse': true })
           this.props.loadCourses()
+          document.querySelector('.Course').scrollTo(0,0)
+          document.querySelector('.Course').style.overflowY = 'hidden'
         })
       }
     })
@@ -245,7 +247,7 @@ export default class Course extends React.Component {
         { this.state.deleteCourse ? 
           <div className="success_page">
             <div>Delete Course Success!</div>
-              <div onClick={this.openToggle}>Back to Course Page</div>
+              <div className="btn" onClick={this.openToggle}>Back to Course Page</div>
           </div>
         : null }
 

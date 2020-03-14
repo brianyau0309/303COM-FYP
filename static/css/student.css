@@ -1534,9 +1534,15 @@ img.header-icon {
     height: 33.75vw;
   }
   .CreateCourses,
-  .CreateQuestions {
+  .CreateQuestions,
+  .Setting,
+  .Notification {
     margin: 0 auto;
     width: 75%
+  }
+  .Setting,
+  .Notification {
+    width: 45%
   }
   .Course .comments-header .TextEditor > iframe,
   .EditCourse > .TextEditor > iframe,

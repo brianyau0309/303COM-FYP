@@ -119,7 +119,7 @@ class ClassroomMembers extends React.Component {
             <div className="block form">{this.state.classroom ? this.state.classroom.name : null}</div>
             {this.props.user_type === 'teacher' ? 
               <div>
-                <div className="block" style={{background: 'lightgreen', marginBottom: '0'}} onClick={this.inviteToggle}>Invite Member</div>
+                <div className="block" style={{padding: '1vh 0', background: 'lightgreen', marginBottom: '0'}} onClick={this.inviteToggle}>Invite Member</div>
                 {this.state.inviteToggle &&
                   <form className="block form" style={{background: 'lightgreen', margin: '0 auto'}} onSubmit={this.inviteMember} name="form_inviteMember">
                     <input type="number" name="user" placeholder="Student ID" required/>

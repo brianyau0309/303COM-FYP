@@ -51,6 +51,8 @@ export default class Lesson extends React.Component {
           console.log(result)
           this.setState({ 'deleteLesson': true })
           this.props.loadLessons()
+          document.querySelector('.Lesson').scrollTo(0,0)
+          document.querySelector('.Lesson').style.overflowY = 'hidden'
         })
       }
     })

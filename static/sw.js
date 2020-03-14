@@ -81,3 +81,22 @@ self.addEventListener('activate', event => {
     })
   )
 })
+
+self.addEventListener('push', event => {
+  var message = event.data.text()
+  self.registration.showNotification("New Courses!", {
+    body: message,
+    icon: 'https://briyana.ddns.net/static/images/icons/icon-192x192.jpg',
+    url: 'https://briyana.ddns.net',
+    actions: [
+      {action: 'Go', title: 'Go'}
+    ]
+  })
+})
+
+self.addEventListener('notificationclick', event => {
+  event.notification.close()
+  if (event.action === 'Go') {
+    clients.openWindow('https://briyana.ddns.net/courses')
+  }
+})
