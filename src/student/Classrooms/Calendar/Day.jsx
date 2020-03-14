@@ -100,7 +100,7 @@ export default class Day extends React.Component {
           </div>
         : null}
         <ul>
-          {this.state.deadline.length === 0 && this.state.events.length === 0 ? <li style={{textAlign: 'center', marginTop: '3vh', fontSize: '2.5vh'}}>Nothing  Today</li> : null}
+          {this.state.deadline.length === 0 && this.state.events.length === 0 ? <li style={{textAlign: 'center', marginTop: '3vh', fontSize: '2.5vh'}}>Nothing Today</li> : null}
           {this.state.deadline.length > 0 && <li className="deadline-item" style={{textAlign: 'center'}}>Today's Deadline</li>}
           {this.state.deadline.map(task => 
             <Link to={`/classrooms/${task.classroom}/tasks/${task.task_num}`}>

@@ -65,6 +65,7 @@ export default class EditLesson extends React.Component {
 
   openToggle() {
     this.setState({'open': !this.state.open})
+    if (document.querySelector('.Lesson')) {document.querySelector('.Lesson').style.overflowY = 'scroll'}
   }
 
   openFalse() {
@@ -73,7 +74,7 @@ export default class EditLesson extends React.Component {
 
   render() {
     return (
-      <div className={this.state.open ? 'EditLesson open' : 'EditLesson close'}>
+      <div className={this.state.open ? 'EditLesson open sticky-top' : 'EditLesson close sticky-top'}>
         <div className="header">
           <img className='header-icon' src={imgBack} onClick={this.openToggle}/>
           <span>Edit Lesson</span>

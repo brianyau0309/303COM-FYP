@@ -41,6 +41,7 @@ export default class Lesson extends React.Component {
   editLesson(t,f,v,d) {
     this.child.current.loadLesson(t,f,v,d)
     this.child.current.openToggle()
+    document.querySelector('.Lesson').style.overflowY = 'hidden'
   }
 
   deleteLesson() {
@@ -57,6 +58,7 @@ export default class Lesson extends React.Component {
 
   openToggle() {
     this.setState({ 'open': !this.state.open })
+   document.querySelector('.Course').style.overflowY = 'scroll'
   }
 
   openFalse() {

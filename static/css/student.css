@@ -424,6 +424,9 @@ img.header-icon {
   border: 1px solid gray;
   border-bottom: none;
 }
+.EditComment > .TextEditor > .EditorPanel {
+  width: 98%;
+}
 
 .Course .comments-header .TextEditor .EditorPanel > button,
 .CreateCourses > .TextEditor > .EditorPanel > button,
@@ -474,9 +477,13 @@ img.header-icon {
   font-size: 2vh;
   margin: auto;
   width: 96%;
-  height: 75vh;
+  height: 72vh;
   background: rgba(255,255,255,.5);
   border: 1px inset lightgray;
+}
+
+.EditComment > .TextEditor > iframe {
+  width: 98%;
 }
 
 .CreateCourses > .TextEditor > iframe,
@@ -547,7 +554,8 @@ img.header-icon {
 .CreateTask .submit,
 .EditTask .submit,
 .AnswerTask .submit,
-.Classrooms ~ .EditAnswer .submit {
+.Classrooms ~ .EditAnswer .submit
+.Classrooms ~ .EditComment .submit {
   width: 98%;
 }
 .EditComment .rate {
@@ -1537,7 +1545,7 @@ img.header-icon {
   .EditLesson > .TextEditor > iframe,
   .CreateQuestions > .TextEditor > iframe,
   .EditAnswer > .TextEditor > iframe {
-    height: 67vh;
+    height: 65vh;
   }
   .ClassroomsMain {
     display: grid;

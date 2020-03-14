@@ -37,6 +37,7 @@ export default class Notification extends React.Component {
   render() {
     return (
       <ul className="Notification content">
+          {this.state.notice.length === 0 ? <li style={{textAlign: 'center', marginTop: '3vh', fontSize: '2.5vh'}}>No Notification</li> : null}
           {this.state.notice.map(n => 
             <li className="block">
               <div>{n.nickname} created a new Course:</div>

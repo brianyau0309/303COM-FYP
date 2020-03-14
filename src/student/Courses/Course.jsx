@@ -144,12 +144,18 @@ export default class Course extends React.Component {
   openLesson(c, l) {
     this.child4.current.loadLesson(c,l)
     this.child4.current.openToggle()
+    console.log(document.querySelector('.Course').style.overflowY)
     document.querySelector('.Course').scrollTo(0,0)
+    document.querySelector('.Course').style.overflowY = 'hidden'
+    console.log(document.querySelector('.Course').style.overflowY)
   }
 
   createLesson() {
     this.child3.current.openToggle()
+    console.log(document.querySelector('.Course').style.overflowY)
     document.querySelector('.Course').scrollTo(0,0)
+    document.querySelector('.Course').style.overflowY = 'hidden'
+    console.log(document.querySelector('.Course').style.overflowY)
   }
 
   collectionToggle(id, m) {
@@ -191,6 +197,7 @@ export default class Course extends React.Component {
     this.child.current.loadComment(c, r)
     this.child.current.openToggle()
     document.querySelector('.Course').scrollTop = 0
+    document.querySelector('.Course').style.overflowY = 'hidden'
   }
 
   deleteComment() {
@@ -224,6 +231,8 @@ export default class Course extends React.Component {
     if (this.child2.current) this.child2.current.openFalse()
     if (this.child3.current) this.child3.current.openFalse()
     if (this.child4.current) this.child4.current.openFalse()
+    document.querySelector('.Course').style.overflowY = 'scroll'
+    document.querySelector('.Lesson').style.overflowY = 'scroll'
   }
 
   commentFieldToggle() {
@@ -292,7 +301,7 @@ export default class Course extends React.Component {
         <div className="comments-header">Comments</div>
 
         {this.state.canComment ? 
-          <div className="comments-header">
+          <div className="comments-header" style={{background: 'lightgreen', fontWeight: 'auto'}}>
             <div onClick={this.commentFieldToggle} style={{cursor: 'pointer'}}>I want to comment!</div> 
             {this.state.commentField ? 
               <div>

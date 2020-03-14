@@ -54,6 +54,7 @@ export default class CreateLesson extends React.Component {
     document.querySelector('#youtube_link').value = ''
     window.frames['CreateLesson'].document.body.innerHTML = ''
     this.setState({'open': !this.state.open})
+    document.querySelector('.Course').style.overflowY = 'scroll'
   }
 
   openFalse() {

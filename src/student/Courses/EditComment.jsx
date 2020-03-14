@@ -54,6 +54,7 @@ export default class EditComment extends React.Component {
 
   openToggle() {
     this.setState({'open': !this.state.open})
+    document.querySelector('.Course').style.overflowY = 'scroll'
   }
 
   openFalse() {
@@ -68,6 +69,7 @@ export default class EditComment extends React.Component {
           <span>Edit Comment</span>
         </div>
         <div className="block">
+          <span>Rate:</span>
           {[...Array(5).keys()].map(i => 
             (this.state.editedRate < i+1 ? 
               <img className="rate" src={imgEmptyStar} onClick={() => this.rating(i+1)}/> 
