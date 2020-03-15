@@ -127,7 +127,7 @@ CREATE TABLE `chatroom` (
 
 LOCK TABLES `chatroom` WRITE;
 /*!40000 ALTER TABLE `chatroom` DISABLE KEYS */;
-INSERT INTO `chatroom` VALUES (1,1,2,'hello','2020-03-07 18:23:38'),(1,2,2,'I am Mary','2020-03-07 18:28:52'),(1,3,2,'hello?','2020-03-07 18:35:23'),(1,4,2,'hello?','2020-03-07 18:42:03'),(1,5,2,'hello','2020-03-07 18:42:19'),(1,6,1,'hello','2020-03-07 18:44:48'),(1,7,1,'?','2020-03-07 18:48:42'),(1,8,1,'?','2020-03-07 18:50:54'),(1,9,2,'Hello Peter','2020-03-07 18:51:05'),(1,10,2,'What are you doing peter?','2020-03-12 14:20:17'),(1,11,1,'Hello Mary!','2020-03-12 14:27:01'),(1,12,2,'Hello!','2020-03-12 14:27:20'),(1,13,1,'I am working','2020-03-12 14:29:45');
+INSERT INTO `chatroom` VALUES (1,1,2,'hello','2020-03-07 18:23:38'),(1,2,2,'I am Mary','2020-03-07 18:28:52'),(1,3,2,'hello?','2020-03-07 18:35:23'),(1,4,2,'hello?','2020-03-07 18:42:03'),(1,5,2,'hello','2020-03-07 18:42:19'),(1,6,1,'hello','2020-03-07 18:44:48'),(1,7,1,'?','2020-03-07 18:48:42'),(1,8,1,'?','2020-03-07 18:50:54'),(1,9,2,'Hello Peter','2020-03-07 18:51:05'),(1,10,2,'What are you doing peter?','2020-03-12 14:20:17'),(1,11,1,'Hello Mary!','2020-03-12 14:27:01'),(1,12,2,'Hello!','2020-03-12 14:27:20'),(1,13,1,'I am working','2020-03-12 14:29:45'),(1,14,2,'Testing','2020-03-15 00:06:32'),(1,15,2,'Hello','2020-03-15 00:10:16'),(1,16,2,'testing','2020-03-15 00:10:41'),(1,17,2,'Testing','2020-03-15 00:11:14'),(1,18,2,'testing','2020-03-15 00:18:38'),(1,19,2,'testing','2020-03-15 00:22:26'),(1,20,2,'testing','2020-03-15 00:24:12'),(1,21,2,'testing','2020-03-15 00:25:16'),(1,22,2,'testing','2020-03-15 00:25:37'),(1,23,2,'testing','2020-03-15 00:26:31'),(1,24,2,'testing','2020-03-15 00:27:16'),(1,25,2,'testing','2020-03-15 00:30:40'),(1,26,2,'testing','2020-03-15 00:36:17'),(1,27,2,'testing','2020-03-15 00:37:09'),(1,28,2,'testing','2020-03-15 00:44:09'),(1,29,2,'testing','2020-03-15 00:48:31'),(1,30,2,'testing','2020-03-15 00:49:31'),(1,31,2,'testing','2020-03-15 00:50:33'),(1,32,2,'test','2020-03-15 00:55:10'),(1,33,2,'test','2020-03-15 00:55:22'),(1,34,2,'test','2020-03-15 00:55:33'),(1,35,2,'test','2020-03-15 00:56:41'),(1,36,2,'test','2020-03-15 01:01:03'),(1,37,2,'tst','2020-03-15 01:01:25');
 /*!40000 ALTER TABLE `chatroom` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -233,7 +233,7 @@ CREATE TABLE `courses` (
   PRIMARY KEY (`course_id`),
   KEY `author` (`author`),
   CONSTRAINT `courses_ibfk_1` FOREIGN KEY (`author`) REFERENCES `users` (`user_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=36 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -242,7 +242,7 @@ CREATE TABLE `courses` (
 
 LOCK TABLES `courses` WRITE;
 /*!40000 ALTER TABLE `courses` DISABLE KEYS */;
-INSERT INTO `courses` VALUES (00000001,2,'DSE Math Prictice.','<b>DSE</b> Math question for F5 and F6 student to practice.<div>with Video.</div>','2020-02-20 23:05:53',1),(00000002,11,'English Course','Tenses Exercise for F1-F3 Student.','2020-02-21 20:43:27',1),(00000003,2,'Course 02','Course about Testing','2020-02-24 20:59:25',1),(00000004,2,'Course 3','<strike>For Testing</strike>','2020-02-24 21:02:39',0),(00000005,2,'Course 3','<strike>For Testing</strike>','2020-02-24 21:04:52',0),(00000006,2,'Course 3','<strike>For Testing</strike>','2020-02-24 21:05:19',0),(00000007,2,'Course 03','<i>For Testing!</i>','2020-02-24 21:10:39',1),(00000008,2,'Course for test Notification','For Testing','2020-03-09 18:19:56',1),(00000009,2,'Testing Notice','Testing','2020-03-09 18:26:34',1),(00000010,2,'For Delete','h1','2020-03-10 19:58:34',0),(00000011,12,'Oliver Course','DSE Course','2020-03-10 22:39:36',1),(00000012,2,'Test','Test','2020-03-11 23:39:41',0),(00000013,2,'tt','tt','2020-03-11 23:42:00',0);
+INSERT INTO `courses` VALUES (00000001,2,'DSE Math Prictice.','<b>DSE</b> Math question for F5 and F6 student to practice.<div>with Video.</div>','2020-02-20 23:05:53',1),(00000002,11,'English Course','Tenses Exercise for F1-F3 Student.','2020-02-21 20:43:27',1),(00000003,2,'Course 02','Course about Testing','2020-02-24 20:59:25',1),(00000007,2,'Course 03','<i>For Testing!</i>','2020-02-24 21:10:39',1),(00000008,2,'Course for test Notification','For Testing','2020-03-09 18:19:56',1),(00000009,2,'Testing Notice','Testing','2020-03-09 18:26:34',1),(00000011,12,'Oliver Course','DSE Course','2020-03-10 22:39:36',1),(00000032,2,'New','a','2020-03-15 14:29:32',0),(00000033,2,'New','a','2020-03-15 14:31:25',0),(00000034,2,'New','a','2020-03-15 14:31:57',0),(00000035,2,'New','as','2020-03-15 14:32:26',0);
 /*!40000 ALTER TABLE `courses` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -273,7 +273,7 @@ CREATE TABLE `courses_comments` (
 
 LOCK TABLES `courses_comments` WRITE;
 /*!40000 ALTER TABLE `courses_comments` DISABLE KEYS */;
-INSERT INTO `courses_comments` VALUES (2,2,'Hello<div><ol><li>1</li><li>2</li><li>3</li></ol></div>',5,1,'2020-03-10 22:10:54');
+INSERT INTO `courses_comments` VALUES (2,2,'Hello<div><ol><li>one</li><li>two</li><li>three</li><li>four</li></ol></div>',5,1,'2020-03-10 22:10:54');
 /*!40000 ALTER TABLE `courses_comments` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -288,7 +288,7 @@ CREATE TABLE `courses_tags` (
   `course` int(8) unsigned NOT NULL,
   `tag` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL,
   PRIMARY KEY (`course`,`tag`),
-  CONSTRAINT `courses_tags_ibfk_1` FOREIGN KEY (`course`) REFERENCES `courses` (`course_id`)
+  CONSTRAINT `courses_tags_ibfk_1` FOREIGN KEY (`course`) REFERENCES `courses` (`course_id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -298,7 +298,7 @@ CREATE TABLE `courses_tags` (
 
 LOCK TABLES `courses_tags` WRITE;
 /*!40000 ALTER TABLE `courses_tags` DISABLE KEYS */;
-INSERT INTO `courses_tags` VALUES (1,'DSE'),(1,'F5'),(1,'F6'),(1,'Math'),(2,'English'),(2,'F1'),(2,'F2'),(2,'F3'),(2,'Tenses'),(3,'A'),(3,'B'),(7,'A'),(7,'B'),(7,'C'),(8,'testing'),(9,'DSE'),(9,'F6'),(9,'testing'),(10,'delete'),(11,'DSE'),(11,'F6'),(12,'Test'),(13,'tt');
+INSERT INTO `courses_tags` VALUES (1,'DSE'),(1,'F5'),(1,'F6'),(1,'Math'),(2,'English'),(2,'F1'),(2,'F2'),(2,'F3'),(2,'Tenses'),(3,'A'),(3,'B'),(7,'A'),(7,'B'),(7,'C'),(8,'testing'),(9,'DSE'),(9,'F6'),(9,'testing'),(11,'DSE'),(11,'F6'),(32,'a'),(33,'a'),(34,'a'),(35,'as');
 /*!40000 ALTER TABLE `courses_tags` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -537,8 +537,33 @@ CREATE TABLE `user_following` (
 
 LOCK TABLES `user_following` WRITE;
 /*!40000 ALTER TABLE `user_following` DISABLE KEYS */;
-INSERT INTO `user_following` VALUES (1,2,'2020-03-09 18:18:49'),(4,2,'2020-03-09 18:25:38');
+INSERT INTO `user_following` VALUES (1,2,'2020-03-15 01:33:58'),(4,2,'2020-03-09 18:25:38');
 /*!40000 ALTER TABLE `user_following` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `user_keys`
+--
+
+DROP TABLE IF EXISTS `user_keys`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `user_keys` (
+  `user_id` int(8) unsigned NOT NULL,
+  `user_key` longtext COLLATE utf8mb4_unicode_ci NOT NULL,
+  PRIMARY KEY (`user_id`),
+  CONSTRAINT `user_keys_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `user_keys`
+--
+
+LOCK TABLES `user_keys` WRITE;
+/*!40000 ALTER TABLE `user_keys` DISABLE KEYS */;
+INSERT INTO `user_keys` VALUES (1,'{\"endpoint\": \"https://fcm.googleapis.com/fcm/send/d43sRm87s9Y:APA91bFJzAwcgEC_1FzIDKB7sdckx2s8slKEQxCP3K_o6BHMIf6Yd7pYF31weszMXxqVQqjI82OuzT8532kUmaYx3KZx04inSZeJGRUPQNoBjx25qln1Cn4ww_0YjBwYt2CbubKvY8Bn\", \"expirationTime\": null, \"keys\": {\"p256dh\": \"BOnc24rCNqOLcitbJ2lqT-A-x1h9MZZxUxJZMTnhHdBO8ptptYInIza-FFFNJ_NycaFdr_-CsbF3eYR02tYFq2E\", \"auth\": \"z5BI5AwHZj1nQMHop3vA8Q\"}}');
+/*!40000 ALTER TABLE `user_keys` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -581,4 +606,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2020-03-13 17:56:21
+-- Dump completed on 2020-03-15 14:34:53

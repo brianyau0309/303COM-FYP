@@ -246,6 +246,7 @@ img.header-icon {
   border-top-left-radius: 25px;
   border-bottom-left-radius: 25px;
   padding-left: 1vh;
+  background: white;
 }
 .Questions .search-panel input {
   padding-left: 1vh;

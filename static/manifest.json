@@ -1,8 +1,8 @@
 {
   "name": "FYP",
   "short_name": "FYP",
-  "theme_color": "#2196f3",
-  "background_color": "#2196f3",
+  "theme_color": "#add8e6",
+  "background_color": "#add8e6",
   "display": "standalone",
   "Scope": "/",
   "start_url": "/",
@@ -48,6 +48,5 @@
       "type": "image/png"
     }
   ],
-  "splash_pages": null,
-  "gcm_sender_id": "784395292948"
+  "splash_pages": null
 }

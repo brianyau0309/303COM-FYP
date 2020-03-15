@@ -7,6 +7,8 @@ from db import DBConn, SQL
 from pathlib import Path
 from werkzeug.utils import secure_filename
 from pywebpush import webpush, WebPushException
+from json import dumps, loads
+from VAPID.push_key import pushKeys
 
 UPLOAD_FILE_FOLDER = os.getcwd()  + '/static/files'
 ALLOWED_FILE_TYPE = ['pdf', 'doc', 'docx', 'ppt', 'pptx']
@@ -20,19 +22,13 @@ socketio = SocketIO(app)
 db = DBConn()
 
 subs = []
-pushKeys = {
-    'privateKey': 'DlIBEvQ7n1k53wxgdhoRDFYT1V3Q0Jx_IQaoqizh088'
-}
-claim = {
-    'sub': 'mailto:brianyauu@gmail.com',
-}
 
 def send_web_push(subscription_information, message_body):
     return webpush(
         subscription_info = subscription_information,
-        data = message_body,
+        data = dumps(message_body),
         vapid_private_key = pushKeys['privateKey'],
-        vapid_claims = claim
+        vapid_claims = pushKeys['claim']
     )
 
 def replace_string(string):
@@ -448,12 +444,12 @@ def api_course():
                         db.exe_commit(SQL['create_course_tags'].format(last_id, replace_string(tag)))
                     except:
                         pass
-                    for i in subs:
-                        following = db.exe_fetch("SELECT * FROM user_following WHERE user_id = {0} AND following = {1}".format(i['user'], user))
-                        print(following)
+                    user_keys = db.exe_fetch("SELECT * FROM user_keys", 'all')
+                    for i in user_keys:
+                        following = db.exe_fetch("SELECT b.nickname FROM user_following a, users b WHERE a.user_id = b.user_id AND a.user_id = {0} AND a.following = {1}".format(i['user_id'], user))
                         if following:
                             try:
-                                send_web_push(i['key'], 'Have a new course!')
+                                send_web_push(loads(i['user_key']), {'notice': 'Have a new course!', 'title': title, 'name': following['nickname'], 'action': 'create a course: '})
                             except:
                                 print('webpush error')
 
@@ -1219,7 +1215,7 @@ def api_chatroom():
 # Notification API
 #
 
-@app.route('/api/notification', methods=['GET', 'POST'])
+@app.route('/api/notification', methods=['GET', 'PUT'])
 def api_notification():
     if session.get('user') != None:
         user = session.get('user')
@@ -1227,16 +1223,13 @@ def api_notification():
             notification = db.exe_fetch(SQL['notification'].format(user), 'all')
             return jsonify({ 'notification': notification })
 
-        if request.method == 'POST':
+        if request.method == 'PUT':
             key = request.json
-            add = True
-            for i in subs:
-                if i['user'] == user:
-                    i['key'] = key
-                    add = False
-            if add:
-                subs.append({'user': user, 'key': key})
-            print(subs)
+            user_key = db.exe_fetch("SELECT * FROM user_keys WHERE user_id = {0}".format(user))
+            if user_key:
+                db.exe_commit("UPDATE user_keys SET user_key = '{0}' WHERE user_id = {1}".format(dumps(key), user))
+            else:
+                db.exe_commit("INSERT INTO user_keys VALUES ({0}, '{1}')".format(user, dumps(key)))
 
     return jsonify({'result': 'Error'})
 
