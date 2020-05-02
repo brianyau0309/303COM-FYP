@@ -493,7 +493,7 @@ img.header-icon {
 }
 .CreateLesson > .TextEditor > iframe,
 .EditLesson > .TextEditor > iframe {
-  height: 64vh;
+  height: 61vh;
 }
 .Course .comments-header .TextEditor > iframe {
   height: 15vh;
@@ -585,7 +585,7 @@ img.header-icon {
 
 .Lesson .flex {
   margin: auto;
-  width: 96%;
+  width: 98%;
 }
 
 .Lesson .video {
@@ -606,10 +606,10 @@ img.header-icon {
 }
 
 .Lesson .lesson_detail {
-  width: 93%;
+  width: 94%;
   margin: 1vh auto;
   overflow: scroll;
-  padding: 1vh 2vh;
+  padding: 1vh 2%;
   font-size: 2.5vh;
   background: var(--main-color-lightblue);
 }
@@ -760,6 +760,10 @@ img.header-icon {
   padding: 2vh;
   padding-bottom: 3vh;
 }
+.question-detail ul,
+.question-detail ol,
+.answer-detail ul,
+.answer-detail ol,
 .comment-content ul,
 .comment-content ol {
     margin-top: 1em;
@@ -1497,7 +1501,7 @@ img.header-icon {
     font-size: 2.5vh;
   }
   .UserInfo-main {
-    width: 50%;
+    width: 30%;
   }
   .header.hidden {
     display: none;

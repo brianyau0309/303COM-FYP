@@ -23,6 +23,7 @@ export default class Setting extends React.Component {
   componentDidMount() {
     this.loadInfo()
     this.loadIcon()
+    document.querySelector('title').innerHTML = 'Self - FYP'
   }
   
   loadInfo() {

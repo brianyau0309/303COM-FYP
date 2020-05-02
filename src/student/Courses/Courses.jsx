@@ -24,6 +24,7 @@ export default class Courses extends React.Component {
 
   componentDidMount() {
     this.loadCourses()
+    document.querySelector('title').innerHTML = 'Courses - FYP'
   }
 
   loadCourses() {

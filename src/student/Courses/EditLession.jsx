@@ -54,7 +54,7 @@ export default class EditLesson extends React.Component {
             console.log(result)
             this.openToggle()
             this.props.reload()
-            this.props.reloadCourse()
+            this.props.reloadLessons()
           })
         }
       })

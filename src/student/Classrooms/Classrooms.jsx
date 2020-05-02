@@ -29,6 +29,7 @@ class Classrooms extends React.Component {
 
   componentDidMount() {
     this.loadClassrooms()
+    document.querySelector('title').innerHTML = 'Classrooms - FYP'
   }
 
   componentDidUpdate(prevProps) {

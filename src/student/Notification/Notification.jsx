@@ -10,6 +10,7 @@ export default class Notification extends React.Component {
 
   componentDidMount() {
     this.loadNotice()
+    document.querySelector('title').innerHTML = 'Notification - FYP'
   }
 
   loadNotice() {

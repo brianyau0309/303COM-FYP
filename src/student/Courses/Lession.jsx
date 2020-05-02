@@ -105,7 +105,7 @@ export default class Lesson extends React.Component {
 
       
          {this.props.myCourse ?
-           <EditLesson ref={this.child} reloadCoruse={this.props.reload} reload={() => this.loadLesson(this.state.course_id, this.state.lesson_num)} course_id={this.state.course_id} lesson_num={this.state.lesson_num}/>
+           <EditLesson ref={this.child} reloadLessons={this.props.loadLessons} reload={() => this.loadLesson(this.state.course_id, this.state.lesson_num)} course_id={this.state.course_id} lesson_num={this.state.lesson_num}/>
          : null }
 
       </div>

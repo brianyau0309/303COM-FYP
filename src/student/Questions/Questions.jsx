@@ -23,6 +23,7 @@ export default class Questions extends React.Component {
   
   componentDidMount() {
     this.loadQuestions()
+    document.querySelector('title').innerHTML = 'Questions - FYP'
   }
 
   loadQuestions() {

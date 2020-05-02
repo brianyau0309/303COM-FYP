@@ -21,8 +21,6 @@ app.config['UPLOAD_FILE_FOLDER'] = UPLOAD_FILE_FOLDER
 socketio = SocketIO(app)
 db = DBConn()
 
-subs = []
-
 def send_web_push(subscription_information, message_body):
     return webpush(
         subscription_info = subscription_information,
@@ -446,7 +444,7 @@ def api_course():
                         pass
                     user_keys = db.exe_fetch("SELECT * FROM user_keys", 'all')
                     for i in user_keys:
-                        following = db.exe_fetch("SELECT b.nickname FROM user_following a, users b WHERE a.user_id = b.user_id AND a.user_id = {0} AND a.following = {1}".format(i['user_id'], user))
+                        following = db.exe_fetch("SELECT b.nickname FROM user_following a, users b WHERE a.following = b.user_id AND a.user_id = {0} AND a.following = {1}".format(i['user_id'], user))
                         if following:
                             try:
                                 send_web_push(loads(i['user_key']), {'notice': 'Have a new course!', 'title': title, 'name': following['nickname'], 'action': 'create a course: '})
