@@ -60,7 +60,7 @@ export default class Lesson extends React.Component {
 
   openToggle() {
     this.setState({ 'open': !this.state.open })
-   document.querySelector('.Course').style.overflowY = 'scroll'
+    document.querySelector('.Course').style.overflowY = 'scroll'
   }
 
   openFalse() {

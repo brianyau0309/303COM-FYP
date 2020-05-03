@@ -347,6 +347,7 @@ img.header-icon {
 .course-list li > div {
   padding: 0 1vw;
   font-size: 2vh;
+  overflow-x: hidden;
 }
 
 .question-list li > h6.solved {
@@ -744,6 +745,7 @@ img.header-icon {
 }
 .Question .delete.cancel {
   background: yellow;
+  color: var(--main-color-lightblack);
   border: 1px solid yellow;
   cursor: pointer;
 }
@@ -1314,6 +1316,9 @@ img.header-icon {
   height: auto;
   padding: 1vh 2vh;
 }
+.newEvent {
+  font-size: 3.5vh;
+}
 .Chatroom {
   display: grid;
   grid-template-rows: 7vh 1fr 7vh;
@@ -1566,6 +1571,9 @@ img.header-icon {
   }
   .Classrooms {
     grid-area: classrooms;
+  }
+  .newEvent {
+    font-size: 3vh;
   }
   .part {
     grid-area: part;

@@ -69,7 +69,7 @@ CREATE TABLE `answers` (
 
 LOCK TABLES `answers` WRITE;
 /*!40000 ALTER TABLE `answers` DISABLE KEYS */;
-INSERT INTO `answers` VALUES (1,2,'Answer Test<div><ol><li>1\'1</li><li>2\"2<br></li></ol><div><ul><li>3/3</li><li>456</li></ul></div></div>','2020-02-14 21:07:59',1),(3,2,'May be 1','2020-02-17 21:57:01',1),(5,1,'Here is My Answer','2020-03-11 21:44:09',1),(5,4,'Here is my answer!','2020-03-11 21:46:00',1),(6,2,'Yes I <b>know</b> it!','2020-02-24 21:14:13',1);
+INSERT INTO `answers` VALUES (1,2,'Answer Test<div><ol><li>1\'1</li><li>2\"2<br></li></ol><div><ul><li>3/3</li><li>456</li></ul></div></div>','2020-02-14 21:07:59',1),(3,2,'May be 1','2020-02-17 21:57:01',1),(5,1,'Here is My Answer','2020-03-11 21:44:09',1),(5,4,'Here is my answer! ran','2020-03-11 21:46:00',1),(6,2,'Yes I <b>know</b> it!','2020-02-24 21:14:13',1);
 /*!40000 ALTER TABLE `answers` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -97,7 +97,7 @@ CREATE TABLE `calendar` (
 
 LOCK TABLES `calendar` WRITE;
 /*!40000 ALTER TABLE `calendar` DISABLE KEYS */;
-INSERT INTO `calendar` VALUES (1,1,'Event Test','It is\nan Event!','2020-03-18 00:00:00');
+INSERT INTO `calendar` VALUES (1,1,'Event Test','It is\nan Event!','2020-03-18 00:00:00'),(1,3,'FYP Presentation','Prepare it!','2020-05-11 00:00:00'),(1,4,'FYP Submission','303CEM FYP','2020-05-22 00:00:00');
 /*!40000 ALTER TABLE `calendar` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -127,7 +127,7 @@ CREATE TABLE `chatroom` (
 
 LOCK TABLES `chatroom` WRITE;
 /*!40000 ALTER TABLE `chatroom` DISABLE KEYS */;
-INSERT INTO `chatroom` VALUES (1,1,2,'hello','2020-03-07 18:23:38'),(1,2,2,'I am Mary','2020-03-07 18:28:52'),(1,3,2,'hello?','2020-03-07 18:35:23'),(1,4,2,'hello?','2020-03-07 18:42:03'),(1,5,2,'hello','2020-03-07 18:42:19'),(1,6,1,'hello','2020-03-07 18:44:48'),(1,7,1,'?','2020-03-07 18:48:42'),(1,8,1,'?','2020-03-07 18:50:54'),(1,9,2,'Hello Peter','2020-03-07 18:51:05'),(1,10,2,'What are you doing peter?','2020-03-12 14:20:17'),(1,11,1,'Hello Mary!','2020-03-12 14:27:01'),(1,12,2,'Hello!','2020-03-12 14:27:20'),(1,13,1,'I am working','2020-03-12 14:29:45'),(1,14,2,'Testing','2020-03-15 00:06:32'),(1,15,2,'Hello','2020-03-15 00:10:16'),(1,16,2,'testing','2020-03-15 00:10:41'),(1,17,2,'Testing','2020-03-15 00:11:14'),(1,18,2,'testing','2020-03-15 00:18:38'),(1,19,2,'testing','2020-03-15 00:22:26'),(1,20,2,'testing','2020-03-15 00:24:12'),(1,21,2,'testing','2020-03-15 00:25:16'),(1,22,2,'testing','2020-03-15 00:25:37'),(1,23,2,'testing','2020-03-15 00:26:31'),(1,24,2,'testing','2020-03-15 00:27:16'),(1,25,2,'testing','2020-03-15 00:30:40'),(1,26,2,'testing','2020-03-15 00:36:17'),(1,27,2,'testing','2020-03-15 00:37:09'),(1,28,2,'testing','2020-03-15 00:44:09'),(1,29,2,'testing','2020-03-15 00:48:31'),(1,30,2,'testing','2020-03-15 00:49:31'),(1,31,2,'testing','2020-03-15 00:50:33'),(1,32,2,'test','2020-03-15 00:55:10'),(1,33,2,'test','2020-03-15 00:55:22'),(1,34,2,'test','2020-03-15 00:55:33'),(1,35,2,'test','2020-03-15 00:56:41'),(1,36,2,'test','2020-03-15 01:01:03'),(1,37,2,'tst','2020-03-15 01:01:25');
+INSERT INTO `chatroom` VALUES (1,1,2,'hello','2020-03-07 18:23:38'),(1,2,2,'I am Mary','2020-03-07 18:28:52'),(1,3,2,'hello?','2020-03-07 18:35:23'),(1,4,2,'hello?','2020-03-07 18:42:03'),(1,5,2,'hello','2020-03-07 18:42:19'),(1,6,1,'hello','2020-03-07 18:44:48'),(1,7,1,'?','2020-03-07 18:48:42'),(1,8,1,'?','2020-03-07 18:50:54'),(1,9,2,'Hello Peter','2020-03-07 18:51:05'),(1,10,2,'What are you doing peter?','2020-03-12 14:20:17'),(1,11,1,'Hello Mary!','2020-03-12 14:27:01'),(1,12,2,'Hello!','2020-03-12 14:27:20'),(1,13,1,'I am working','2020-03-12 14:29:45'),(1,14,2,'Testing','2020-03-15 00:06:32'),(1,15,2,'Hello','2020-03-15 00:10:16'),(1,16,2,'testing','2020-03-15 00:10:41'),(1,17,2,'Testing','2020-03-15 00:11:14'),(1,18,2,'testing','2020-03-15 00:18:38'),(1,19,2,'testing','2020-03-15 00:22:26'),(1,20,2,'testing','2020-03-15 00:24:12'),(1,21,2,'testing','2020-03-15 00:25:16'),(1,22,2,'testing','2020-03-15 00:25:37'),(1,23,2,'testing','2020-03-15 00:26:31'),(1,24,2,'testing','2020-03-15 00:27:16'),(1,25,2,'testing','2020-03-15 00:30:40'),(1,26,2,'testing','2020-03-15 00:36:17'),(1,27,2,'testing','2020-03-15 00:37:09'),(1,28,2,'testing','2020-03-15 00:44:09'),(1,29,2,'testing','2020-03-15 00:48:31'),(1,30,2,'testing','2020-03-15 00:49:31'),(1,31,2,'testing','2020-03-15 00:50:33'),(1,32,2,'test','2020-03-15 00:55:10'),(1,33,2,'test','2020-03-15 00:55:22'),(1,34,2,'test','2020-03-15 00:55:33'),(1,35,2,'test','2020-03-15 00:56:41'),(1,36,2,'test','2020-03-15 01:01:03'),(1,37,2,'tst','2020-03-15 01:01:25'),(1,38,2,'jknllkn','2020-03-16 23:11:16');
 /*!40000 ALTER TABLE `chatroom` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -155,7 +155,7 @@ CREATE TABLE `classroom_members` (
 
 LOCK TABLES `classroom_members` WRITE;
 /*!40000 ALTER TABLE `classroom_members` DISABLE KEYS */;
-INSERT INTO `classroom_members` VALUES (1,1,'2020-03-12 22:50:42'),(1,2,'2020-02-27 22:16:53'),(1,4,'2020-03-04 02:54:39'),(1,5,'2020-03-04 02:54:42'),(1,6,'2020-03-04 02:54:43');
+INSERT INTO `classroom_members` VALUES (1,1,'2020-03-12 22:50:42'),(1,2,'2020-02-27 22:16:53'),(1,4,'2020-03-04 02:54:39'),(1,5,'2020-03-04 02:54:42'),(1,6,'2020-03-04 02:54:43'),(1,7,'2020-05-03 23:37:57'),(1,8,'2020-05-03 23:37:59'),(1,9,'2020-05-03 23:38:01'),(1,10,'2020-05-03 23:38:02');
 /*!40000 ALTER TABLE `classroom_members` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -185,7 +185,7 @@ CREATE TABLE `classrooms` (
 
 LOCK TABLES `classrooms` WRITE;
 /*!40000 ALTER TABLE `classrooms` DISABLE KEYS */;
-INSERT INTO `classrooms` VALUES (00000001,2,'Class 2D','hello\nTesting\nClass 2D','2020-02-27 22:16:53',1);
+INSERT INTO `classrooms` VALUES (00000001,2,'Class 2D','hello everybody\nTesting\nClass 2D','2020-02-27 22:16:53',1);
 /*!40000 ALTER TABLE `classrooms` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -233,7 +233,7 @@ CREATE TABLE `courses` (
   PRIMARY KEY (`course_id`),
   KEY `author` (`author`),
   CONSTRAINT `courses_ibfk_1` FOREIGN KEY (`author`) REFERENCES `users` (`user_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=36 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=48 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -242,7 +242,7 @@ CREATE TABLE `courses` (
 
 LOCK TABLES `courses` WRITE;
 /*!40000 ALTER TABLE `courses` DISABLE KEYS */;
-INSERT INTO `courses` VALUES (00000001,2,'DSE Math Prictice.','<b>DSE</b> Math question for F5 and F6 student to practice.<div>with Video.</div>','2020-02-20 23:05:53',1),(00000002,11,'English Course','Tenses Exercise for F1-F3 Student.','2020-02-21 20:43:27',1),(00000003,2,'Course 02','Course about Testing','2020-02-24 20:59:25',1),(00000007,2,'Course 03','<i>For Testing!</i>','2020-02-24 21:10:39',1),(00000008,2,'Course for test Notification','For Testing','2020-03-09 18:19:56',1),(00000009,2,'Testing Notice','Testing','2020-03-09 18:26:34',1),(00000011,12,'Oliver Course','DSE Course','2020-03-10 22:39:36',1),(00000032,2,'New','a','2020-03-15 14:29:32',0),(00000033,2,'New','a','2020-03-15 14:31:25',0),(00000034,2,'New','a','2020-03-15 14:31:57',0),(00000035,2,'New','as','2020-03-15 14:32:26',0);
+INSERT INTO `courses` VALUES (00000001,2,'DSE Math Prictice.','<b>DSE</b> Math question for F5 and F6 student to practice.<div style=\"text-align: left;\">with Video!</div>','2020-02-20 23:05:53',1),(00000002,11,'English Course','Tenses Exercise for F1-F3 Student.','2020-02-21 20:43:27',1),(00000003,2,'Course 02','Course about Testing','2020-02-24 20:59:25',1),(00000007,2,'Course 03','<i>For Testing!</i>','2020-02-24 21:10:39',1),(00000008,2,'Course for test Notification','For Testing','2020-03-09 18:19:56',1),(00000009,2,'Testing Notice','Testing','2020-03-09 18:26:34',1),(00000011,12,'Oliver Course','DSE Course','2020-03-10 22:39:36',1),(00000038,2,'New ','New','2020-03-16 11:40:44',1),(00000040,2,'New Course','ABC','2020-03-16 22:37:05',1),(00000047,2,'Learn English Grammar','<b>Learning English grammar</b> by watching video and doing excises.<div>From Crown Academy of English</div><div><a href=\"https://www.youtube.com/playlist?list=PL6BDo90oiwpS4_AM1c0s0ozpROeE2A9ff\">https://www.youtube.com/playlist?list=PL6BDo90oiwpS4_AM1c0s0ozpROeE2A9ff</a></div>','2020-05-03 22:58:11',1);
 /*!40000 ALTER TABLE `courses` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -273,7 +273,7 @@ CREATE TABLE `courses_comments` (
 
 LOCK TABLES `courses_comments` WRITE;
 /*!40000 ALTER TABLE `courses_comments` DISABLE KEYS */;
-INSERT INTO `courses_comments` VALUES (2,2,'Hello<div><ol><li>one</li><li>two</li><li>three</li><li>four</li></ol></div>',5,1,'2020-03-10 22:10:54');
+INSERT INTO `courses_comments` VALUES (2,1,'Good',3,1,'2020-05-03 23:27:17'),(2,2,'Hello<div><ol><li>one</li><li>two</li><li>three</li><li>four</li></ol></div>',5,1,'2020-03-10 22:10:54'),(47,1,'Bad Content!',2,1,'2020-05-03 23:20:58');
 /*!40000 ALTER TABLE `courses_comments` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -298,7 +298,7 @@ CREATE TABLE `courses_tags` (
 
 LOCK TABLES `courses_tags` WRITE;
 /*!40000 ALTER TABLE `courses_tags` DISABLE KEYS */;
-INSERT INTO `courses_tags` VALUES (1,'DSE'),(1,'F5'),(1,'F6'),(1,'Math'),(2,'English'),(2,'F1'),(2,'F2'),(2,'F3'),(2,'Tenses'),(3,'A'),(3,'B'),(7,'A'),(7,'B'),(7,'C'),(8,'testing'),(9,'DSE'),(9,'F6'),(9,'testing'),(11,'DSE'),(11,'F6'),(32,'a'),(33,'a'),(34,'a'),(35,'as');
+INSERT INTO `courses_tags` VALUES (1,'DSE'),(1,'F5'),(1,'F6'),(1,'Math'),(2,'English'),(2,'F1'),(2,'F2'),(2,'F3'),(2,'Tenses'),(3,'A'),(3,'B'),(7,'A'),(7,'B'),(7,'C'),(8,'testing'),(9,'DSE'),(9,'F6'),(9,'testing'),(11,'DSE'),(11,'F6'),(38,'New'),(40,'ABC'),(47,'English'),(47,'excises'),(47,'F3'),(47,'grammar');
 /*!40000 ALTER TABLE `courses_tags` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -328,7 +328,7 @@ CREATE TABLE `lessons` (
 
 LOCK TABLES `lessons` WRITE;
 /*!40000 ALTER TABLE `lessons` DISABLE KEYS */;
-INSERT INTO `lessons` VALUES (1,1,'Lesson 1','Somthing!','https://www.youtube.com/embed/L_UPHsGR6fM','Tutorial1011ans_2017_1.doc','2020-03-13 17:50:32'),(1,2,'Lesson 2','JSON file',NULL,NULL,'2020-03-13 17:52:01'),(2,1,'Lesson 1: Past Tense','Q1. What is the past tense of \'run\'?<div>Q2.</div>',NULL,NULL,'2020-02-23 23:11:43'),(2,2,'Lesson 2: Present tense','Present Tense<div>a. 1</div><div>b. 2</div><div>c.&nbsp;</div>','https://www.youtube.com/embed/EYiUqij4ngM','Tutorial1011ans_2017_1.doc','2020-02-23 23:33:41');
+INSERT INTO `lessons` VALUES (1,1,'Lesson 1','Somthing!','https://www.youtube.com/embed/L_UPHsGR6fM','Tutorial1011ans_2017_1.doc','2020-03-13 17:50:32'),(1,2,'Lesson 2','JSON file',NULL,'Tutorial1011ans_2017_1.doc','2020-03-16 22:11:12'),(2,1,'Lesson 1: Past Tense','Q1. What is the past tense of \'run\'?<div>Q2.</div>',NULL,NULL,'2020-02-23 23:11:43'),(2,2,'Lesson 2: Present tense','Present Tense<div>a. 1</div><div>b. 2</div><div>c.&nbsp;</div>','https://www.youtube.com/embed/EYiUqij4ngM','Tutorial1011ans_2017_1.doc','2020-02-23 23:33:41'),(47,1,'Lesson 1 Present Continuous verb','<div style=\"text-align: center;\"><img src=\"https://i.ytimg.com/vi/rjWd8U-6jbA/hqdefault.jpg?sqp=-oaymwEYCKgBEF5IVfKriqkDCwgBFQAAiEIYAXAB&amp;rs=AOn4CLAJXec6C8s5RWPt0Azj8NcwlO6ZmA\"></div><div style=\"text-align: center;\"><span style=\"font-size: 32px;\"><b>This is an English grammar lesson about the present continuous tense. We also call this verb tense the present progressive.</b></span></div><div style=\"text-align: center;\"><span style=\"font-size: 32px;\"><br></span></div><div style=\"text-align: center;\"><span style=\"font-size: 32px;\">The video starts with an explanation of the form which is made up of the verb \"to be\" and the ing form of the main verb. We look at the affirmative, question and negative forms.</span></div><div style=\"text-align: center;\"><span style=\"font-size: 32px;\"><br></span></div><div style=\"text-align: center;\"><span style=\"font-size: 32px;\">You will then learn the uses of the present continuous and how it is different to the present simple. The general rules is that we use the present progressive to describe an action that is happening now. It is in progress.</span></div><div style=\"text-align: center;\"><br></div>','https://www.youtube.com/embed/rjWd8U-6jbA',NULL,'2020-05-03 23:30:44'),(47,2,'Lesson 2 Present Simple verb tense','<div style=\"\"><span style=\"font-size: 32px;\">Present Simple verb tense&nbsp; - English verbs</span></div><div style=\"\"><span style=\"font-size: 32px;\">1)&nbsp;</span><span style=\"font-size: 32px;\">Present Simple form&nbsp;</span></div><div style=\"\"><span style=\"font-size: 32px;\">2) Affirmative, question and negative forms of the present Simple verb tense</span></div><div style=\"\"><span style=\"font-size: 32px;\">3) How to use the present simple</span></div><div style=\"\"><span style=\"font-size: 32px;\">5) Exercises and&nbsp;practice</span></div>','https://www.youtube.com/embed/X8lu4_5F0hg','Grammer_Excise.docx','2020-05-03 23:15:46'),(47,3,'Lesson 3 How to use apostrophes','<div><span style=\"font-size: 32px;\">Learn how to use apostrophes with this English grammar and punctuation lesson with exercises.&nbsp;</span></div><div><span style=\"font-size: 32px;\"><br></span></div><div><span style=\"font-size: 32px;\">Students make a lot of mistakes using apostrophes and so With this English punctuation class, you will learn how to use them correctly without errors.</span></div>','https://www.youtube.com/embed/4ptrjSSxljM',NULL,'2020-05-03 23:19:52');
 /*!40000 ALTER TABLE `lessons` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -355,7 +355,7 @@ CREATE TABLE `question_collection` (
 
 LOCK TABLES `question_collection` WRITE;
 /*!40000 ALTER TABLE `question_collection` DISABLE KEYS */;
-INSERT INTO `question_collection` VALUES (1,1),(2,1),(2,3),(2,4),(2,7);
+INSERT INTO `question_collection` VALUES (1,1),(1,3),(2,1),(2,3),(2,4),(2,7);
 /*!40000 ALTER TABLE `question_collection` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -413,7 +413,7 @@ CREATE TABLE `search_history` (
 
 LOCK TABLES `search_history` WRITE;
 /*!40000 ALTER TABLE `search_history` DISABLE KEYS */;
-INSERT INTO `search_history` VALUES (2,'DSE'),(2,'DSE'),(2,'A'),(2,'A'),(2,'C'),(2,'A'),(2,'C'),(2,'A'),(2,'C'),(1,'History'),(1,'DSE'),(1,'English'),(1,'DSE'),(1,'English'),(1,'DSE'),(1,'Math'),(2,'dse'),(2,'english'),(2,'dse'),(2,'Math'),(2,'dse'),(2,'Math'),(2,'English'),(2,'math'),(2,'ahq'),(2,'Dse'),(1,'DSE'),(1,'DSE'),(1,'F5'),(1,'DSE'),(1,'F5'),(1,'DSE'),(1,'testing'),(1,'DSE'),(1,'testing'),(1,'F6'),(1,'DSE'),(1,'DSE'),(1,'testing'),(1,'DSE'),(1,'testing'),(1,'F6');
+INSERT INTO `search_history` VALUES (2,'DSE'),(2,'DSE'),(2,'A'),(2,'A'),(2,'C'),(2,'A'),(2,'C'),(2,'A'),(2,'C'),(1,'History'),(1,'DSE'),(1,'English'),(1,'DSE'),(1,'English'),(1,'DSE'),(1,'Math'),(2,'dse'),(2,'english'),(2,'dse'),(2,'Math'),(2,'dse'),(2,'Math'),(2,'English'),(2,'math'),(2,'ahq'),(2,'Dse'),(1,'DSE'),(1,'DSE'),(1,'F5'),(1,'DSE'),(1,'F5'),(1,'DSE'),(1,'testing'),(1,'DSE'),(1,'testing'),(1,'F6'),(1,'DSE'),(1,'DSE'),(1,'testing'),(1,'DSE'),(1,'testing'),(1,'F6'),(1,'DSE');
 /*!40000 ALTER TABLE `search_history` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -443,7 +443,7 @@ CREATE TABLE `task_answers` (
 
 LOCK TABLES `task_answers` WRITE;
 /*!40000 ALTER TABLE `task_answers` DISABLE KEYS */;
-INSERT INTO `task_answers` VALUES (1,7,1,1,'MC1MC'),(1,7,1,4,'MC2'),(1,7,1,5,'MC2'),(1,7,2,1,'answer'),(1,7,2,4,'qwww'),(1,7,2,5,'qwww123'),(1,7,3,1,'MC2'),(1,7,3,4,'MC23'),(1,7,3,5,'MC34');
+INSERT INTO `task_answers` VALUES (1,7,1,1,'MC1MC'),(1,7,1,4,'MC2'),(1,7,1,5,'MC2'),(1,7,2,1,'answer'),(1,7,2,4,'qwww'),(1,7,2,5,'qwww123'),(1,7,3,1,'MC2'),(1,7,3,4,'MC23'),(1,7,3,5,'MC34'),(1,9,1,1,'readed'),(1,10,1,4,'women'),(1,10,1,5,'women'),(1,10,1,6,'womens'),(1,10,1,7,'women'),(1,10,1,8,'womens'),(1,10,1,9,'women'),(1,10,1,10,'women'),(1,10,2,4,'offence'),(1,10,2,5,'watching'),(1,10,2,6,'away'),(1,10,2,7,'offence'),(1,10,2,8,'officen'),(1,10,2,9,'offence'),(1,10,2,10,'offence'),(1,10,3,4,'for'),(1,10,3,5,'for'),(1,10,3,6,'to'),(1,10,3,7,'for'),(1,10,3,8,'to'),(1,10,3,9,'for'),(1,10,3,10,'for'),(1,10,4,4,'for'),(1,10,4,5,'on'),(1,10,4,6,'on'),(1,10,4,7,'for'),(1,10,4,8,'for'),(1,10,4,9,'for'),(1,10,4,10,'for'),(1,10,5,4,'so'),(1,10,5,5,'so'),(1,10,5,6,'so'),(1,10,5,7,'such'),(1,10,5,8,'such'),(1,10,5,9,'so'),(1,10,5,10,'such'),(1,10,6,4,'so'),(1,10,6,5,'so'),(1,10,6,6,'such'),(1,10,6,7,'such'),(1,10,6,8,'so'),(1,10,6,9,'so'),(1,10,6,10,'so'),(1,10,7,4,'so'),(1,10,7,5,'so'),(1,10,7,6,'such'),(1,10,7,7,'such'),(1,10,7,8,'so'),(1,10,7,9,'so'),(1,10,7,10,'so'),(1,10,8,4,'of'),(1,10,8,5,'for'),(1,10,8,6,'up'),(1,10,8,7,'of'),(1,10,8,8,'of'),(1,10,8,9,'of'),(1,10,8,10,'of'),(1,10,9,4,'is'),(1,10,9,5,'are'),(1,10,9,6,'are'),(1,10,9,7,'IDK'),(1,10,9,8,'are'),(1,10,9,9,'is'),(1,10,9,10,'are');
 /*!40000 ALTER TABLE `task_answers` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -477,7 +477,7 @@ CREATE TABLE `task_questions` (
 
 LOCK TABLES `task_questions` WRITE;
 /*!40000 ALTER TABLE `task_questions` DISABLE KEYS */;
-INSERT INTO `task_questions` VALUES (1,5,1,'tEst','sq','SQ','answer',NULL,NULL,NULL,NULL),(1,5,2,'test','mc','MC Test\nIt is a Math Q.\n1+1 = ?','2','1','2','3','4'),(1,6,1,'tEst','sq','SQ','answer1',NULL,NULL,NULL,NULL),(1,6,2,'Test','mc','MC 2','123','123','456',NULL,NULL),(1,6,3,'test','mc','MC Test','answer4','answer1','answer2','answer4',NULL),(1,7,1,'MC','mc','MC','MC2','MC1MC','MC2',NULL,NULL),(1,7,2,'MC','sq','SQ1','qwwq212',NULL,NULL,NULL,NULL),(1,7,3,'Test','mc','MC2','MC23','MC2','MC23','MC34',NULL),(1,8,1,'mc','mc','Mc 1','abc','abc','bcd','bdc','cbd');
+INSERT INTO `task_questions` VALUES (1,5,1,'tEst','sq','SQ','answer',NULL,NULL,NULL,NULL),(1,5,2,'test','mc','MC Test\nIt is a Math Q.\n1+1 = ?','2','1','2','3','4'),(1,6,1,'tEst','sq','SQ','answer1',NULL,NULL,NULL,NULL),(1,6,2,'Test','mc','MC 2','123','123','456',NULL,NULL),(1,6,3,'test','mc','MC Test','answer4','answer1','answer2','answer4',NULL),(1,7,1,'MC','mc','MC','MC2','MC1MC','MC2',NULL,NULL),(1,7,2,'MC','sq','SQ1','qwwq212',NULL,NULL,NULL,NULL),(1,7,3,'Test','mc','MC2','MC23','MC2','MC23','MC34',NULL),(1,8,1,'mc','mc','Mc 1','abc','abc','bcd','bdc','cbd'),(1,9,1,'past tense','mc','past tense of read','read','read','readed',NULL,NULL),(1,10,1,'noun','mc','The winners were two ………………………… from the north.','women','women','womens','females',NULL),(1,10,2,'noun','sq','He took …………………………… at this.','offence',NULL,NULL,NULL,NULL),(1,10,3,'phrasal verbs','mc','Are you speaking ……………………… me or against me?','for','to','for','down',NULL),(1,10,4,'phrasal verbs','mc','He is a brilliant actor.\nHis movies speak …………………………… themselves.','for','to','for','on',NULL),(1,10,5,'so vs such','mc','It was ………………………… dark that I couldn\'t see anything.','so','so','such',NULL,NULL),(1,10,6,'so vs such','mc','The watch was ………………………… expensive that I couldn\'t buy it.','so','so','such',NULL,NULL),(1,10,7,'so vs such','mc','I liked him …………………………… much that I helped him.','so','so','such',NULL,NULL),(1,10,8,'phrasal verbs','mc','It was one of the driest years on record – no rain to speak ………………………….','of','up','of','for',NULL),(1,10,9,'noun','sq','The latest news from across the borders ………………………… disquieting.','is',NULL,NULL,NULL,NULL);
 /*!40000 ALTER TABLE `task_questions` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -509,7 +509,7 @@ CREATE TABLE `tasks` (
 
 LOCK TABLES `tasks` WRITE;
 /*!40000 ALTER TABLE `tasks` DISABLE KEYS */;
-INSERT INTO `tasks` VALUES (1,5,'Task',2,'2020-03-02 21:12:26','2020-03-26 04:00:00',0),(1,6,'Task',2,'2020-03-02 23:47:05','2020-03-24 04:00:00',1),(1,7,'Task7',2,'2020-03-02 23:48:43','2020-03-04 04:00:00',0),(1,8,'New Task',2,'2020-03-13 13:57:38','2020-03-20 04:00:00',0);
+INSERT INTO `tasks` VALUES (1,5,'Task',2,'2020-03-02 21:12:26','2020-03-26 04:00:00',0),(1,6,'Task',2,'2020-03-02 23:47:05','2020-03-24 04:00:00',1),(1,7,'Task7',2,'2020-03-02 23:48:43','2020-03-04 04:00:00',0),(1,8,'New Task',2,'2020-03-13 13:57:38','2020-03-20 04:00:00',0),(1,9,'New Task',2,'2020-03-16 22:41:31','2020-03-17 04:00:00',1),(1,10,'Grammar Exercise',2,'2020-05-03 23:54:59','2020-05-15 04:00:00',0);
 /*!40000 ALTER TABLE `tasks` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -537,7 +537,7 @@ CREATE TABLE `user_following` (
 
 LOCK TABLES `user_following` WRITE;
 /*!40000 ALTER TABLE `user_following` DISABLE KEYS */;
-INSERT INTO `user_following` VALUES (1,2,'2020-03-15 01:33:58'),(4,2,'2020-03-09 18:25:38');
+INSERT INTO `user_following` VALUES (1,2,'2020-03-15 01:33:58'),(4,2,'2020-03-09 18:25:38'),(5,2,'2020-03-16 22:36:49');
 /*!40000 ALTER TABLE `user_following` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -562,7 +562,7 @@ CREATE TABLE `user_keys` (
 
 LOCK TABLES `user_keys` WRITE;
 /*!40000 ALTER TABLE `user_keys` DISABLE KEYS */;
-INSERT INTO `user_keys` VALUES (1,'{\"endpoint\": \"https://fcm.googleapis.com/fcm/send/d43sRm87s9Y:APA91bFJzAwcgEC_1FzIDKB7sdckx2s8slKEQxCP3K_o6BHMIf6Yd7pYF31weszMXxqVQqjI82OuzT8532kUmaYx3KZx04inSZeJGRUPQNoBjx25qln1Cn4ww_0YjBwYt2CbubKvY8Bn\", \"expirationTime\": null, \"keys\": {\"p256dh\": \"BOnc24rCNqOLcitbJ2lqT-A-x1h9MZZxUxJZMTnhHdBO8ptptYInIza-FFFNJ_NycaFdr_-CsbF3eYR02tYFq2E\", \"auth\": \"z5BI5AwHZj1nQMHop3vA8Q\"}}');
+INSERT INTO `user_keys` VALUES (1,'{\"endpoint\": \"https://fcm.googleapis.com/fcm/send/d43sRm87s9Y:APA91bFJzAwcgEC_1FzIDKB7sdckx2s8slKEQxCP3K_o6BHMIf6Yd7pYF31weszMXxqVQqjI82OuzT8532kUmaYx3KZx04inSZeJGRUPQNoBjx25qln1Cn4ww_0YjBwYt2CbubKvY8Bn\", \"expirationTime\": null, \"keys\": {\"p256dh\": \"BOnc24rCNqOLcitbJ2lqT-A-x1h9MZZxUxJZMTnhHdBO8ptptYInIza-FFFNJ_NycaFdr_-CsbF3eYR02tYFq2E\", \"auth\": \"z5BI5AwHZj1nQMHop3vA8Q\"}}'),(4,'{\"endpoint\": \"https://fcm.googleapis.com/fcm/send/enXS95K3_e4:APA91bHROai4ZAjFagyE5SLp3Y47FupUNpzXkaeBuaRdUmFwoOmgmJVl6W7rtUg9uwOJqYiSpkjU2DtP5EKANhKcWd8nWLt6Qh4NN_VFt2o6GlmruRVhneMVYqS0YzrCKriv7F4OyVpM\", \"expirationTime\": null, \"keys\": {\"p256dh\": \"BEdBV7lMWk7cR5IIc4HWD_U-xuKDf__LqLmhU7f055kvALgmO4RBnB1JkaN32wdpw1sA9xqg7tC-9yR1ue0_75w\", \"auth\": \"rAfsij1yl6dpWKLcqFIwLQ\"}}');
 /*!40000 ALTER TABLE `user_keys` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -606,4 +606,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2020-03-15 14:34:53
+-- Dump completed on 2020-05-04  3:22:25

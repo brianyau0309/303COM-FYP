@@ -127,6 +127,7 @@ export default class Question extends React.Component {
         res.json().then(result => {
           console.log(result)
           this.loadQuestion(this.state.question_id)
+          this.props.loadQuestions()
         })
       }
     })

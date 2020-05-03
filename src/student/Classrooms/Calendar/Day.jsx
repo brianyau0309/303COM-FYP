@@ -91,7 +91,7 @@ export default class Day extends React.Component {
         </div>
         {this.state.createEventToggle && this.props.user_type === 'teacher' ? 
           <div>
-            <div style={{textAlign: 'center'}}>New Event</div>
+            <div className="newEvent" style={{textAlign: 'center'}}>New Event</div>
             <form name='form_createEvent' onSubmit={this.createEvent} style={{paddingBottom: '.5vh'}}>
               <input type="text" name="event_name" placeholder="Name of the Event" required/>
               <textarea name="event_description" placeholder="Desceibe the Event here..." required/>

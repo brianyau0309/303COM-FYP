@@ -300,7 +300,7 @@ SQL = {
     SELECT a.course_id, a.author, a.title, a.description, a.create_date, b.nickname, c.avg_rate, c.raters
     FROM courses a
       INNER JOIN users b ON a.author = b.user_id
-      LEFT JOIN (SELECT course, AVG(rating) as avg_rate, COUNT(create_by) as raters FROM courses_comments) c ON c.course = {0}
+      LEFT JOIN (SELECT course, AVG(rating) as avg_rate, COUNT(create_by) as raters FROM courses_comments GROUP BY course) c ON c.course = {0}
     WHERE a.valid = true AND b.valid = true AND a.course_id = {0}
     ''',
     'course_tags': '''
