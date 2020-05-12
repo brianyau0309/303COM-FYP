@@ -40,7 +40,7 @@ def sw():
 @app.route('/<path:path>')
 def home(path):
     if session.get('user'):
-        return render_template("index.html")
+        return send_file(os.path.dirname(os.path.realpath(__file__))+"/static/index.html")
     else:
         return redirect(url_for('login'))
 

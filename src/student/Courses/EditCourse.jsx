@@ -45,6 +45,7 @@ export default class EditCourse extends React.Component {
         res.json().then(result => {
           console.log(result)
           this.props.reload()
+          this.props.reloadCourses()
           this.openToggle()
         })
       }

@@ -562,7 +562,6 @@ CREATE TABLE `user_keys` (
 
 LOCK TABLES `user_keys` WRITE;
 /*!40000 ALTER TABLE `user_keys` DISABLE KEYS */;
-INSERT INTO `user_keys` VALUES (1,'{\"endpoint\": \"https://fcm.googleapis.com/fcm/send/d43sRm87s9Y:APA91bFJzAwcgEC_1FzIDKB7sdckx2s8slKEQxCP3K_o6BHMIf6Yd7pYF31weszMXxqVQqjI82OuzT8532kUmaYx3KZx04inSZeJGRUPQNoBjx25qln1Cn4ww_0YjBwYt2CbubKvY8Bn\", \"expirationTime\": null, \"keys\": {\"p256dh\": \"BOnc24rCNqOLcitbJ2lqT-A-x1h9MZZxUxJZMTnhHdBO8ptptYInIza-FFFNJ_NycaFdr_-CsbF3eYR02tYFq2E\", \"auth\": \"z5BI5AwHZj1nQMHop3vA8Q\"}}'),(4,'{\"endpoint\": \"https://fcm.googleapis.com/fcm/send/enXS95K3_e4:APA91bHROai4ZAjFagyE5SLp3Y47FupUNpzXkaeBuaRdUmFwoOmgmJVl6W7rtUg9uwOJqYiSpkjU2DtP5EKANhKcWd8nWLt6Qh4NN_VFt2o6GlmruRVhneMVYqS0YzrCKriv7F4OyVpM\", \"expirationTime\": null, \"keys\": {\"p256dh\": \"BEdBV7lMWk7cR5IIc4HWD_U-xuKDf__LqLmhU7f055kvALgmO4RBnB1JkaN32wdpw1sA9xqg7tC-9yR1ue0_75w\", \"auth\": \"rAfsij1yl6dpWKLcqFIwLQ\"}}');
 /*!40000 ALTER TABLE `user_keys` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -606,4 +605,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2020-05-04  3:22:25
+-- Dump completed on 2020-05-10 21:43:05

@@ -353,7 +353,7 @@ export default class Course extends React.Component {
         : null} 
       
          {this.state.myCourse ?
-           <EditCourse ref={this.child2} reload={() => this.loadCourse(this.state.course_id)} course_id={this.state.course_id}/>
+           <EditCourse ref={this.child2} reloadCourses={this.props.loadCourses} reload={() => this.loadCourse(this.state.course_id)} course_id={this.state.course_id}/>
          : <EditComment ref={this.child} reload={this.reloadComments} course_id={this.state.course_id}/> }
 
          {this.state.myCourse ? <CreateLesson ref={this.child3} course_id={this.state.course_id} reload={() => this.loadLessons(this.state.course_id)}/> : null}
